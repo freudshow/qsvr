@@ -1,0 +1,8 @@
+*.o
+qServer
+moc_*
+ui_*
+*.stash
+Makefile
+*.user
+
