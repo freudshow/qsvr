@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	pServer = new QTcpServer();
 
 	//连接信号槽
-	connect(pServer,&QTcpServer::newConnection,this,&MainWindow::server_New_Connect);
+    connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
+
+    listenState = false;
 }
 
 MainWindow::~MainWindow()
@@ -25,14 +27,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_Listen_clicked()
 {
-	if(ui->pushButton_Listen->text() == tr("侦听"))
-	{
+    if(!listenState) {
 		//从输入框获取端口号
 		int port = ui->lineEdit_Port->text().toInt();
 
 		//监听指定的端口
-		if(!pServer->listen(QHostAddress::Any, port))
-		{
+        if(!pServer->listen(QHostAddress::Any, port)){
 			//若出错，则输出错误信息
 			qDebug()<<pServer->errorString();
 			return;
@@ -40,12 +40,10 @@ void MainWindow::on_pushButton_Listen_clicked()
 		//修改按键文字
 		ui->pushButton_Listen->setText("取消侦听");
 		qDebug()<< "Listen succeessfully!";
-	}
-	else
-	{
+        listenState = !listenState;
+    } else {
 		//如果正在连接（点击侦听后立即取消侦听，若socket没有指定对象会有异常，应修正——2017.9.30）
-		if(pSocket->state() == QAbstractSocket::ConnectedState)
-		{
+        if (pSocket->state() == QAbstractSocket::ConnectedState) {
 			//关闭连接
 			pSocket->disconnectFromHost();
 		}
@@ -56,7 +54,6 @@ void MainWindow::on_pushButton_Listen_clicked()
 		//发送按键失能
 		ui->pushButton_Send->setEnabled(false);
 	}
-
 }
 
 void MainWindow::on_pushButton_Send_clicked()
@@ -67,20 +64,20 @@ void MainWindow::on_pushButton_Send_clicked()
 	pSocket->flush();
 }
 
-void MainWindow::server_New_Connect()
+void MainWindow::serverNewConnect()
 {
 	//获取客户端连接
 	pSocket = pServer->nextPendingConnection();
 	//连接QTcpSocket的信号槽，以读取新数据
-	QObject::connect(pSocket, &QTcpSocket::readyRead, this, &MainWindow::socket_Read_Data);
-	QObject::connect(pSocket, &QTcpSocket::disconnected, this, &MainWindow::socket_Disconnected);
+    QObject::connect(pSocket, &QTcpSocket::readyRead, this, &MainWindow::socketReadData);
+    QObject::connect(pSocket, &QTcpSocket::disconnected, this, &MainWindow::socketDisconnected);
 	//发送按键使能
 	ui->pushButton_Send->setEnabled(true);
 
 	qDebug() << "A Client connect!";
 }
 
-void MainWindow::socket_Read_Data()
+void MainWindow::socketReadData()
 {
 	QByteArray buffer;
 	//读取缓冲区数据
@@ -94,7 +91,7 @@ void MainWindow::socket_Read_Data()
 	}
 }
 
-void MainWindow::socket_Disconnected()
+void MainWindow::socketDisconnected()
 {
 	//发送按键失能
 	ui->pushButton_Send->setEnabled(false);

@@ -20,14 +20,15 @@ public:
 private slots:
 	void on_pushButton_Listen_clicked();
 	void on_pushButton_Send_clicked();
-	void server_New_Connect();
-	void socket_Read_Data();
-	void socket_Disconnected();
+    void serverNewConnect();
+    void socketReadData();
+    void socketDisconnected();
 
 private:
 	Ui::MainWindow *ui;
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;
+    bool listenState;
 };
 
 #endif // MAINWINDOW_H
