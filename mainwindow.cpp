@@ -40,7 +40,6 @@ void MainWindow::on_pushButton_Listen_clicked()
 		//修改按键文字
 		ui->pushButton_Listen->setText("取消侦听");
 		qDebug()<< "Listen succeessfully!";
-        listenState = !listenState;
     } else {
 		//如果正在连接（点击侦听后立即取消侦听，若socket没有指定对象会有异常，应修正——2017.9.30）
         if (pSocket->state() == QAbstractSocket::ConnectedState) {
@@ -54,6 +53,7 @@ void MainWindow::on_pushButton_Listen_clicked()
 		//发送按键失能
 		ui->pushButton_Send->setEnabled(false);
 	}
+    listenState = !listenState;
 }
 
 void MainWindow::on_pushButton_Send_clicked()
@@ -66,12 +66,10 @@ void MainWindow::on_pushButton_Send_clicked()
 
 void MainWindow::serverNewConnect()
 {
-	//获取客户端连接
 	pSocket = pServer->nextPendingConnection();
-	//连接QTcpSocket的信号槽，以读取新数据
+
     QObject::connect(pSocket, &QTcpSocket::readyRead, this, &MainWindow::socketReadData);
     QObject::connect(pSocket, &QTcpSocket::disconnected, this, &MainWindow::socketDisconnected);
-	//发送按键使能
 	ui->pushButton_Send->setEnabled(true);
 
 	qDebug() << "A Client connect!";
@@ -79,14 +77,27 @@ void MainWindow::serverNewConnect()
 
 void MainWindow::socketReadData()
 {
-	QByteArray buffer;
-	//读取缓冲区数据
-	buffer = pSocket->readAll();
-	if(!buffer.isEmpty())
-	{
-		QString str = ui->textEdit_Recv->toPlainText();
-		str+=tr(buffer);
-		//刷新显示
+    bool isHex = ui->checkBox_RecvHex->isChecked();
+    QByteArray buffer = pSocket->readAll();
+    QString str = ui->textEdit_Recv->toPlainText();
+
+    if(!buffer.isEmpty()) {
+        if(isHex) {
+            QString buf;
+            QString s;
+            for (int i = 0; i < buffer.count() - 1; i++) {
+                s = "";
+                s.sprintf("%02X ", (unsigned char)buffer.at(i));
+                buf += s;
+            }
+            s = "";
+            s.sprintf("%02X", (unsigned char)buffer.at(i));
+            buf += s;
+            str+= buf;
+        } else {
+            str+=tr(buffer);
+        }
+
 		ui->textEdit_Recv->setText(str);
 	}
 }
