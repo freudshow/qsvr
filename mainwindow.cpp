@@ -85,7 +85,8 @@ void MainWindow::socketReadData()
         if(isHex) {
             QString buf;
             QString s;
-            for (int i = 0; i < buffer.count() - 1; i++) {
+            int i = 0;
+            for (i = 0; i < buffer.count() - 1; i++) {
                 s = "";
                 s.sprintf("%02X ", (unsigned char)buffer.at(i));
                 buf += s;

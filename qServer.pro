@@ -26,10 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    lib698/lib698.c
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    lib698/lib698.h \
+    basedef.h
 
 FORMS += \
         mainwindow.ui
