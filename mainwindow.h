@@ -24,6 +24,7 @@ private slots:
     void socketReadData();
     void socketDisconnected();
     void sendMsg();
+    QString byteArrayToString(QByteArray, bool);
 
 private:
 	Ui::MainWindow *ui;

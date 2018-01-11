@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QDateTime>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -94,6 +95,10 @@ void MainWindow::sendMsg()
 
     pSocket->write(buf);
     pSocket->flush();
+
+    QString str = ui->textEdit_Recv->toPlainText();
+    str += byteArrayToString(buf, false);
+    ui->textEdit_Recv->setText(str);
     qDebug() << tr("send data success");
 }
 
@@ -108,6 +113,32 @@ void MainWindow::serverNewConnect()
     qDebug() << "A Client connect!";
 }
 
+QString MainWindow::byteArrayToString(QByteArray buffer, bool read)
+{
+    QString buf;
+    QString s;
+    int i = 0;
+
+    buf.clear();
+    buf.append(QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss.zzz]"));
+    buf += read?"[R:]":"[S:]";
+
+    for (i = 0; i < buffer.count() - 1; i++) {
+        s.clear();
+        s.sprintf("%02X ", (unsigned char)buffer.at(i));
+        buf += s;
+    }
+
+    s.clear();
+    s.sprintf("%02X", (unsigned char)buffer.at(i));
+    buf += s;
+    s.clear();
+    s.sprintf("\n");
+    buf += s;
+
+    return buf;
+}
+
 void MainWindow::socketReadData()
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
@@ -116,20 +147,7 @@ void MainWindow::socketReadData()
 
     if(!buffer.isEmpty()) {
         if(isHex) {
-            QString buf;
-            QString s;
-            int i = 0;
-
-            buf.clear();
-            for (i = 0; i < buffer.count() - 1; i++) {
-                s.clear();
-                s.sprintf("%02X ", (unsigned char)buffer.at(i));
-                buf += s;
-            }
-            s.clear();
-            s.sprintf("%02X", (unsigned char)buffer.at(i));
-            buf += s;
-            str+= buf;
+            str+= byteArrayToString(buffer, true);
         } else {
             str+=tr(buffer);
         }
