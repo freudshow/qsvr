@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -9,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	ui->lineEdit_Port->setText("8002");
 	ui->pushButton_Send->setEnabled(false);
+    ui->checkBox_RecvHex->setChecked(true);
+    ui->checkBox_SendHex->setChecked(true);
 
 	pServer = new QTcpServer();
 
@@ -28,17 +31,14 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_Listen_clicked()
 {
     if(!listenState) {
-		//从输入框获取端口号
 		int port = ui->lineEdit_Port->text().toInt();
 
-		//监听指定的端口
         if(!pServer->listen(QHostAddress::Any, port)){
-			//若出错，则输出错误信息
-			qDebug()<<pServer->errorString();
+            qDebug() << pServer->errorString();
 			return;
 		}
-		//修改按键文字
-		ui->pushButton_Listen->setText("取消侦听");
+
+        ui->pushButton_Listen->setText(tr("Don't Listen"));
 		qDebug()<< "Listen succeessfully!";
     } else {
 		//如果正在连接（点击侦听后立即取消侦听，若socket没有指定对象会有异常，应修正——2017.9.30）
@@ -48,9 +48,7 @@ void MainWindow::on_pushButton_Listen_clicked()
 		}
 		//取消侦听
 		pServer->close();
-		//修改按键文字
-		ui->pushButton_Listen->setText("侦听");
-		//发送按键失能
+        ui->pushButton_Listen->setText(tr("Listen"));
 		ui->pushButton_Send->setEnabled(false);
 	}
     listenState = !listenState;
@@ -58,21 +56,56 @@ void MainWindow::on_pushButton_Listen_clicked()
 
 void MainWindow::on_pushButton_Send_clicked()
 {
+    sendMsg();
 	qDebug() << "Send: " << ui->textEdit_Send->toPlainText();
-	//获取文本框内容并以ASCII码形式发送
-	pSocket->write(ui->textEdit_Send->toPlainText().toLatin1());
-	pSocket->flush();
+}
+
+void MainWindow::sendMsg()
+{
+    QByteArray buf;
+    if (ui->checkBox_SendHex->isChecked()) {
+        int i = 0;
+        QString str;
+        bool ok;
+        char data;
+        QStringList list;
+
+        str = ui->textEdit_Send->toPlainText();
+        list = str.split(" ");
+        for (i = 0; i < list.count(); i++) {
+            if (list.at(i) == " ")
+                continue;
+            if (list.at(i).isEmpty())
+                continue;
+            data = (char)list.at(i).toInt(&ok, 16);
+            if (!ok){
+                QMessageBox::information(this, tr("Hint"), tr("data format error"), QMessageBox::Ok);
+                return;
+            }
+            buf.append(data);
+        }
+    } else {
+#if QT_VERSION < 0x050000
+        buf = ui->textEdit_Send->toPlainText().toAscii();
+#else
+        buf = ui->textEdit_Send->toPlainText().toLocal8Bit();
+#endif
+    }
+
+    pSocket->write(buf);
+    pSocket->flush();
+    qDebug() << tr("send data success");
 }
 
 void MainWindow::serverNewConnect()
 {
-	pSocket = pServer->nextPendingConnection();
+    pSocket = pServer->nextPendingConnection();
 
     QObject::connect(pSocket, &QTcpSocket::readyRead, this, &MainWindow::socketReadData);
     QObject::connect(pSocket, &QTcpSocket::disconnected, this, &MainWindow::socketDisconnected);
-	ui->pushButton_Send->setEnabled(true);
+    ui->pushButton_Send->setEnabled(true);
 
-	qDebug() << "A Client connect!";
+    qDebug() << "A Client connect!";
 }
 
 void MainWindow::socketReadData()
@@ -86,12 +119,14 @@ void MainWindow::socketReadData()
             QString buf;
             QString s;
             int i = 0;
+
+            buf.clear();
             for (i = 0; i < buffer.count() - 1; i++) {
-                s = "";
+                s.clear();
                 s.sprintf("%02X ", (unsigned char)buffer.at(i));
                 buf += s;
             }
-            s = "";
+            s.clear();
             s.sprintf("%02X", (unsigned char)buffer.at(i));
             buf += s;
             str+= buf;

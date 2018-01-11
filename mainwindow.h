@@ -23,6 +23,7 @@ private slots:
     void serverNewConnect();
     void socketReadData();
     void socketDisconnected();
+    void sendMsg();
 
 private:
 	Ui::MainWindow *ui;
