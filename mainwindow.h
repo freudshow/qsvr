@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include "basedef.h"
 
 namespace Ui {
 	class MainWindow;
@@ -25,6 +26,7 @@ private slots:
     void socketDisconnected();
     void sendMsg();
     QString byteArrayToString(QByteArray, bool);
+    bool byteArray2CharBuf(QByteArray, char*, u32);
 
 private:
 	Ui::MainWindow *ui;

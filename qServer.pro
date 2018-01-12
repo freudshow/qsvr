@@ -28,7 +28,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     lib698/lib698.c \
-    lib698/fcs.c
+    lib698/fcs.c \
+    basedef.c
 
 HEADERS += \
         mainwindow.h \

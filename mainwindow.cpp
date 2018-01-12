@@ -162,3 +162,15 @@ void MainWindow::socketDisconnected()
 	ui->pushButton_Send->setEnabled(false);
 	qDebug() << "Disconnected!";
 }
+
+
+bool MainWindow::byteArray2CharBuf(QByteArray b, const char* buf, u32* bufSize)
+{
+    if(NULL == buf || NULL == bufSize)
+        return false;
+
+    buf = b.data();
+    *bufSize = b.length();
+
+    return true;
+}

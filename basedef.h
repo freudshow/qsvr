@@ -3,23 +3,23 @@
 
 #ifdef __cplusplus
 extern "C" {
-#elif
+#endif
 
 
-typedef unsigned char  BOOLEAN;
-typedef unsigned char  INT8U;                    /* Unsigned  8 bit quantity                           */
-typedef signed   char  INT8S;                    /* Signed    8 bit quantity                           */
-typedef unsigned short INT16U;                   /* Unsigned 16 bit quantity                           */
-typedef signed   short INT16S;                   /* Signed   16 bit quantity                           */
-typedef unsigned int   INT32U;                   /* Unsigned 32 bit quantity                           */
-typedef signed   int   INT32S;                   /* Signed   32 bit quantity                           */
-typedef unsigned long long     	INT64U;          /* Unsigned 64 bit quantity   						   */
-typedef signed long long  		INT64S;          /* Unsigned 64 bit quantity                           */
-typedef float          FP32;                     /* Single precision floating point                    */
-typedef double         FP64;                     /* Double precision floating point                    */
+typedef unsigned char           boolean;      /* bool value, 0-false, 1-true       */
+typedef unsigned char           u8;           /* Unsigned  8 bit quantity          */
+typedef signed   char           s8;           /* Signed    8 bit quantity          */
+typedef unsigned short          u16;          /* Unsigned 16 bit quantity          */
+typedef signed   short          s16;          /* Signed   16 bit quantity          */
+typedef unsigned int            u32;          /* Unsigned 32 bit quantity          */
+typedef signed   int            s32;          /* Signed   32 bit quantity          */
+typedef unsigned long long     	u64;          /* Unsigned 64 bit quantity   	   */
+typedef signed long long  		s64;          /* Unsigned 64 bit quantity          */
+typedef float                   fp32;         /* Single precision floating point   */
+typedef double                  fp64;         /* Double precision floating point   */
 
-#define TRUE 1
-#define FALSE !TRUE
+#define TRUE        0x01
+#define FALSE       !TRUE
 
 //698.45扩展数据类型-------------------------------------
 typedef unsigned char MAC_698;	//数据安全MAC
@@ -28,6 +28,6 @@ typedef unsigned short OI_698;	//对象标识
 
 #ifdef __cplusplus
 }
-#elif
+#endif
 
 #endif // BASEDEF_H
