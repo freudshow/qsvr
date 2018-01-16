@@ -71,6 +71,19 @@ u8 checkFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
     return TRUE;
 }
 
+void scamCode(u8 *buf,int len, boolean addScam)
+{
+    int i=0;
+
+    if(TRUE == addScam) {
+        for(i=0;i<len;i++)
+            buf[i] = buf[i] + 0x33;
+    } else {
+        for(i=0;i<len;i++)
+            buf[i] = buf[i] - 0x33;
+    }
+}
+
 /*
  * process 698 frame
  * @buf: frame buffer
