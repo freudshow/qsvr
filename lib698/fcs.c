@@ -1,9 +1,12 @@
 /*
+* u16 represents an unsigned 16-bit number. Adjust the typedef for
+* your hardware.
 * Drew D. Perkins at Carnegie Mellon University.
 * Code liberally borrowed from Mohsen Banan and D. Hugh Redelmeier.
 */
 
-#include "fcs.h"
+#include "basedef.h"
+
 /*
 * FCS lookup table as calculated by the table generator.
 */
@@ -42,25 +45,24 @@ static u16 fcstab[256] = {
 0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
 
-u16 pppfcs16(u16 fcs,unsigned char *cp, int len)
+u16 pppfcs16(u16 fcs, u8* cp, u16 len)
 {
-	while (len--)
-	fcs = (fcs >> 8) ^ fcstab[(fcs ^ *cp++) & 0xff];
-	return (fcs);
+    while (len--)
+        fcs = (fcs >> 8) ^ fcstab[(fcs ^ *cp++) & 0xff];
+
+    return (fcs);
 }
 
-/*tryfcs16   bg
-* How to use the fcs
-*/
 #define PPPINITFCS16 0xffff /* Initial FCS value */
 #define PPPGOODFCS16 0xf0b8 /* Good final FCS value */
 
-unsigned short fcs16(unsigned char *cp, int  len)
+u16 fcs16(u8 *cp, u16 len)
 {
-	u16 trialfcs=0;
-	/* add on output */
-	trialfcs = pppfcs16( PPPINITFCS16, cp, len );
-	trialfcs ^= 0xffff; /* complement */
-
-	return trialfcs;
+    u16 trialfcs=0;
+    /* add on output */
+    trialfcs = pppfcs16( PPPINITFCS16, cp, len );
+    trialfcs ^= 0xffff; /* complement */
+//	b1 = (trialfcs & 0x00ff); /* least significant byte first */
+//	b2 = ((trialfcs >> 8) & 0x00ff);
+    return trialfcs;
 }

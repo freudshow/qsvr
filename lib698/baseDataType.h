@@ -1,0 +1,4 @@
+#ifndef BASEDATATYPE_H
+#define BASEDATATYPE_H
+
+#endif // BASEDATATYPE_H

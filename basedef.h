@@ -18,13 +18,33 @@ typedef signed long long  		s64;          /* Unsigned 64 bit quantity          *
 typedef float                   fp32;         /* Single precision floating point   */
 typedef double                  fp64;         /* Double precision floating point   */
 
-#define TRUE        0x01
-#define FALSE       !TRUE
+#define TRUE        1
+#define FALSE       0
 
-//698.45扩展数据类型-------------------------------------
-typedef unsigned char MAC_698;	//数据安全MAC
-typedef unsigned char RN_698;	//随机数
-typedef unsigned short OI_698;	//对象标识
+#define HEX_TO_BCD(x) (((x)/0x0A)*0x10+((x)%0x0A))
+#define BCD_TO_HEX(x) (((x)/0x10)*0x0A+((x)%0x10))
+#define ASCII_TO_HEX(c) (((c) >='0' && (c) <='9')?((c)-'0'):(((c)>='A'&&(c)<='F')?((c)-'A'+10):(((c)>='a'&&c<='f')?((c)-'a'+10):0)))
+#define isDigit(c) ((unsigned) ((c)-'0') < 10)
+#define isHex(c) (((unsigned) ((c)-'0') < 10) || ((unsigned) ((c)-'A') < 6) || ((unsigned) ((c)-'a') < 6) )
+#define isDelim(c) (c == ' ' || c == '\n' || c == 't' || c == '\r')
+#define HEX_TO_ASCII(x) ((x<=0x09)?(x+0x30):(x+0x37))
+
+#define U8_TO_ASCII_H(x) HEX_TO_ASCII(((x)&0x0F))
+#define U8_TO_ASCII_L(x) HEX_TO_ASCII(((x)&0x0F))
+#define BIT_N(byte, n) (((byte)>>(n))&0x01)
+#define	NELEM(array)	(sizeof(array)/sizeof(array[0]))
+
+#define	FILE_LINE		__FILE__,__FUNCTION__,__LINE__
+
+#define	DEBUG_BUFF(data, dataSize)		debugBuf(FILE_LINE, data, dataSize)
+#define	DEBUG_TIME_LINE(format, ...)	debugToStderr(FILE_LINE, format, ##__VA_ARGS__)
+#define DEBUG_TO_FILE(fname, format, ...)	debugToFile(fname, FILE_LINE, format, ##__VA_ARGS__)
+
+#define FILE_MAX_SIZE   (5*1024*1024)//5M
+
+extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 bufSize);
+extern void debugToStderr(const char* file, const char* func, u32 line, const char *fmt, ...);
+extern void debugToFile(const char* fname, const char* file, const char* func, u32 line, const char *fmt,...);
 
 #ifdef __cplusplus
 }

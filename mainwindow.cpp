@@ -2,6 +2,7 @@
 #include <QDateTime>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "lib698/lib698.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -41,7 +42,7 @@ void MainWindow::on_pushButton_Listen_clicked()
 
         ui->pushButton_Listen->setText(tr("Don't Listen"));
 		qDebug()<< "Listen succeessfully!";
-    } else {
+    } else if(NULL != pSocket) {
 		//如果正在连接（点击侦听后立即取消侦听，若socket没有指定对象会有异常，应修正——2017.9.30）
         if (pSocket->state() == QAbstractSocket::ConnectedState) {
 			//关闭连接
@@ -143,16 +144,16 @@ void MainWindow::socketReadData()
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
     QByteArray buffer = pSocket->readAll();
-    QString str = ui->textEdit_Recv->toPlainText();
 
     if(!buffer.isEmpty()) {
-        if(isHex) {
-            str+= byteArrayToString(buffer, true);
+        u8 ret = processFrame((u8*)(buffer.data()), buffer.length());
+        if(TRUE == ret) {
+            qDebug() << "frame valid";
         } else {
-            str+=tr(buffer);
+            qDebug() << "frame invalid";
         }
 
-		ui->textEdit_Recv->setText(str);
+        ui->textEdit_Recv->append(isHex ? byteArrayToString(buffer, true) : tr(buffer));
 	}
 }
 
@@ -163,14 +164,3 @@ void MainWindow::socketDisconnected()
 	qDebug() << "Disconnected!";
 }
 
-
-bool MainWindow::byteArray2CharBuf(QByteArray b, const char* buf, u32* bufSize)
-{
-    if(NULL == buf || NULL == bufSize)
-        return false;
-
-    buf = b.data();
-    *bufSize = b.length();
-
-    return true;
-}
