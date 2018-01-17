@@ -6,6 +6,8 @@ extern "C" {
 #include "string.h"
 #include "lib698.h"
 #include "fcs.h"
+#include "linkManager.h"
+#include "apduManager.h"
 
 /*
  * check if this frame is valid
@@ -13,10 +15,10 @@ extern "C" {
  * @bufSize: frame length
  * return: FALSE-invalid; TRUE-valid.
  */
-u8 checkFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
+u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 {
 
-    if((NULL == buf) || (0 == bufSize) || (NULL == pFrmhead))
+    if((NULL == buf) || (NULL == bufSize) || (NULL == pFrmhead))
         return FALSE;
 
     u16 crc = 0;
@@ -26,29 +28,31 @@ u8 checkFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
 
     while((FRM_WAKEUP == *p) && (bufSize > 0)) {//skip wake up code
         p++;
-        bufSize--;
+        *bufSize--;
     }
 
-    if(0 == bufSize)
+    buf = p;
+
+    if(0 == *bufSize)
         return FALSE;
 
      //check start code and end code
-    if((FRM_PREFIX != *p) || (FRM_SUFFIX != p[bufSize-1]))
+    if((FRM_PREFIX != *p) || (FRM_SUFFIX != p[*bufSize-1]))
         return FALSE;
 
     //check head length
-    if(bufSize <= HEAD_LEN_EXCEPT_SA)
+    if(*bufSize <= HEAD_LEN_EXCEPT_SA)
         return FALSE;
 
     memcpy(pFrmhead, p, HEAD_LEN_BEFORE_SA);
     pFrmhead->headLen = HEAD_LEN(pFrmhead->sa.saLen.sa.saLen);
-    if(bufSize < pFrmhead->headLen)
+    if(*bufSize < pFrmhead->headLen)
         return FALSE;
 
     memcpy(&(pFrmhead->sa.sa), (p+HEAD_LEN_BEFORE_SA), SA_LEN(pFrmhead->sa.saLen.sa.saLen));
 
     //check frame length
-    if(bufSize != (pFrmhead->frmLen.len.len+2))
+    if(*bufSize != (pFrmhead->frmLen.len.len+2))
         return FALSE;
 
     //check head's crc
@@ -62,7 +66,7 @@ u8 checkFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
         return FALSE;
 
     //check frame's crc
-    memcpy(&crc, p+bufSize-3, sizeof(u16));
+    memcpy(&crc, p+*bufSize-3, sizeof(u16));
 
     fcs = fcs16((p+1), (pFrmhead->frmLen.len.len-2));
     if(crc != fcs)
@@ -95,11 +99,23 @@ u8 processFrame(u8* buf, u16 bufSize)
     if((NULL == buf) || (0 == bufSize))
         return FALSE;
 
+    boolean ret = FALSE;
     frmHead_s frmhead = {0};
 
-    if(checkFrame(buf, bufSize, &frmhead) == FALSE) {
+    if(checkFrame(buf, &bufSize, &frmhead) == FALSE) {
         DEBUG_TIME_LINE("frame invalid");
         return FALSE;
+    }
+
+    switch (frmhead.ctlChar.ctl.func) {
+    case FUNC_LINK_MANAGE:
+        ret = linkManager(buf, bufSize, &frmhead);
+        break;
+    case FUNC_LINK_UERDATA:
+        ret = userDataManager(buf, bufSize, &frmhead);
+        break;
+    default:
+        break;
     }
 
     switch (frmhead.ctlChar.dirPrm.dpAssem) {

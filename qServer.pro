@@ -32,7 +32,9 @@ SOURCES += \
     basedef.c \
     lib698/request.c \
     lib698/apduType.c \
-    lib698/baseDataType.c
+    lib698/baseDataType.c \
+    lib698/linkManager.c \
+    lib698/apdumanager.c
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +43,12 @@ HEADERS += \
     lib698/fcs.h \
     lib698/request.h \
     lib698/apduType.h \
-    lib698/baseDataType.h
+    lib698/baseDataType.h \
+    lib698/linkManager.h \
+    lib698/apduManager.h
 
 FORMS += \
         mainwindow.ui
+
+DISTFILES += \
+    lib698/dlt698.45.asn1

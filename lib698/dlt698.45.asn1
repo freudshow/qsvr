@@ -1,0 +1,796 @@
+DLT69845 DEFINITIONS ::= BEGIN
+    Null ::= NULL
+	Array ::= SEQUENCE OF Data
+	Structure ::= SEQUENCE OF Data
+	Bool ::= BOOLEAN
+	BitString ::= BIT STRING
+	Integer32 ::= INTEGER
+	Integer8  ::= INTEGER(0..255)
+	DoubleLong ::= Integer32
+	DoubleLongUnsigned ::= Integer32
+	OctetString ::= OCTET STRING
+	Integer ::= BIT STRING(SIZE(8))
+	Long ::= BIT STRING(SIZE(16))
+	Unsigned ::= BIT STRING(SIZE(8))
+	LongUnsigned ::= BIT STRING(SIZE(16))
+	Long64 ::= BIT STRING(SIZE(64))
+	Long64Unsigned ::= BIT STRING(SIZE(64))
+	Enum ::= BIT STRING(SIZE(8))
+	Float32 ::= OctetString(SIZE(4))
+	Float64 ::= OctetString(SIZE(8))
+	ComBCD2 ::= OctetString(SIZE(1))
+	ComBCD4 ::= OctetString(SIZE(2))
+	ComBCD6 ::= OctetString(SIZE(3))
+	ComBCD8 ::= OctetString(SIZE(4))
+
+	DateTime ::= SEQUENCE {
+		year LongUnsigned,
+		month Unsigned,
+		dayOfMonth Unsigned,
+		dayOfWeek Unsigned,
+		hour Unsigned,
+		minute Unsigned,
+		second Unsigned,
+		milliseconds LongUnsigned
+	}
+
+	Date ::= SEQUENCE {
+		year LongUnsigned,
+		month Unsigned,
+		dayOfMonth Unsigned,
+		dayOfWeek Unsigned
+	}
+
+	Time ::= SEQUENCE {
+		hour Unsigned,
+		minute Unsigned,
+		second Unsigned
+	}
+
+	DateTimeBCD ::= SEQUENCE {
+		year  ComBCD4,
+		month  ComBCD2,
+		day  ComBCD2,
+		hour ComBCD2,
+		minute ComBCD2,
+		sec  ComBCD2
+	}
+
+	DateTimeBCDH ::= SEQUENCE {
+		dateTime DateTimeBCD,
+		milliSec  LongUnsigned
+	}
+
+	DateTimeBCDS ::= SEQUENCE {
+		year  ComBCD4,
+		month  ComBCD2,
+		day  ComBCD2,
+		hour ComBCD2,
+		minute ComBCD2
+	}
+
+	DateBCD ::= SEQUENCE {
+		year  ComBCD4,
+		month  ComBCD2,
+		day  ComBCD2
+	}
+
+	TimeBCD ::= SEQUENCE {
+		hour ComBCD2,
+		minute ComBCD2,
+		sec  ComBCD2
+	}
+
+	PIID ::= BIT STRING(SIZE(8)) {
+		svrPrio		(0),	--服务优先级
+		rsv			(1),	--保留
+		svrSeq5		(2),	--服务序号bit5
+		svrSeq4		(3),	--服务序号bit4 
+		svrSeq3		(4),	--服务序号bit3 
+		svrSeq2		(5),	--服务序号bit2 
+		svrSeq1		(6),	--服务序号bit1 
+		svrSeq0		(7)		--服务序号bit0 
+	}
+
+	PIID-ACD ::= BIT STRING(SIZE(8)) {
+		svrPrio		(0),
+		acd 		(1),	--请求访问(ACD) bit6
+		svrSeq5		(2),
+		svrSeq4		(3),
+		svrSeq3		(4),
+		svrSeq2		(5),
+		svrSeq1		(6),
+		svrSeq0		(7)
+	}
+
+	OI ::= LongUnsigned
+
+	OAD ::= SEQUENCE {
+		objId OI,
+		attrIdChara BitString(SIZE(8)),
+		attrElemIdx Integer8(1..255)
+	}
+
+	ROAD ::= SEQUENCE {
+		objDescr OAD,	-- Primary Key
+		relateObjDescr SEQUENCE OF OAD -- attributes
+	}
+
+	DAR ::= ENUMERATED {
+		suc								(0),	--	成功
+		hardInvalid						(1),	--	硬件失效
+		invalidForMoment				(2),	--	暂时失效
+		refuseRdWr						(3),	--	拒绝读写
+		objNotDef						(4),	--	对象未定义
+		objInterNotMatch				(5),	--	对象接口类不符合
+		objNotExist						(6),	--	对象不存在
+		typeNotMatch					(7),	--	类型不匹配
+		overflow						(8),	--	越界
+		dataBlkDisable					(9),	--	数据块不可用
+		subframeTransCancle				(10),	--	分帧传输已取消
+		notInSubframeTransState			(11),	--	不处于分帧传输状态
+		cancleBlkWR						(12),	--	块写取消
+		blkWRNotExist					(13),	--	不存在块写状态
+		blkSeqInvalid					(14),	--	数据块序号无效
+		passwdWrongOrNotPermit			(15),	--	密码错/未授权
+		cannotModifyBaudrate			(16),	--	通信速率不能更改
+		overflowYearInterval			(17),	--	年时区数超
+		overflowDayInterval				(18),	--	日时段数超
+		overflowRateCnt					(19),	--	费率数超
+		securityCertificateNotMatch		(20),	--	安全认证不匹配
+		repeatRecharge					(21),	--	重复充值
+		esamAuthenticationFailed		(22),	--	ESAM验证失败
+		saftyAuthenticationFailed		(23),	--	安全认证失败
+		customerIDNotMatch				(24),	--	客户编号不匹配
+		rechargeCntErr					(25),	--	充值次数错误
+		electricityPurchasingOverflow	(26),	--	购电超囤积
+		addrException					(27),	--	地址异常
+		symmetricDecryptionErr			(28),	--	对称解密错误
+		asymmetricDecryptionErr			(29),	--	非对称解密错误
+		signatureErr					(30),	--	签名错误
+		meterSuspend					(31),	--	电能表挂起
+		timeTagInvalid					(32),	--	时间标签无效
+		other							(-255)	--	其它
+	}
+
+
+	OMD ::= SEQUENCE {
+		objId OI,
+		methodId Integer8(1..255),
+		actionMode Integer8(0)
+	}
+
+	TI::=SEQUENCE {
+		unit ENUMERATED {
+			sec  (0),
+			minute (1),
+			hour (2),
+			day  (3),
+			month  (4),
+			year  (5)
+		},
+		interval LongUnsigned
+	}
+
+	TSA ::= OctetString(SIZE(2..17))
+	MAC ::= OctetString
+	RN ::= OctetString  --ESAM 生成用于加密的信息串。
+	CSD ::= CHOICE {
+		oad [0] OAD,
+		road [1] ROAD
+	}
+
+	RCSD ::= SEQUENCE OF CSD
+
+	Region ::= SEQUENCE {
+		regionUnit ENUMERATED {
+			closeOpen (0),
+			openClose (1),
+			closeClose (2),
+			openOpen (3)
+		},
+		start Data,
+		end Data
+	}
+
+    PhysicalUnit ::= ENUMERATED {
+        a   (1),
+        mo  (2),
+        wk  (3),
+        d   (4),
+        h   (5),
+        min (6),
+        s   (7),
+        rad (8),
+        tK   (9),
+        currency    (10),
+        m   (11),
+        mPerSec (12),
+        squareMeter  (13),
+        sqMeter (14),
+        sqMeterPerHour  (15)
+    }
+
+	ScalerUnit ::= SEQUENCE {
+		conversion Integer8,	--换算——倍数因子的指数,基数为 10；如数值不是数字的,则换算应被置 0。
+		unit PhysicalUnit		--物理单位, 详见698.45<表B.1 物理单位的枚举定义>, 其符号待以后添加
+	}
+
+	RSD ::= CHOICE {
+		notSel [0] NULL,
+		sel1 [1] Selector1,
+		sel2 [2] Selector2,
+		sel3 [3] Selector3,
+		sel4 [4] Selector4,
+		sel5 [5] Selector5,
+		sel6 [6] Selector6,
+		sel7 [7] Selector7,
+		sel8 [8] Selector8,
+		sel9 [9] Selector9,
+		sel10 [10] Selector10
+	}
+
+	Selector1 ::= SEQUENCE {
+		objDescr OAD,
+		value Data
+	}
+
+	Selector2 ::= SEQUENCE {
+		objDescr OAD,		--对象描述符
+		startValue Data,	--起始值
+		endValue Data,		--结束值
+		interv Data			--数据间隔
+	}
+
+	Selector3 ::= SEQUENCE OF Selector2
+
+	Selector4 ::= SEQUENCE {
+		acqStartTime DateTimeBCD,	--采集启动时间
+		meterSet	 MS	--电能表集合
+	}
+
+	Selector5 ::= SEQUENCE {
+		acqStoreTime DateTimeBCD,
+		meterSet MS
+	}
+
+	Selector6 ::= SEQUENCE {
+		acqStartTimeStartValue DateTimeBCD,	--采集启动时间起始值
+		acqStartTimeEndValue DateTimeBCD,	--采集启动时间结束值
+		timeInterv TI,						--时间间隔
+		meterSet MS							--电能表集合
+	}
+
+	Selector7 ::= SEQUENCE {
+		acqStoreTimeStartValue DateTimeBCD,	--采集存储时间起始值
+		acqStoreTimeEndValue DateTimeBCD,	--采集存储时间结束值
+		timeInterv TI,						--时间间隔
+		meterSet MS							--电能表集合
+	}
+
+	Selector8 ::= SEQUENCE {
+		acqSucTimeStartValue DateTimeBCD,	--采集成功时间起始值
+		acqSucTimeEndValue DateTimeBCD,	--采集成功时间结束值
+		timeInterv TI,	--时间间隔
+		meterSet MS	--电能表集合
+	}
+
+	Selector9 ::= SEQUENCE {
+		upNRec unsigned	--上n次记录
+	}
+
+	Selector10 ::= SEQUENCE {
+		upNRecord unsigned,	--上 n 条记录
+		meterSet MS			--电能表集合
+	}
+
+	MS ::= CHOICE	{
+		noMeter [0] NULL,
+		allAddr [1] NULL,
+		aGrpUserType [2] SEQUENCE OF Unsigned,	--一组用户类型
+		aGrpUserAddr [3] SEQUENCE OF TSA,	--一组用户地址
+		aGrpCfgSeq [4] SEQUENCE OF LongUnsigned,	--一组配置序号
+		aGrpUserTypeInterv [5] SEQUENCE OF Region,	--一组用户类型区间
+		aGrpUserAddrInterv [6] SEQUENCE OF Region,	--一组用户地址区间
+		aGrpUserCfgSeqInterv [7] SEQUENCE OF Region		--一组配置序号区间
+	}
+
+	SID ::= SEQUENCE {
+		identity DoubleLongUnsigned,
+		appendData OctetString
+	}
+
+	SIDMAC ::= SEQUENCE {
+		saftyId SID,
+		dataMAC MAC
+	}
+
+	BaudRate ::= ENUMERATED {
+		baud300bps (0), baud600bps (1), baud1200bps (2),
+		baud2400bps (3), baud4800bps (4), baud7200bps (5),
+		baud9600bps (6), baud19200bps (7), baud38400bps (8),
+		baud57600bps (9), baud115200bps (10), autoAjust (255)
+	}
+	
+	Parity ::= ENUMERATED {
+		no(0), odd(1), even(2)
+	}
+
+	DataBits ::= ENUMERATED {
+		databit5(5), databit6(6),
+		databit7(7), databit8(8)
+	}
+
+	StopBits ENUMERATED {
+		stopbits1(1), stopbits2(2)
+	}
+	
+	FlowCtl ENUMERATED {
+		no(0), hard(1), soft(2)
+	}
+
+	COMDCB ::= SEQUENCE {
+		baudrate BaudRate,
+		parity Parity,
+		databits DataBits,
+		stopbits StopBits,
+		flowctl FlowCtl
+	}
+
+	Data ::= CHOICE {
+		null				[0] NULL,
+		array				[1] SEQUENCE OF Data,
+		structure			[2] SEQUENCE OF Data,
+		bool				[3] BOOLEAN,
+		bitString			[4] BitString,
+		doubleLong			[5] DoubleLong,
+		doubleLongunsigned	[6] DoubleLongUnsigned,
+		octetString			[9] OctetString,
+		visibleString		[10] VisibleString,
+		utf8String			[12] UTF8String,
+		integer				[15] Integer,
+		long				[16] Long,
+		unsigned			[17] Unsigned,
+		longunsigned		[18] LongUnsigned,
+		long64				[20] Long64,
+		long64Unsigned		[21] Long64Unsigned,
+		enum				[22] Enum,
+		float32				[23] Float32,
+		float64				[24] Float64,
+		dateTime			[25] DateTime,
+		date				[26] Date,
+		time				[27] Time,
+		dateTimeBCD			[28] DateTimeBCD,
+		dateTimeBCDH		[29] DateTimeBCDH,
+		datetimeBCDS		[30] DateTimeBCDS,
+		dateBCD				[31] DateBCD,
+		timeBCD				[32] TimeBCD,
+		oi					[80] OI,
+		oad					[81] OAD,
+		road				[82] ROAD,
+		omd					[83] OMD,
+		ti					[84] TI,
+		tsa					[85] TSA,
+		mac					[86] MAC,
+		rn			     	[87] RN,
+		region				[88] Region,
+		scalerUnit			[89] ScalerUnit,
+		rsd					[90] RSD,
+		csd					[91] CSD,
+		ms					[92] MS,
+		sid					[93] SID,
+		sidMac 	        	[94] SIDMAC,
+		comdcb            	[95] COMDCB,
+		rcsd              	[96] RCSD
+	}
+
+	LINK-APDU ::= CHOICE {
+		preLinkRq [1] LINK-Request,	--预连接请求
+		PreLinkRp [129] LINK-Response	--预连接响应
+	}
+
+	Client-APDU ::= SEQUENCE {
+		应用层服务 CHOICE {
+			建立应用连接请求 [2] CONNECT-Request,
+			断开应用连接请求 [3] RELEASE-Request,
+			读取请求 [5] GET-Request,
+			设置请求 [6] SET-Request,
+			操作请求 [7] ACTION-Request,
+			上报应答 [8] REPORT-Response,
+			代理请求 [9] PROXY-Request
+		},
+		时间标签 TimeTag OPTIONAL
+	}
+
+	Server-APDU ::= SEQUENCE {
+		应用层服务 CHOICE {
+			建立应用连接响应 [130] CONNECT-Response,
+			断开应用连接响应 [131] RELEASE-Response,
+			断开应用连接通知 [132] RELEASE-Notification,
+			读取响应 [133] GET-Response,
+			设置响应 [134] SET-Response,
+			操作响应 [135] ACTION-Response,
+			上报通知 [136] REPORT-Notification,
+			代理响应 [137] PROXY-Response
+		},
+		跟随上报信息域 FollowReport OPTIONAL,
+		时间标签 TimeTag OPTIONAL
+	}
+
+	FollowReport ::= CHOICE {
+		若干个对象属性及其数据 [1] SEQUENCE OF A-ResultNormal
+		若干个记录型对象属性及其数据 [2] SEQUENCE OF A-ResultRecord
+	}
+
+	TimeTag::=SEQUENCE {
+		发送时标 DateTimeBCD,
+		允许传输延时时间 TI
+	}
+
+	SECURITY-APDU ::= CHOICE {
+		安全请求 [16] SECURITY-Request,
+		安全响应 [144] SECURITY-Response
+	}
+
+	LINK-Request ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		请求类型 ENUMERATED { 
+			登录 (0),
+			心跳 (1),
+			退出登录 (2)
+		},
+		心跳周期 LongUnsigned,
+		请求时间 date_time
+	}
+	
+	LINK-Response ::= SEQUENCE {
+		prioInvID PIID,
+		结果 Result,
+		请求时间 date_time,
+		收到时间 date_time,
+		响应时间 date_time
+	}
+
+	Result ::= Bit-string(SIZE(8)) {
+		时钟可信标志 (0),
+		保留 bit6 (1),
+		保留 bit5 (2),
+		保留 bit4 (3),
+		保留 bit3 (4),
+		结果 bit2 (5),
+		结果 bit1 (6),
+		结果 bit0 (7)
+	}
+
+	Connect-Request ::= SEQUENCE {
+		prioInvID PIID,
+		期望的应用层协议版本号 LongUnsigned,
+		期望的协议一致性块 ProtocolConformance,
+		期望的功能一致性块 FunctionConformance,
+		客户机发送帧最大尺寸 LongUnsigned,
+		客户机接收帧最大尺寸 LongUnsigned,
+		客户机接收帧最大窗口尺寸 Unsigned,
+		客户机最大可处理 APDU 尺寸 LongUnsigned,
+		期望的应用连接超时时间 double-LongUnsigned,
+		认证请求对象 ConnectMechanismInfo
+	}
+
+	CONNECT-Response ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		服务器厂商版本信息 FactoryVersion,
+		商定的应用层协议版本号 LongUnsigned,
+		商定的协议一致性块 ProtocolConformance,
+		商定的功能一致性块 FunctionConformance,
+		服务器发送帧最大尺寸 LongUnsigned,
+		服务器接收帧最大尺寸 LongUnsigned,
+		服务器接收帧最大窗口尺寸 Unsigned,
+		服务器最大可处理 APDU 尺寸 LongUnsigned,
+		商定的应用连接超时时间 double-LongUnsigned,
+		连接响应对象 ConnectResponseInfo
+	}
+
+	FactoryVersion ::= SEQUENCE {
+		厂商代码 VisibleString(SIZE (4)),
+		软件版本号 VisibleString(SIZE (4)),
+		软件版本日期 VisibleString(SIZE (6)),
+		硬件版本号 VisibleString(SIZE (4)),
+		硬件版本日期 VisibleString(SIZE (6)),
+		厂家扩展信息 VisibleString(SIZE (8))
+	}
+
+	RELEASE-Request ::= SEQUENCE {
+		prioInvID PIID
+	}
+
+	RELEASE-Response ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		结果 ENUMERATED {
+			成功 (0)
+		}
+	}
+
+	RELEASE-Notification ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		应用连接建立时间 date_time_s,
+		服务器当前时间 date_time_s
+	}
+
+	GET-Request ::= CHOICE {
+		读取一个对象属性请求 [1] GetRequestNormal,
+		读取若干个对象属性请求 [2] GetRequestNormalList,
+		读取一个记录型对象属性请求 [3] GetRequestRecord,
+		读取若干个记录型对象属性请求 [4] GetRequestRecordList,
+		读取分帧响应的下一个数据块请求 [5] GetRequestNext
+	}
+
+	GetRequestNormal ::= SEQUENCE {
+		prioInvID PIID,
+		一个对象属性描述符 OAD
+	}
+
+	GetRequestNormalList ::= SEQUENCE {
+		prioInvID PIID,
+		若干个对象属性描述符 SEQUENCE OF OAD
+	}
+
+	GetRequestRecord ::= SEQUENCE {
+		prioInvID PIID,
+		读取一个记录型对象属性 GetRecord
+	}
+
+	GetRecord ::= SEQUENCE {
+		objDescr OAD,
+		记录选择描述符 RSD,
+		记录列选择描述符 RCSD
+	}
+
+	GetRequestRecordList ::= SEQUENCE {
+		prioInvID PIID,
+		读取若干个记录型对象属性 SEQUENCE OF
+		GetRecord
+	}
+
+	GetRequestNext ::= SEQUENCE {
+		prioInvID PIID,
+		正确接收的最近一次数据块序号 LongUnsigned
+	}
+
+	GET-Response ::= CHOICE {
+		读取一个对象属性的响应 [1] GetResponseNormal,
+		读取若干个对象属性的响应 [2] GetResponseNormalList,
+		读取一个记录型对象属性的响应 [3] GetResponseRecord,
+		读取若干个记录型对象属性的响应 [4] GetResponseRecordList,
+		分帧响应一个数据块 [5] GetResponseNext
+	}
+
+	GetResponseNormal ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		一个对象属性及其结果 A-ResultNormal
+	}
+
+	A-ResultNormal ::= SEQUENCE {
+		objDescr OAD,
+		及其结果 Get-Result
+	}
+
+	Get-Result ::= CHOICE {
+		错误信息 [0] DAR,
+		数据 [1] Data
+	}
+
+	GetResponseNormalList ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		若干个对象属性及其结果 SEQUENCE OF AResultNormal
+	}
+
+	GetResponseRecord ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		一个记录型对象属性及其结果 A-ResultRecord
+	}
+
+	A-ResultRecord ::= SEQUENCE {
+		记录型objDescr OAD,
+		一行记录 N 列属性描述符 RCSD,
+		响应数据 CHOICE {
+			错误信息	[0] DAR,
+			M条记录	[1] SEQUENCE OF A-RecordRow
+		}
+	}
+
+	A-RecordRow ::= SEQUENCE OF Data 
+	--{
+	--	第 1 列数据 Data,
+	--	第 2 列数据 Data,
+	--	…
+	--	第 N 列数据 Data
+	--}
+
+	GetResponseRecordList ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		若干个记录型对象属性及其结果 SEQUENCE OF A-ResultRecord
+	}
+
+	GetResponseNext ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		末帧标志 BOOLEAN,
+		分帧序号 LongUnsigned,
+		分帧响应 CHOICE {
+			错误信息 [0] DAR,
+			对象属性 [1] SEQUENCE OF A-ResultNormal,
+			记录型对象属性 [2] SEQUENCE OF A-ResultRecord
+		}
+	}
+
+	SET-Request ::= SEQUENCE {
+		设置一个对象属性请求 [1] SetRequestNormal,
+		设置若干个对象属性请求 [2] SetRequestNormalList,
+		设置后读取若干个对象属性请求 [3] SetThenGetRequestNormalList
+	}
+
+	SetRequestNormal ::= SEQUENCE {
+		prioInvID PIID,
+		objDescr OAD,
+		data Data
+	}
+
+	SetRequestNormalList ::= SEQUENCE {
+		prioInvID PIID,
+		若干个对象属性 SEQUENCE OF {
+			objDescr OAD,
+			数据 Data
+		}
+	}
+
+	SetThenGetRequestNormalList ::= SEQUENCE {
+		prioInvID PIID,
+		若干个设置后读取对象属性 SEQUENCE OF {
+			一个设置的对象属性 OAD,
+			数据 Data,
+			一个读取的对象属性 OAD,
+			延时读取时间 unsigned
+		}
+	}
+
+	SET-Response ::= CHOICE {
+		设置一个对象属性的确认信息响应 [1] SetResponseNormal,
+		设置若干个对象属性的确认信息响应 [2] SetResponseNormalList,
+		设置的确认信息以及读取的响应 [3] SetThenGetResponseNormalList
+	}
+
+	SetResponseNormal ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		objDescr OAD,
+		设置执行结果 DAR
+	}
+
+	SetResponseNormalList ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		若干个对象属性设置结果::= SEQUENCE OF {
+			objDescr OAD,
+			res DAR
+		}
+	}
+
+	SetThenGetResponseNormalList ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		若干个对象属性设置后读取结果::= SEQUENCE OF {
+			一个设置的objDescr OAD,
+			设置执行结果 DAR,
+			一个读取的objDescr OAD,
+			读取响应数据 Get-Result
+		}
+	}
+
+	ACTION-Request ::= CHOICE {
+		操作一个对象方法请求 [1] ActionRequest,
+		操作若干个对象方法请求 [2] ActionRequestList,
+		操作若干个对象方法后读取若干个对象属性请求 [3] ActionThenGetRequestNormalList
+	}
+
+	ActionRequest ::= SEQUENCE {
+		prioInvID		PIID,
+		objMethDescr	OMD,	--对象方法描述符
+		methArg			Data	--方法参数
+	}
+
+	ActionRequestList ::= SEQUENCE {
+		prioInvID PIID,
+		若干个对象属性 SEQUENCE OF {
+			objMethDescr OMD,
+			方法参数 Data
+		}
+	}
+
+	ActionThenGetRequestNormalList ::= SEQUENCE {
+		prioInvID PIID,
+		若干个操作对象方法后读取对象属性 SEQUENCE OF {
+			一个设置的对象方法描述符 OMD,
+			方法参数 Data,
+			一个读取的objDescr OAD,
+			读取延时 unsigned
+		}
+	}
+
+	ACTION-Response ::= CHOICE {
+		操作一个对象方法的响应 [1] ActionResponseNormal,
+		操作若干个对象方法的响应 [2] ActionResponseNormalList,
+		操作若干个对象方法后读取若干个属性的响应 [3] ActionThenGetResponseNormalList
+	}
+
+	ActionResponseNormal ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		objMethDescr OMD,
+		操作执行结果 DAR,
+		操作返回数据 Data OPTIONAL
+	}
+
+	ActionResponseNormalList ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		若干个对象方法操作结果 SEQUENCE OF {
+			objMethDescr OMD,
+			操作执行结果 DAR,
+			操作返回数据 Data OPTIONAL
+		}
+	}
+
+	ActionThenGetResponseNormalList ::= SEQUENCE {
+		服务序号-优先级-ACD PIID-ACD,
+		操作若干个对象方法后读取属性的结果 SEQUENCE OF {
+			一个设置的对象方法描述符 OMD,
+			操作执行结果 DAR,
+			操作返回数据 Data OPTIONAL,
+			一个读取的objDescr OAD,
+			读取响应数据 Get-Result
+		}
+	}
+
+	AcqDocDef ::= Structure {	--采集档案配置单元.属性[2]
+		configId LongUnsigned,	--配置序号
+		basicInfo BasicObject,	--基本信息
+		extInfo ExtendedObject,--扩展信息
+		auxInfo AnnexObject	--附属信息
+	}
+
+	BasicObject ::= Structure {
+		addr TSA,				--通信地址
+		baud BaudRate,			--波特率 enum
+		protoType Enum {		--规约类型
+			unknow (0),
+			DLT6451997 (1),
+			DLT6452007 (2),
+			DLT698dot45 (3),
+			CJT188dot2004 (4)
+		},
+		port OAD,				--端口
+		passwd octet-string,	--通信密码
+		rateCnt unsigned,		--费率个数
+		userType unsigned,		--用户类型
+		wireType Enum {			--接线方式
+			unknow (0),
+			singlePhase (1),
+			threePhase3Wire (2),--三项三线
+			threePhase4wire (3)	--三项四线
+		},
+		nominalVoltage LongUnsigned,--额定电压(换算-1，单位 V)
+		nominalCurrent LongUnsigned	--额定电流(换算-1，单位 A)
+	}
+
+	ExtendedObject ::= Structure {
+		collectorAddr TSA,		--采集器地址
+		AssetNO OctetString,	--资产号
+		PT LongUnsigned,
+		CT LongUnsigned
+	}
+
+	AnnexObject ::= array Structure {
+		objDescr OAD,	--对象属性描述符
+		fieldValue Data	--属性值
+	}
+	
+	
+	interface12 ::= Structure {
+	
+	}
+END
+
+
