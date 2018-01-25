@@ -34,7 +34,7 @@ SOURCES += \
     lib698/apduType.c \
     lib698/baseDataType.c \
     lib698/linkManager.c \
-    lib698/apdumanager.c
+    lib698/apduManager.c
 
 HEADERS += \
         mainwindow.h \

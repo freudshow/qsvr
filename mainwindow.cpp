@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QDateTime>
+#include <QTextCursor>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "lib698/lib698.h"
@@ -15,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->checkBox_RecvHex->setChecked(true);
     ui->checkBox_SendHex->setChecked(true);
 
+    connect(ui->textEdit_Recv, QTextEdit::textChanged, this, &MainWindow::setRecvCursor);
+
 	pServer = new QTcpServer();
 
 	//连接信号槽
@@ -28,6 +31,13 @@ MainWindow::~MainWindow()
 	pServer->close();
 	pServer->deleteLater();
 	delete ui;
+}
+
+void MainWindow::setRecvCursor()
+{
+    QTextCursor cursor=ui->textEdit_Recv->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    ui->textEdit_Recv->setTextCursor(cursor);
 }
 
 void MainWindow::on_pushButton_Listen_clicked()

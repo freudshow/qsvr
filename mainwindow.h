@@ -25,6 +25,7 @@ private slots:
     void socketReadData();
     void socketDisconnected();
     void sendMsg();
+    void setRecvCursor();
     QString byteArrayToString(QByteArray, bool);
 
 private:
