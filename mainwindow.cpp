@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->textEdit_Recv, &QTextEdit::textChanged, this, &MainWindow::setRecvCursor);
 
 	pServer = new QTcpServer();
+    pSocket = NULL;
 
 	//连接信号槽
     connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
