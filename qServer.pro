@@ -34,7 +34,8 @@ SOURCES += \
     lib698/apduType.c \
     lib698/baseDataType.c \
     lib698/linkManager.c \
-    lib698/apduManager.c
+    lib698/apduManager.c \
+    dlt698.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     lib698/apduType.h \
     lib698/baseDataType.h \
     lib698/linkManager.h \
-    lib698/apduManager.h
+    lib698/apduManager.h \
+    dlt698.h
 
 FORMS += \
         mainwindow.ui

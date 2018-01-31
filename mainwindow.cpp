@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->checkBox_RecvHex->setChecked(true);
     ui->checkBox_SendHex->setChecked(true);
 
-    connect(ui->textEdit_Recv, QTextEdit::textChanged, this, &MainWindow::setRecvCursor);
+    connect(ui->textEdit_Recv, &QTextEdit::textChanged, this, &MainWindow::setRecvCursor);
 
 	pServer = new QTcpServer();
 
