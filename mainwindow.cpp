@@ -123,6 +123,7 @@ void MainWindow::serverNewConnect()
     ui->pushButton_Send->setEnabled(true);
 
     qDebug() << "A Client connect!";
+    qDebug() << "Client IP:" << pSocket->peerAddress() << pSocket->peerPort() << pSocket->peerName();
 }
 
 QString MainWindow::byteArrayToString(QByteArray buffer, bool read)
