@@ -73,6 +73,11 @@ void MainWindow::on_pushButton_Send_clicked()
 	qDebug() << "Send: " << ui->textEdit_Send->toPlainText();
 }
 
+void MainWindow::on_Button_ClrRcv_clicked()
+{
+    ui->textEdit_Recv->clear();
+}
+
 void MainWindow::sendMsg()
 {
     QByteArray buf;
