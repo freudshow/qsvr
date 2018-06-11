@@ -127,8 +127,9 @@ void MainWindow::serverNewConnect()
     QObject::connect(pSocket, &QTcpSocket::disconnected, this, &MainWindow::socketDisconnected);
     ui->pushButton_Send->setEnabled(true);
 
-    qDebug() << "A Client connect!";
-    qDebug() << "Client IP:" << pSocket->peerAddress() << pSocket->peerPort() << pSocket->peerName();
+    qDebug() << "Client IP:" << pSocket->peerAddress()
+             << pSocket->peerPort() << pSocket->peerName()
+             << "connect!";
 }
 
 QString MainWindow::byteArrayToString(QByteArray buffer, bool read)
