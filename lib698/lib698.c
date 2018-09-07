@@ -3,6 +3,7 @@ extern "C" {
 #endif
 
 #include "stdio.h"
+#include "stdlib.h"
 #include "string.h"
 #include "lib698.h"
 #include "fcs.h"
@@ -26,7 +27,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     u8* p = buf;
 
 
-    while((FRM_WAKEUP == *p) && (bufSize > 0)) {//skip wake up code
+    while((FRM_PREFIX != *p) && (*bufSize > 0)) {//find start code
         p++;
         *bufSize--;
     }
@@ -36,8 +37,8 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     if(0 == *bufSize)
         return FALSE;
 
-     //check start code and end code
-    if((FRM_PREFIX != *p) || (FRM_SUFFIX != p[*bufSize-1]))
+     //check end code
+    if(FRM_SUFFIX != p[*bufSize-1])
         return FALSE;
 
     //check head length
@@ -45,11 +46,30 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
         return FALSE;
 
     memcpy(pFrmhead, p, HEAD_LEN_BEFORE_SA);
+
+    DEBUG_TIME_LINE("frmLen: %u, dir: sent by %s, prm: promoted by %s, divS: %s apdu, func: %s",
+                    pFrmhead->frmLen.len.len,
+                    (pFrmhead->ctlChar.ctl.dir==0?"client":"server"),
+                    (pFrmhead->ctlChar.ctl.prm==0?"server":"client"),
+                    (pFrmhead->ctlChar.ctl.divS==0?"whole":"piece of"),
+                    (pFrmhead->ctlChar.ctl.func==1?"link managment, logon, heart beat and logout.":(\
+                     pFrmhead->ctlChar.ctl.func==3? "apdu managment and data exchange." : "unknown function code" )));
+
     pFrmhead->headLen = HEAD_LEN(pFrmhead->sa.saLen.sa.saLen);
+    DEBUG_TIME_LINE("head's len: %u", pFrmhead->headLen);
     if(*bufSize < pFrmhead->headLen)
         return FALSE;
 
-    memcpy(&(pFrmhead->sa.sa), (p+HEAD_LEN_BEFORE_SA), SA_LEN(pFrmhead->sa.saLen.sa.saLen));
+    pFrmhead->sa.saLen.sa.saLen = SA_LEN(pFrmhead->sa.saLen.sa.saLen);
+    DEBUG_TIME_LINE("server's len: %u", pFrmhead->sa.saLen.sa.saLen);
+    if(NULL != pFrmhead->sa.sa)
+        return FALSE;
+    pFrmhead->sa.sa = calloc(1, pFrmhead->sa.saLen.sa.saLen);
+    if(NULL == pFrmhead->sa.sa)
+        return FALSE;
+
+    memcpy(&(pFrmhead->sa.sa), (p+HEAD_LEN_BEFORE_SA), pFrmhead->sa.saLen.sa.saLen);
+
 
     //check frame length
     if(*bufSize != (pFrmhead->frmLen.len.len+2))
@@ -69,9 +89,9 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     memcpy(&crc, p+*bufSize-3, sizeof(u16));
 
     fcs = fcs16((p+1), (pFrmhead->frmLen.len.len-2));
-    if(crc != fcs)
+    if(crc != fcs) {
         return FALSE;
-
+    }
     return TRUE;
 }
 
@@ -99,12 +119,13 @@ u8 processFrame(u8* buf, u16 bufSize)
     if((NULL == buf) || (0 == bufSize))
         return FALSE;
 
-    boolean ret = FALSE;
-    frmHead_s frmhead = {0};
+    boolean ret = TRUE;
+    frmHead_s frmhead = {};
 
     if(checkFrame(buf, &bufSize, &frmhead) == FALSE) {
         DEBUG_TIME_LINE("frame invalid");
-        return FALSE;
+        ret = FALSE;
+        goto onret;
     }
 
     switch (frmhead.ctlChar.ctl.func) {
@@ -135,7 +156,11 @@ u8 processFrame(u8* buf, u16 bufSize)
         break;
     }
 
-    return TRUE;
+ onret:
+    if(frmhead.sa.sa != NULL)
+        free(frmhead.sa.sa);
+
+    return ret;
 }
 
 #ifdef __cplusplus

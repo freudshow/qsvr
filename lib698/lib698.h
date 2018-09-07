@@ -16,11 +16,18 @@ extern "C" {
 #pragma pack(push)
 #pragma pack(1)
 
-
 //698.45扩展数据类型-------------------------------------
 typedef unsigned char   MAC_698;//数据安全MAC
 typedef unsigned char   RN_698;	//random number
 typedef unsigned short  OI_698;	//object's identifier
+
+typedef union {//little endian
+    u8 u8b;//convenient to set value to 0
+    struct {
+        u8  low     :4;
+        u8  high    :4;
+    }bcd;
+}comBCD_u;
 
 /****************************
  * frame's length definition
@@ -28,42 +35,43 @@ typedef unsigned short  OI_698;	//object's identifier
 typedef union {
     u16 u16b;//convenient to set value to 0
     struct {//only for little endian frame!
-        u16 len	: 14;//length
-        u16 rev	: 2;//reserve
+        u16 len	:14;//length
+        u16 rev	:2;//reserve
     } len;
 } frmLen_u;
 
 /*****************************
  * control code definition
  ****************************/
-#define DIR_SEND_BY_CLT     0//direction flag, frame sent by client
-#define DIR_SEND_BY_SRV     1//direction flag, frame sent by server
-
-#define PRM_BY_CLT          1//promotion flag, frame promoted by client
-#define PRM_BY_SRV          0//promotion flag, frame promoted by server
-
-#define DIR_PRM_CLT_RESPONSE 0//client's response to server's report
-#define DIR_PRM_CLT_REQUEST  1//client's request
-#define DIR_PRM_SRV_REPORT   2//server's report
-#define DIR_PRM_SRV_RESPONSE 3//server's response for client's request
-
-#define FUNC_LINK_MANAGE     1//link managment, including "logon", "heart beat" and "logout".
-#define FUNC_LINK_UERDATA    3//apdu managment and data exchange.
 
 typedef union {//control code
     u8 u8b;//convenient to set value to 0
     struct {//only for little endian mathine!
-        u8 func		: 3;//function code
-        u8 sc		: 1;//Scrambling Code flag. 1-apdu add 0x33 by each byte; 0-apdu don't add 0x33 by each byte.
+#define FUNC_LINK_MANAGE     1//link managment, including "logon", "heart beat" and "logout".
+#define FUNC_LINK_UERDATA    3//apdu managment and data exchange.
+        u8 func             :3;//function code
+#define SCAMBLE_WITH        1
+#define SCAMBLE_NOT_WITH    0
+        u8 sc               :1;//Scrambling Code flag. 1-apdu add 0x33 by each byte; 0-apdu don't add 0x33 by each byte.
                         //response's Scrambling format mast be the same as request's/report's Scrambling format.
-        u8 rev		: 1;//reserve
-        u8 divS		: 1;//divide frame flag. 0-this is a complete frame; 1-this is a piece of a frame.
-        u8 prm		: 1;//promote flag
-        u8 dir		: 1;//direction flag
+        u8 rev              :1;//reserve
+#define DIV_PIECE           1//divide frame flag. a piece of a frame
+#define DIV_COMPLETE        0//divide frame flag. complete frame
+        u8 divS             :1;//divide frame flag. 0-this is a complete frame; 1-this is a piece of a frame.
+#define PRM_BY_CLT          1//promotion flag, frame promoted by client
+#define PRM_BY_SRV          0//promotion flag, frame promoted by server
+        u8 prm              :1;//promote flag
+#define DIR_SEND_BY_CLT     0//direction flag, frame sent by client
+#define DIR_SEND_BY_SRV     1//direction flag, frame sent by server
+        u8 dir              :1;//direction flag
     } ctl;
     struct {
-        u8 rev      :6;//reserve
-        u8 dpAssem  :2;//direction and promotion assembly
+        u8 rev              :6;//reserve
+#define DIR_PRM_CLT_RESPONSE 0//client's response to server's report
+#define DIR_PRM_CLT_REQUEST  1//client's request
+#define DIR_PRM_SRV_REPORT   2//server's report
+#define DIR_PRM_SRV_RESPONSE 3//server's response for client's request
+        u8 dpAssem          :2;//direction and promotion assembly
     } dirPrm;
 } ctl_u;
 
@@ -77,23 +85,19 @@ typedef union {//control code
 typedef union {//little endian
     u8 u8b;//convenient to set value to 0
     struct {//only for little endian mathine!
-        u8 saLen		: 4;//server address's length
-        u8 logicAddr	: 2;//logic addr
-        u8 saType       : 2;//server address's type, 0-single, 1-wildcard, 2-group，3-broadcast.
+        u8 saLen            :4;//server address's length
+        u8 logicAddr        :2;//logic addr
+#define SA_TYPE_SINGLE      0
+#define SA_TYPE_WILDCARD    1
+#define SA_TYPE_GROUP       2
+#define SA_TYPE_BROADCAST   3
+        u8 saType           :2;//server address's type, 0-single, 1-wildcard, 2-group, 3-broadcast.
     } sa;
 } sa_u;
 
-typedef union {//little endian
-    u8 u8b;//convenient to set value to 0
-    struct {
-        u8  low     :4;
-        u8  high    :4;
-    }bcd;
-}comBCD_u;
-
 typedef struct {
-    sa_u        saLen;
-    comBCD_u   sa[SA_MAX_LEN];//compression BCD
+    sa_u       saLen;
+    comBCD_u*  sa;//compression BCD
 } srvAddr_s;
 
 
@@ -115,7 +119,7 @@ typedef struct frameHead {
     u8          headLen;//length of frame's head, including startChar
 }frmHead_s;
 
-typedef union apduStruct {//todo: to be completed
+typedef union apduStruct {//todo:to be completed
     u8   foo;
 } apdu_s;
 
