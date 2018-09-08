@@ -128,6 +128,24 @@ void debugToFile(const char* fname, const char* file, const char* func, u32 line
     }
 }
 
+void printBuf(u8* buf, u32 bufSize, u8 space, u8 inverse)
+{
+    u32 i = 0;
+
+    if (NULL == buf || 0 == bufSize) {
+        return;
+    }
+
+    if(inverse == 0)
+        for (i = 0; i < (bufSize - 1); i++)
+            fprintf(stderr, "%02X%s", buf[i], space==0?"":" ");
+    else
+        for (i = (bufSize - 1); i > 0; i--)
+            fprintf(stderr, "%02X%s", buf[i], space==0?"":" ");
+
+    fprintf(stderr, "%02X\n", buf[i]);
+}
+
 
 #ifdef __cplusplus
 }

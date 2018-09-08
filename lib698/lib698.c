@@ -47,7 +47,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 
     memcpy(pFrmhead, p, HEAD_LEN_BEFORE_SA);
 
-    DEBUG_TIME_LINE("frmLen: %u, dir: sent by %s, prm: promoted by %s, divS: %s apdu, func: %s",
+    DEBUG_TIME_LINE("frmLen: %u,\n dir: sent by %s,\n prm: promoted by %s,\n divS: %s apdu,\n func: %s",
                     pFrmhead->frmLen.len.len,
                     (pFrmhead->ctlChar.ctl.dir==0?"client":"server"),
                     (pFrmhead->ctlChar.ctl.prm==0?"server":"client"),
@@ -64,23 +64,27 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     DEBUG_TIME_LINE("server's len: %u", pFrmhead->sa.saLen.sa.saLen);
     if(NULL != pFrmhead->sa.sa)
         return FALSE;
-    pFrmhead->sa.sa = calloc(1, pFrmhead->sa.saLen.sa.saLen);
+    pFrmhead->sa.sa = calloc(1, pFrmhead->sa.saLen.sa.saLen*sizeof(*(pFrmhead->sa.sa)));
     if(NULL == pFrmhead->sa.sa)
         return FALSE;
 
-    memcpy(&(pFrmhead->sa.sa), (p+HEAD_LEN_BEFORE_SA), pFrmhead->sa.saLen.sa.saLen);
-
+    memcpy((u8*)(pFrmhead->sa.sa), (p+HEAD_LEN_BEFORE_SA), pFrmhead->sa.saLen.sa.saLen);
+    DEBUG_TIME_LINE("server id:");
+    printBuf((u8*)pFrmhead->sa.sa, pFrmhead->sa.saLen.sa.saLen, 0, 1);
 
     //check frame length
     if(*bufSize != (pFrmhead->frmLen.len.len+2))
         return FALSE;
 
+    pFrmhead->ca = *(p+HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen);
+    DEBUG_TIME_LINE("client id: %02X", pFrmhead->ca);
     //check head's crc
     memcpy(&pFrmhead->headChk,
-           (p+HEAD_LEN_BEFORE_SA+SA_LEN(pFrmhead->sa.saLen.sa.saLen)+sizeof(u8)),
+           (p+HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen+sizeof(u8)),
            sizeof(u16));
 
     crc = fcs16((p+1), (pFrmhead->headLen-3));
+
 
     if(crc != pFrmhead->headChk)
         return FALSE;
@@ -120,9 +124,11 @@ u8 processFrame(u8* buf, u16 bufSize)
         return FALSE;
 
     boolean ret = TRUE;
-    frmHead_s frmhead = {};
+    frmHead_s frmhead;
 
-    if(checkFrame(buf, &bufSize, &frmhead) == FALSE) {
+    bzero((u8*)&frmhead, sizeof(frmhead));
+    ret = checkFrame(buf, &bufSize, &frmhead);
+    if( FALSE == ret) {
         DEBUG_TIME_LINE("frame invalid");
         ret = FALSE;
         goto onret;

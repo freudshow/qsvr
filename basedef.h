@@ -45,6 +45,7 @@ typedef double                  fp64;         /* Double precision floating point
 extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 bufSize);
 extern void debugToStderr(const char* file, const char* func, u32 line, const char *fmt, ...);
 extern void debugToFile(const char* fname, const char* file, const char* func, u32 line, const char *fmt,...);
+extern void printBuf(u8* buf, u32 bufSize, u8 space, u8 inverse);
 
 #ifdef __cplusplus
 }
