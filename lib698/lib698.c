@@ -61,7 +61,24 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
         return FALSE;
 
     pFrmhead->sa.saLen.sa.saLen = SA_LEN(pFrmhead->sa.saLen.sa.saLen);
-    DEBUG_TIME_LINE("server's len: %u", pFrmhead->sa.saLen.sa.saLen);
+    DEBUG_TIME_LINE("server's len: %u, logicAddr: %02X, ", pFrmhead->sa.saLen.sa.saLen,
+    		pFrmhead->sa.saLen.sa.logicAddr);
+	switch (pFrmhead->sa.saLen.sa.saType) {
+	case SA_TYPE_SINGLE:
+		fprintf(stderr, "single address\n");
+		break;
+	case SA_TYPE_WILDCARD:
+		fprintf(stderr, "wildcard address\n");
+		break;
+	case SA_TYPE_GROUP:
+		fprintf(stderr, "group address\n");
+		break;
+	case SA_TYPE_BROADCAST:
+		fprintf(stderr, "broadcast address\n");
+		break;
+	default:
+		break;
+	}
     if(NULL != pFrmhead->sa.sa)
         return FALSE;
     pFrmhead->sa.sa = calloc(1, pFrmhead->sa.saLen.sa.saLen*sizeof(*(pFrmhead->sa.sa)));

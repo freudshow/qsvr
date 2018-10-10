@@ -43,27 +43,25 @@ void MainWindow::setRecvCursor()
 
 void MainWindow::on_pushButton_Listen_clicked()
 {
+    qDebug() << "listenState: " << listenState;
     if(!listenState) {
-		int port = ui->lineEdit_Port->text().toInt();
-
+        quint16 port = ui->lineEdit_Port->text().toUInt();
         if(!pServer->listen(QHostAddress::Any, port)){
             qDebug() << pServer->errorString();
-			return;
 		}
 
         ui->pushButton_Listen->setText(tr("Don't Listen"));
 		qDebug()<< "Listen succeessfully!";
-    } else if(NULL != pSocket) {
-		//如果正在连接（点击侦听后立即取消侦听，若socket没有指定对象会有异常，应修正——2017.9.30）
-        if (pSocket->state() == QAbstractSocket::ConnectedState) {
-			//关闭连接
-			pSocket->disconnectFromHost();
-		}
-		//取消侦听
-		pServer->close();
+    } else {
+        if(Q_NULLPTR != pSocket) {
+            if (pSocket->state() == QAbstractSocket::ConnectedState)
+                pSocket->disconnectFromHost();
+            pServer->close();
+            pSocket = Q_NULLPTR;
+        }
         ui->pushButton_Listen->setText(tr("Listen"));
-		ui->pushButton_Send->setEnabled(false);
-	}
+        ui->pushButton_Send->setEnabled(false);
+    }
     listenState = !listenState;
 }
 
