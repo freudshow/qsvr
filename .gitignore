@@ -5,5 +5,7 @@ ui_*
 *.stash
 Makefile
 *.user
-
+*.settings
+.cproject
+.project
 *.autosave
