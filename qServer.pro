@@ -53,8 +53,8 @@ HEADERS += \
 
 FORMS += \
         ui/mainwindow.ui \
-    ui/comconfig.ui \
-    ui/netconfig.ui
+        ui/comconfig.ui \
+        ui/netconfig.ui
 
 DISTFILES += \
     lib698/dlt698.45.asn1

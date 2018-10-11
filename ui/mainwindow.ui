@@ -180,9 +180,9 @@
     <property name="title">
      <string>config</string>
     </property>
-    <addaction name="actioncomconfig"/>
+    <addaction name="actionComconfig"/>
     <addaction name="separator"/>
-    <addaction name="actionnetconfig"/>
+    <addaction name="actionNetconfig"/>
    </widget>
    <widget class="QMenu" name="menuPreConnect">
     <property name="title">
@@ -201,12 +201,12 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actioncomconfig">
+  <action name="actionComconfig">
    <property name="text">
     <string>comconfig</string>
    </property>
   </action>
-  <action name="actionnetconfig">
+  <action name="actionNetconfig">
    <property name="text">
     <string>netconfig</string>
    </property>

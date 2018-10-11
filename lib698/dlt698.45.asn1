@@ -1,119 +1,135 @@
 DLT69845 DEFINITIONS ::= BEGIN
+
+-----------------------------basic data type---------------------------------------
     Null ::= NULL
 	Array ::= SEQUENCE OF Data
 	Structure ::= SEQUENCE OF Data
 	Bool ::= BOOLEAN
-	BitString ::= BIT STRING
+	Bit-string ::= BIT STRING
 	Integer32 ::= INTEGER
 	Integer8  ::= INTEGER(0..255)
 	DoubleLong ::= Integer32
 	DoubleLongUnsigned ::= Integer32
-	OctetString ::= OCTET STRING
+	Octet-string ::= OCTET STRING
+    Visible-string ::= VisibleString
 	Integer ::= BIT STRING(SIZE(8))
 	Long ::= BIT STRING(SIZE(16))
-	Unsigned ::= BIT STRING(SIZE(8))
+	--Unsigned ::= BIT STRING(SIZE(8))
+    Unsigned ::= INTEGER(0..255)
+    Unsigned8 ::= Unsigned
+    Unsigned16 ::= INTEGER(0..65535)
+    Unsigned32 ::= INTEGER(0..4294967295)
+    --Unsigned64 ::= INTEGER(0..18446744073709551615)
+    Integer64 ::= INTEGER(-9223372036854775808..9223372036854775807)
 	LongUnsigned ::= BIT STRING(SIZE(16))
 	Long64 ::= BIT STRING(SIZE(64))
 	Long64Unsigned ::= BIT STRING(SIZE(64))
 	Enum ::= BIT STRING(SIZE(8))
-	Float32 ::= OctetString(SIZE(4))
-	Float64 ::= OctetString(SIZE(8))
-	ComBCD2 ::= OctetString(SIZE(1))
-	ComBCD4 ::= OctetString(SIZE(2))
-	ComBCD6 ::= OctetString(SIZE(3))
-	ComBCD8 ::= OctetString(SIZE(4))
+	Float32 ::= OCTET STRING(SIZE(4))
+	Float64 ::= OCTET STRING(SIZE(8))
+	ComBCD2 ::= OCTET STRING(SIZE(1))
+	ComBCD4 ::= OCTET STRING(SIZE(2))
+	ComBCD6 ::= OCTET STRING(SIZE(3))
+	ComBCD8 ::= OCTET STRING(SIZE(4))
 
-	DateTime ::= SEQUENCE {
-		year LongUnsigned,
-		month Unsigned,
-		dayOfMonth Unsigned,
-		dayOfWeek Unsigned,
-		hour Unsigned,
-		minute Unsigned,
-		second Unsigned,
-		milliseconds LongUnsigned
-	}
-
-	Date ::= SEQUENCE {
-		year LongUnsigned,
-		month Unsigned,
-		dayOfMonth Unsigned,
-		dayOfWeek Unsigned
-	}
-
-	Time ::= SEQUENCE {
-		hour Unsigned,
-		minute Unsigned,
-		second Unsigned
-	}
-
-	DateTimeBCD ::= SEQUENCE {
-		year  ComBCD4,
-		month  ComBCD2,
-		day  ComBCD2,
-		hour ComBCD2,
-		minute ComBCD2,
-		sec  ComBCD2
-	}
-
-	DateTimeBCDH ::= SEQUENCE {
-		dateTime DateTimeBCD,
-		milliSec  LongUnsigned
-	}
-
-	DateTimeBCDS ::= SEQUENCE {
-		year  ComBCD4,
-		month  ComBCD2,
-		day  ComBCD2,
-		hour ComBCD2,
-		minute ComBCD2
-	}
-
-	DateBCD ::= SEQUENCE {
-		year  ComBCD4,
-		month  ComBCD2,
-		day  ComBCD2
-	}
-
-	TimeBCD ::= SEQUENCE {
-		hour ComBCD2,
-		minute ComBCD2,
-		sec  ComBCD2
-	}
-
-	PIID ::= BIT STRING(SIZE(8)) {
-		svrPrio		(0),	--服务优先级
-		rsv			(1),	--保留
-		svrSeq5		(2),	--服务序号bit5
-		svrSeq4		(3),	--服务序号bit4 
-		svrSeq3		(4),	--服务序号bit3 
-		svrSeq2		(5),	--服务序号bit2 
-		svrSeq1		(6),	--服务序号bit1 
-		svrSeq0		(7)		--服务序号bit0 
-	}
-
-	PIID-ACD ::= BIT STRING(SIZE(8)) {
-		svrPrio		(0),
-		acd 		(1),	--请求访问(ACD) bit6
-		svrSeq5		(2),
-		svrSeq4		(3),
-		svrSeq3		(4),
-		svrSeq2		(5),
-		svrSeq1		(6),
-		svrSeq0		(7)
-	}
-
-	OI ::= LongUnsigned
+    PIID ::= Unsigned
+    PIID-ACD ::= Unsigned
 
 	OAD ::= SEQUENCE {
 		objId OI,
-		attrIdChara BitString(SIZE(8)),
+		attrIdChara Bit-string(SIZE(8)),
 		attrElemIdx Integer8(1..255)
 	}
 
 	ROAD ::= SEQUENCE {
-		objDescr OAD,	-- Primary Key
-		relateObjDescr SEQUENCE OF OAD -- attributes
+		objDescr OAD,
+		ralateObjDescr SEQUENCE OF OAD
+	}
+
+	RSD ::= CHOICE {
+		notSel [0] NULL,
+		sel1 [1] Selector1,
+		sel2 [2] Selector2,
+		sel3 [3] Selector3,
+		sel4 [4] Selector4,
+		sel5 [5] Selector5,
+		sel6 [6] Selector6,
+		sel7 [7] Selector7,
+		sel8 [8] Selector8,
+		sel9 [9] Selector9,
+		sel10 [10] Selector10
+	}
+
+	Selector1 ::= SEQUENCE {
+		objDescr OAD,
+		value Data
+	}
+
+	Selector2 ::= SEQUENCE {
+		objDescr OAD,		--对象描述符
+		startValue Data,	--起始值
+		endValue Data,		--结束值
+		interv Data			--数据间隔
+	}
+
+	Selector3 ::= SEQUENCE OF Selector2
+
+	Selector4 ::= SEQUENCE {
+		acqStartTime Date-Time-S,	--采集启动时间
+		meterSet	 MS	            --电能表集合
+	}
+
+	Selector5 ::= SEQUENCE {
+		acqStoreTime Date-Time-S,
+		meterSet MS
+	}
+
+	Selector6 ::= SEQUENCE {
+		acqStartTimeStartValue Date-Time-S,	--采集启动时间起始值
+		acqStartTimeEndValue Date-Time-S,   --采集启动时间结束值
+		timeInterv TI,						--时间间隔
+		meterSet MS							--电能表集合
+	}
+
+	Selector7 ::= SEQUENCE {
+		acqStoreTimeStartValue Date-Time-S,	--采集存储时间起始值
+		acqStoreTimeEndValue Date-Time-S,	--采集存储时间结束值
+		timeInterv TI,						--时间间隔
+		meterSet MS							--电能表集合
+	}
+
+	Selector8 ::= SEQUENCE {
+		acqSucTimeStartValue Date-Time-S,	--采集成功时间起始值
+		acqSucTimeEndValue Date-Time-S,	    --采集成功时间结束值
+		timeInterv TI,	                    --时间间隔
+		meterSet MS	                        --电能表集合
+	}
+
+	Selector9 ::= SEQUENCE {
+		upNRec Unsigned	--上n次记录
+	}
+
+	Selector10 ::= SEQUENCE {
+		upNRecord Unsigned,	--上 n 条记录
+		meterSet MS			--电能表集合
+	}
+
+	RCSD ::= SEQUENCE OF CSD
+
+	CSD ::= CHOICE {
+		oad [0] OAD,
+		road [1] ROAD
+	}
+    
+	MS ::= CHOICE	{
+		noMeter                 [0] NULL,
+		allAddr                 [1] NULL,
+		aGrpUserType            [2] SEQUENCE OF Unsigned,	    --一组用户类型
+		aGrpUserAddr            [3] SEQUENCE OF TSA,	        --一组用户地址
+		aGrpCfgSeq              [4] SEQUENCE OF LongUnsigned,	--一组配置序号
+		aGrpUserTypeInterv      [5] SEQUENCE OF Region,	        --一组用户类型区间
+		aGrpUserAddrInterv      [6] SEQUENCE OF Region,	        --一组用户地址区间
+		aGrpUserCfgSeqInterv    [7] SEQUENCE OF Region		    --一组配置序号区间
 	}
 
 	DAR ::= ENUMERATED {
@@ -153,47 +169,15 @@ DLT69845 DEFINITIONS ::= BEGIN
 		other							(-255)	--	其它
 	}
 
-
 	OMD ::= SEQUENCE {
 		objId OI,
 		methodId Integer8(1..255),
 		actionMode Integer8(0)
 	}
 
-	TI::=SEQUENCE {
-		unit ENUMERATED {
-			sec  (0),
-			minute (1),
-			hour (2),
-			day  (3),
-			month  (4),
-			year  (5)
-		},
-		interval LongUnsigned
-	}
+	TSA ::= Octet-string(SIZE(1..16))
 
-	TSA ::= OctetString(SIZE(2..17))
-	MAC ::= OctetString
-	RN ::= OctetString  --ESAM 生成用于加密的信息串。
-	CSD ::= CHOICE {
-		oad [0] OAD,
-		road [1] ROAD
-	}
-
-	RCSD ::= SEQUENCE OF CSD
-
-	Region ::= SEQUENCE {
-		regionUnit ENUMERATED {
-			closeOpen (0),
-			openClose (1),
-			closeClose (2),
-			openOpen (3)
-		},
-		start Data,
-		end Data
-	}
-
-    PhysicalUnit ::= ENUMERATED {
+    PhysicalUnit ::= ENUMERATED {--NOT COMPLETE
         a   (1),
         mo  (2),
         wk  (3),
@@ -212,106 +196,137 @@ DLT69845 DEFINITIONS ::= BEGIN
     }
 
 	ScalerUnit ::= SEQUENCE {
-		conversion Integer8,	--换算——倍数因子的指数,基数为 10；如数值不是数字的,则换算应被置 0。
+		conversion Integer8,	--换算-倍数因子的指数,基数为 10；如数值不是数字的,则换算应被置 0。
 		unit PhysicalUnit		--物理单位, 详见698.45<表B.1 物理单位的枚举定义>, 其符号待以后添加
 	}
 
-	RSD ::= CHOICE {
-		notSel [0] NULL,
-		sel1 [1] Selector1,
-		sel2 [2] Selector2,
-		sel3 [3] Selector3,
-		sel4 [4] Selector4,
-		sel5 [5] Selector5,
-		sel6 [6] Selector6,
-		sel7 [7] Selector7,
-		sel8 [8] Selector8,
-		sel9 [9] Selector9,
-		sel10 [10] Selector10
-	}
-
-	Selector1 ::= SEQUENCE {
-		objDescr OAD,
-		value Data
-	}
-
-	Selector2 ::= SEQUENCE {
-		objDescr OAD,		--对象描述符
-		startValue Data,	--起始值
-		endValue Data,		--结束值
-		interv Data			--数据间隔
-	}
-
-	Selector3 ::= SEQUENCE OF Selector2
-
-	Selector4 ::= SEQUENCE {
-		acqStartTime DateTimeBCD,	--采集启动时间
-		meterSet	 MS	--电能表集合
-	}
-
-	Selector5 ::= SEQUENCE {
-		acqStoreTime DateTimeBCD,
-		meterSet MS
-	}
-
-	Selector6 ::= SEQUENCE {
-		acqStartTimeStartValue DateTimeBCD,	--采集启动时间起始值
-		acqStartTimeEndValue DateTimeBCD,	--采集启动时间结束值
-		timeInterv TI,						--时间间隔
-		meterSet MS							--电能表集合
-	}
-
-	Selector7 ::= SEQUENCE {
-		acqStoreTimeStartValue DateTimeBCD,	--采集存储时间起始值
-		acqStoreTimeEndValue DateTimeBCD,	--采集存储时间结束值
-		timeInterv TI,						--时间间隔
-		meterSet MS							--电能表集合
-	}
-
-	Selector8 ::= SEQUENCE {
-		acqSucTimeStartValue DateTimeBCD,	--采集成功时间起始值
-		acqSucTimeEndValue DateTimeBCD,	--采集成功时间结束值
-		timeInterv TI,	--时间间隔
-		meterSet MS	--电能表集合
-	}
-
-	Selector9 ::= SEQUENCE {
-		upNRec unsigned	--上n次记录
-	}
-
-	Selector10 ::= SEQUENCE {
-		upNRecord unsigned,	--上 n 条记录
-		meterSet MS			--电能表集合
-	}
-
-	MS ::= CHOICE	{
-		noMeter [0] NULL,
-		allAddr [1] NULL,
-		aGrpUserType [2] SEQUENCE OF Unsigned,	--一组用户类型
-		aGrpUserAddr [3] SEQUENCE OF TSA,	--一组用户地址
-		aGrpCfgSeq [4] SEQUENCE OF LongUnsigned,	--一组配置序号
-		aGrpUserTypeInterv [5] SEQUENCE OF Region,	--一组用户类型区间
-		aGrpUserAddrInterv [6] SEQUENCE OF Region,	--一组用户地址区间
-		aGrpUserCfgSeqInterv [7] SEQUENCE OF Region		--一组配置序号区间
-	}
-
+	MAC ::= Octet-string
+    
 	SID ::= SEQUENCE {
 		identity DoubleLongUnsigned,
-		appendData OctetString
+		appendData Octet-string
 	}
 
-	SIDMAC ::= SEQUENCE {
+	SID-MAC ::= SEQUENCE {
 		saftyId SID,
 		dataMAC MAC
 	}
 
-	BaudRate ::= ENUMERATED {
-		baud300bps (0), baud600bps (1), baud1200bps (2),
-		baud2400bps (3), baud4800bps (4), baud7200bps (5),
-		baud9600bps (6), baud19200bps (7), baud38400bps (8),
-		baud57600bps (9), baud115200bps (10), autoAjust (255)
+	RN ::= Octet-string                              --ESAM 生成用于加密的信息串。
+
+    ConnectMechanismInfo ::= CHOICE {
+        publicConnection	[0]	NullSecurity,  	    --公共连接
+        pwdSec	 	        [1]	PasswordSecurity,  	--一般密码
+        symmSec	 	        [2]	SymmetrySecurity,  	--对称加密
+        sigSec	 	        [3]	SignatureSecurity	--数字签名
+    }
+
+    NullSecurity ::= NULL
+    PasswordSecurity ::= Visible-string
+    
+    SymmetrySecurity ::= SEQUENCE{
+        cipherText1 Octet-string, --密文1
+        clientSig1  Octet-string  --客户机签名1
+    }
+    
+    SignatureSecurity ::= SEQUENCE{
+        cipherText2 Octet-string, --密文2
+        clientSig2  Octet-string  --客户机签名2
+    }
+
+    ConnectResult ::= ENUMERATED{
+        allowEstablishAppLink	 	(0)	,   --允许建立应用连接
+        pwdInvalid	 	            (1)	,   --密码错误
+        symmDecodeErr	 	        (2)	,   --对称解密错误
+        asymmDecodeErr	 	        (3)	,   --非对称解密错误
+        sigInvalid	 	            (4)	,   --签名错误
+        protocolVerNotMatch	 	    (5)	,   --协议版本不匹配
+        otherErr	 	            (255)   --	其他错误
+    }
+
+    ConnectResponseInfo ::= SEQUENCE{
+        authResult ConnectResult,                   --认证结果
+        authAnnexationInfo SecurityData OPTIONAL    --认证附加信息
+    }
+
+    SecurityData ::= SEQUENCE{
+        svrRN RN, --服务器随机数
+        svrSigInfo Octet-string --服务器签名信息
+    }
+
+	TI::=SEQUENCE {
+		unit ENUMERATED {
+			sec  (0),
+			minute (1),
+			hour (2),
+			day  (3),
+			month  (4),
+			year  (5)
+		},
+		interval LongUnsigned
 	}
-	
+
+    Region ::= SEQUENCE {
+		regionUnit ENUMERATED {
+			closeOpen (0),
+			openClose (1),
+			closeClose (2),
+			openOpen (3)
+		},
+		start Data,
+		end Data
+	}
+    
+	OI ::= LongUnsigned
+
+	Date-Time ::= SEQUENCE {
+		year LongUnsigned,
+		month Unsigned,
+		dayOfMonth Unsigned,
+		dayOfWeek Unsigned,
+		hour Unsigned,
+		minute Unsigned,
+		second Unsigned,
+		milliseconds LongUnsigned
+	}
+
+	Date ::= SEQUENCE {
+		year LongUnsigned,
+		month Unsigned,
+		dayOfMonth Unsigned,
+		dayOfWeek Unsigned
+	}
+
+	Time ::= SEQUENCE {
+		hour Unsigned,
+		minute Unsigned,
+		second Unsigned
+	}
+
+	Date-Time-S ::= SEQUENCE { --  date_time_s
+		year  ComBCD4,
+		month  ComBCD2,
+		day  ComBCD2,
+		hour ComBCD2,
+		minute ComBCD2,
+		sec  ComBCD2
+	}
+
+	BaudRate ::= ENUMERATED {
+		baud300bps      (0),
+        baud600bps      (1),
+        baud1200bps     (2),
+		baud2400bps     (3),
+        baud4800bps     (4),
+        baud7200bps     (5),
+		baud9600bps     (6),
+        baud19200bps    (7),
+        baud38400bps    (8),
+		baud57600bps    (9),
+        baud115200bps   (10),
+        autoAjust       (255)
+	}
+
 	Parity ::= ENUMERATED {
 		no(0), odd(1), even(2)
 	}
@@ -321,11 +336,11 @@ DLT69845 DEFINITIONS ::= BEGIN
 		databit7(7), databit8(8)
 	}
 
-	StopBits ENUMERATED {
+	StopBits ::= ENUMERATED {
 		stopbits1(1), stopbits2(2)
 	}
-	
-	FlowCtl ENUMERATED {
+
+	FlowCtl ::= ENUMERATED {
 		no(0), hard(1), soft(2)
 	}
 
@@ -342,10 +357,10 @@ DLT69845 DEFINITIONS ::= BEGIN
 		array				[1] SEQUENCE OF Data,
 		structure			[2] SEQUENCE OF Data,
 		bool				[3] BOOLEAN,
-		bitString			[4] BitString,
+		bitString			[4] Bit-string,
 		doubleLong			[5] DoubleLong,
 		doubleLongunsigned	[6] DoubleLongUnsigned,
-		octetString			[9] OctetString,
+		octetString			[9] Octet-string,
 		visibleString		[10] VisibleString,
 		utf8String			[12] UTF8String,
 		integer				[15] Integer,
@@ -357,14 +372,10 @@ DLT69845 DEFINITIONS ::= BEGIN
 		enum				[22] Enum,
 		float32				[23] Float32,
 		float64				[24] Float64,
-		dateTime			[25] DateTime,
+		dateTime			[25] Date-Time,
 		date				[26] Date,
 		time				[27] Time,
-		dateTimeBCD			[28] DateTimeBCD,
-		dateTimeBCDH		[29] DateTimeBCDH,
-		datetimeBCDS		[30] DateTimeBCDS,
-		dateBCD				[31] DateBCD,
-		timeBCD				[32] TimeBCD,
+		date-Time-s			[28] Date-Time-S,
 		oi					[80] OI,
 		oad					[81] OAD,
 		road				[82] ROAD,
@@ -379,221 +390,295 @@ DLT69845 DEFINITIONS ::= BEGIN
 		csd					[91] CSD,
 		ms					[92] MS,
 		sid					[93] SID,
-		sidMac 	        	[94] SIDMAC,
+		sidMac 	        	[94] SID-MAC,
 		comdcb            	[95] COMDCB,
 		rcsd              	[96] RCSD
 	}
 
-	LINK-APDU ::= CHOICE {
-		preLinkRq [1] LINK-Request,	--预连接请求
-		PreLinkRp [129] LINK-Response	--预连接响应
+-----------------------------basic data type end------------------------------------
+
+-----------------------------extend data type---------------------------------------
+
+    LINK-APDU ::= CHOICE {
+		linkRequest [1] LINK-Request,	    --预连接请求
+		linkResponse [129] LINK-Response	--预连接响应
 	}
 
 	Client-APDU ::= SEQUENCE {
-		应用层服务 CHOICE {
-			建立应用连接请求 [2] CONNECT-Request,
-			断开应用连接请求 [3] RELEASE-Request,
-			读取请求 [5] GET-Request,
-			设置请求 [6] SET-Request,
-			操作请求 [7] ACTION-Request,
-			上报应答 [8] REPORT-Response,
-			代理请求 [9] PROXY-Request
+		appLayerSvr CHOICE {
+            connectRequest	 	[2]	CONNECT-Request, 	--建立应用链接请求 
+            releaseRequest	 	[3]	RELEASE-Request, 	--断开应用链接请求
+            getRequest	 	    [5]	GET-Request, 	    --读取请求
+            setRequest	 	    [6]	SET-Request, 	    --设置请求
+            actionRequest	 	[7]	ACTION-Request, 	--操作请求
+            reportResponse	 	[8]	REPORT-Response, 	--上报响应
+            proxyRequest	 	[9]	PROXY-Request    	--代理请求
 		},
-		时间标签 TimeTag OPTIONAL
+		timeTag TimeTag OPTIONAL --时间标签
 	}
 
 	Server-APDU ::= SEQUENCE {
-		应用层服务 CHOICE {
-			建立应用连接响应 [130] CONNECT-Response,
-			断开应用连接响应 [131] RELEASE-Response,
-			断开应用连接通知 [132] RELEASE-Notification,
-			读取响应 [133] GET-Response,
-			设置响应 [134] SET-Response,
-			操作响应 [135] ACTION-Response,
-			上报通知 [136] REPORT-Notification,
-			代理响应 [137] PROXY-Response
+		appLayerSvr CHOICE {
+			connectResponse	 	[130]	CONNECT-Response,       --建立应用链接响应
+            releaseResponse	 	[131]	RELEASE-Response,       --断开应用连接响应
+            releaseNotification	[132]	RELEASE-Notification, 	--断开应用连接通知
+            getResponse	 	    [133]	GET-Response,           --读取响应
+            setResponse	 	    [134]	SET-Response,           --设置响应
+            actionResponse	 	[135]	ACTION-Response,        --操作响应
+            reportNotification	[136]	REPORT-Notification, 	--上报通知
+            proxyResponse	 	[137]	PROXY-Response          --代理响应
 		},
-		跟随上报信息域 FollowReport OPTIONAL,
-		时间标签 TimeTag OPTIONAL
+		followRpt FollowReport OPTIONAL,    --跟随上报信息域
+		timeTag TimeTag OPTIONAL            --时间标签
 	}
 
 	FollowReport ::= CHOICE {
-		若干个对象属性及其数据 [1] SEQUENCE OF A-ResultNormal
-		若干个记录型对象属性及其数据 [2] SEQUENCE OF A-ResultRecord
+		arrayOfObjAttrData [1] SEQUENCE OF A-ResultNormal,  --若干个对象属性及其数据
+		arrayOfRecAttrData [2] SEQUENCE OF A-ResultRecord   --若干个记录型对象属性及其数据
 	}
 
 	TimeTag::=SEQUENCE {
-		发送时标 DateTimeBCD,
-		允许传输延时时间 TI
+		sendTime Date-Time-S,  --发送时标
+		allowDelay TI          --允许传输延时时间
 	}
 
 	SECURITY-APDU ::= CHOICE {
-		安全请求 [16] SECURITY-Request,
-		安全响应 [144] SECURITY-Response
+        security-Request [16] SECURITY-Request,     --安全请求
+        security-Response [144] SECURITY-Response   --安全响应
 	}
 
 	LINK-Request ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		请求类型 ENUMERATED { 
-			登录 (0),
-			心跳 (1),
-			退出登录 (2)
+		piid-acd PIID-ACD,          --服务序号-优先级-ACD
+		requestType ENUMERATED {    --请求类型
+			login (0),              --登录 
+			heartBeat (1),          --心跳 
+			exit (2)                --退出登录
 		},
-		心跳周期 LongUnsigned,
-		请求时间 date_time
+		heartCycle LongUnsigned,    --心跳周期
+		requestTime Date-Time       --请求时间
 	}
-	
+
 	LINK-Response ::= SEQUENCE {
 		prioInvID PIID,
-		结果 Result,
-		请求时间 date_time,
-		收到时间 date_time,
-		响应时间 date_time
+		res Result,             --结果
+        requestTime Date-Time,  --请求时间
+        recvTime Date-Time,     --收到时间
+        responseTime Date-Time  --响应时间
 	}
 
-	Result ::= Bit-string(SIZE(8)) {
-		时钟可信标志 (0),
-		保留 bit6 (1),
-		保留 bit5 (2),
-		保留 bit4 (3),
-		保留 bit3 (4),
-		结果 bit2 (5),
-		结果 bit1 (6),
-		结果 bit0 (7)
-	}
+    Result ::= Bit-string(SIZE(8)) 
 
-	Connect-Request ::= SEQUENCE {
+	CONNECT-Request ::= SEQUENCE {
 		prioInvID PIID,
-		期望的应用层协议版本号 LongUnsigned,
-		期望的协议一致性块 ProtocolConformance,
-		期望的功能一致性块 FunctionConformance,
-		客户机发送帧最大尺寸 LongUnsigned,
-		客户机接收帧最大尺寸 LongUnsigned,
-		客户机接收帧最大窗口尺寸 Unsigned,
-		客户机最大可处理 APDU 尺寸 LongUnsigned,
-		期望的应用连接超时时间 double-LongUnsigned,
-		认证请求对象 ConnectMechanismInfo
+        expectAppProtocolVer LongUnsigned,              --期望的应用层协议版本号
+        expectProtocolConsistency ProtocolConformance,  --期望的协议一致性块
+        expectFuncConsistency FunctionConformance,      --期望的功能一致性块
+        clientMaxSend LongUnsigned,                     --客户机发送帧最大尺寸
+        clientMaxRecv LongUnsigned,                     --客户机接收帧最大尺寸
+        clientMaxWindow Unsigned,                       --客户机接收帧最大窗口尺寸
+        clientMaxApdu LongUnsigned,                     --客户机最大可处理APDU尺寸
+        expectAppLinkDelay DoubleLongUnsigned,          --期望的应用连接超时时间
+        authRequestObj ConnectMechanismInfo             --认证请求对象
 	}
 
 	CONNECT-Response ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		服务器厂商版本信息 FactoryVersion,
-		商定的应用层协议版本号 LongUnsigned,
-		商定的协议一致性块 ProtocolConformance,
-		商定的功能一致性块 FunctionConformance,
-		服务器发送帧最大尺寸 LongUnsigned,
-		服务器接收帧最大尺寸 LongUnsigned,
-		服务器接收帧最大窗口尺寸 Unsigned,
-		服务器最大可处理 APDU 尺寸 LongUnsigned,
-		商定的应用连接超时时间 double-LongUnsigned,
-		连接响应对象 ConnectResponseInfo
+		piidACD PIID-ACD,                                   --服务序号-优先级-ACD
+        factoryVer FactoryVersion,                          --服务器厂商版本信息
+        negotiateAppProtocolVer LongUnsigned,               --商定的应用层协议版本号
+        negotiateProtocolConsistency ProtocolConformance,   --商定的协议一致性块
+        negotiateFuncConsistency FunctionConformance,       --商定的功能一致性块
+        svrMaxSend LongUnsigned,                            --服务器发送帧最大尺寸
+        svrMaxRecv LongUnsigned,                            --服务器接收帧最大尺寸
+        svrMaxWindow Unsigned,                              --服务器接收帧最大窗口尺寸
+        svrMaxApdu LongUnsigned,                            --服务器最大可处理APDU尺寸
+        negotiateAppLinkDelay DoubleLongUnsigned,           --商定的应用连接超时时间
+        connectResponseObj ConnectResponseInfo              --连接响应对象
 	}
 
 	FactoryVersion ::= SEQUENCE {
-		厂商代码 VisibleString(SIZE (4)),
-		软件版本号 VisibleString(SIZE (4)),
-		软件版本日期 VisibleString(SIZE (6)),
-		硬件版本号 VisibleString(SIZE (4)),
-		硬件版本日期 VisibleString(SIZE (6)),
-		厂家扩展信息 VisibleString(SIZE (8))
+        vendorCode	 	VisibleString(SIZE (4)), --厂商代码
+        softVerCode	 	VisibleString(SIZE (4)), --软件版本号
+        softverDate	 	VisibleString(SIZE (6)), --软件版本日期
+        hardVerCode	 	VisibleString(SIZE (4)), --硬件版本号
+        hardVerDate	 	VisibleString(SIZE (6)), --硬件版本日期
+        vendorExtInfo	VisibleString(SIZE (8))  --厂家扩展信息
 	}
 
+    ProtocolConformance ::= Bit-string(SIZE(64))
+--{
+--    应用连接协商 Application Association (0),
+--    请求对象属性 Get Normal (1),
+--    批量请求基本对象属性 Get With List (2),
+--    请求记录型对象属性 Get Record (3),
+--    代理请求对象属性 Get Proxy (4),
+--    代理请求记录型对象属性 Get Proxy Record (5),
+--    请求分帧后续帧 Get Subsequent Frame (6),
+--    设置基本对象属性 Set Normal (7),
+--    批量设置基本对象属性 Set With List (8),
+--    设置后读取 Set With Get (9),
+--    代理设置对象属性 Set Proxy (10),
+--    代理设置后读取对象属性 Set Proxy With Get (11),
+--    执行对象方法 Action Normal (12),
+--    批量执行对象方法 Action With List (13),
+--    执行方法后读取 Action With List (14),
+--    代理执行对象方法 Action Proxy (15),
+--    代理执行后读取 Action Proxy With Get (16),
+--    事件主动上报 Active Event Report (17),
+--    事件尾随上报 (18),
+--    事件请求访问位 ACD 上报 (19),
+--    分帧数据传输 Slicing Service (20),
+--    Get-request 分帧 (21),
+--    Get-response 分帧 (22),
+--    Set-request 分帧 (23),
+--    Set-response 分帧 (24),
+--    Action-request 分帧 (25),
+--    Action-response 分帧 (26),
+--    Proxy-request 分帧 (27),
+--    Proxy-response 分帧 (28),
+--    事件上报分帧 (29),
+--    DL/T645-2007 (30),
+--    安全方式传输 (31),
+--    对象属性 ID 为 0 的读取访问 (32),
+--    对象属性 ID 为 0 的设置访问 (33)
+--}
+
+    FunctionConformance ::= Bit-string(SIZE(128))
+--{
+--    电能量计量 (0),
+--    双向有功计量 (1),
+--    无功电能计量 (2),
+--    视在电能计量 (3),
+--    有功需量 (4),
+--    无功需量 (5),
+--    视在需量 (6),
+--    复费率 (7),
+--    阀控 (8),
+--    本地费控 (9),
+--    远程费控 (10),
+--    基波电能 (11),
+--    谐波电能 (12),
+--    谐波含量 (13),
+--    波形失真度 (14),
+--    多功能端子输出 (15),
+--    事件记录 (16),
+--    事件上报 (17),
+--    温度测量 (18),
+--    状态量监测（如：开表盖/开端钮盖) (19),
+--    以太网通信 (20),
+--    红外通信 (21),
+--    蓝牙通信 (22),
+--    多媒体采集 (23),
+--    级联 (24),
+--    直流模拟量 (25),
+--    弱电端子 12V 输出 (26),
+--    搜表 (27),
+--    三相负载平衡 (28),
+--    升级 (29),
+--    比对 (30)
+--}
+
 	RELEASE-Request ::= SEQUENCE {
-		prioInvID PIID
+		prioInvID PIID --服务序号-优先级
 	}
 
 	RELEASE-Response ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		结果 ENUMERATED {
-			成功 (0)
+		piidACD PIID-ACD, --服务序号-优先级-ACD
+		result ENUMERATED {
+			success (0)
 		}
 	}
 
 	RELEASE-Notification ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		应用连接建立时间 date_time_s,
-		服务器当前时间 date_time_s
+		piidACD PIID-ACD,                   --服务序号-优先级-ACD
+		appLinkEstablishTime Date-Time-S,   --应用连接建立时间
+		svrCurrentTime Date-Time-S          --服务器当前时间
 	}
 
 	GET-Request ::= CHOICE {
-		读取一个对象属性请求 [1] GetRequestNormal,
-		读取若干个对象属性请求 [2] GetRequestNormalList,
-		读取一个记录型对象属性请求 [3] GetRequestRecord,
-		读取若干个记录型对象属性请求 [4] GetRequestRecordList,
-		读取分帧响应的下一个数据块请求 [5] GetRequestNext
+        getRequestNormal	 	[1]	GetRequestNormal, 	    --	读取一个对象属性请求
+        getRequestNormalList	[2]	GetRequestNormalList, 	--	读取若干个对象属性请求
+        getRequestRecord	 	[3]	GetRequestRecord, 	    --	读取一个记录型对象属性请求
+        getRequestRecordList	[4]	GetRequestRecordList, 	--	读取若干个记录型对象属性请求
+        getRequestNext	 	    [5]	GetRequestNext,	 	    --	读取分帧响应的下一个数据块请求
+        getRequestMD5           [6] GetRequestMD5           --  读取一个对象属性的MD5值
 	}
 
 	GetRequestNormal ::= SEQUENCE {
 		prioInvID PIID,
-		一个对象属性描述符 OAD
+		objDescr OAD --一个对象属性描述符
 	}
 
 	GetRequestNormalList ::= SEQUENCE {
 		prioInvID PIID,
-		若干个对象属性描述符 SEQUENCE OF OAD
+		arrayOfOad SEQUENCE OF OAD --若干个对象属性描述符
 	}
 
 	GetRequestRecord ::= SEQUENCE {
 		prioInvID PIID,
-		读取一个记录型对象属性 GetRecord
+		getRec GetRecord --读取一个记录型对象属性
 	}
 
 	GetRecord ::= SEQUENCE {
 		objDescr OAD,
-		记录选择描述符 RSD,
-		记录列选择描述符 RCSD
+		rsd RSD,        --记录选择描述符
+		rcsd RCSD       --记录列选择描述符
 	}
 
 	GetRequestRecordList ::= SEQUENCE {
 		prioInvID PIID,
-		读取若干个记录型对象属性 SEQUENCE OF
-		GetRecord
+		getRecordList SEQUENCE OF GetRecord --读取若干个记录型对象属性
 	}
 
 	GetRequestNext ::= SEQUENCE {
 		prioInvID PIID,
-		正确接收的最近一次数据块序号 LongUnsigned
+		seq LongUnsigned --正确接收的最近一次数据块序号
 	}
 
+    GetRequestMD5 ::= SEQUENCE {
+       prioInvID PIID,
+       oad OAD          --一个对象属性描述符
+    }
+
 	GET-Response ::= CHOICE {
-		读取一个对象属性的响应 [1] GetResponseNormal,
-		读取若干个对象属性的响应 [2] GetResponseNormalList,
-		读取一个记录型对象属性的响应 [3] GetResponseRecord,
-		读取若干个记录型对象属性的响应 [4] GetResponseRecordList,
-		分帧响应一个数据块 [5] GetResponseNext
+        getResponseNormal	 	[1]	GetResponseNormal, 	    --	读取一个对象属性的响应
+        getResponseNormalList	[2]	GetResponseNormalList, 	--	读取若干个对象属性的响应
+        getResponseRecord	 	[3]	GetResponseRecord, 	    --	读取一个记录型对象属性的响应
+        getResponseRecordList	[4]	GetResponseRecordList, 	--	读取若干个记录型对象属性的响应
+        getResponseNext	 	    [5]	GetResponseNext, 	    --	分帧响应一个数据块
+        getResponseMD5	 	    [6]	GetResponseMD5       	--	读取一个对象属性的MD5值的响应
 	}
 
 	GetResponseNormal ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		一个对象属性及其结果 A-ResultNormal
+		piidACD PIID-ACD,               --服务序号-优先级-ACD
+		a-ResultNormal A-ResultNormal   --一个对象属性及其结果
 	}
 
 	A-ResultNormal ::= SEQUENCE {
-		objDescr OAD,
-		及其结果 Get-Result
+		objDescr OAD,           --对象属性描述符
+		getResult Get-Result    --及其结果
 	}
 
 	Get-Result ::= CHOICE {
-		错误信息 [0] DAR,
-		数据 [1] Data
+		dar [0] DAR,    --错误信息
+		data [1] Data   --数据
 	}
 
 	GetResponseNormalList ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		若干个对象属性及其结果 SEQUENCE OF AResultNormal
+		piidACD PIID-ACD,                               --服务序号-优先级-ACD
+		listOfa-ResultNormal SEQUENCE OF A-ResultNormal --若干个对象属性及其结果
 	}
 
 	GetResponseRecord ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		一个记录型对象属性及其结果 A-ResultRecord
+		piidACD PIID-ACD,               --服务序号-优先级-ACD
+		a-ResultRecord A-ResultRecord   --一个记录型对象属性及其结果
 	}
 
 	A-ResultRecord ::= SEQUENCE {
-		记录型objDescr OAD,
-		一行记录 N 列属性描述符 RCSD,
-		响应数据 CHOICE {
-			错误信息	[0] DAR,
-			M条记录	[1] SEQUENCE OF A-RecordRow
+		objDescr OAD,                                       --记录型对象属性描述符
+		rsd RCSD,                                           --一行记录N列属性描述符
+		responseData CHOICE {                               --响应数据
+			dar	                [0] DAR,                    --错误信息
+			listOfa-RecordRow   [1] SEQUENCE OF A-RecordRow --M条记录
 		}
 	}
 
@@ -606,191 +691,460 @@ DLT69845 DEFINITIONS ::= BEGIN
 	--}
 
 	GetResponseRecordList ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		若干个记录型对象属性及其结果 SEQUENCE OF A-ResultRecord
+		piidACD PIID-ACD,                               --服务序号-优先级-ACD
+		listOfa-ResultRecord SEQUENCE OF A-ResultRecord --若干个记录型对象属性及其结果
 	}
 
 	GetResponseNext ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		末帧标志 BOOLEAN,
-		分帧序号 LongUnsigned,
-		分帧响应 CHOICE {
-			错误信息 [0] DAR,
-			对象属性 [1] SEQUENCE OF A-ResultNormal,
-			记录型对象属性 [2] SEQUENCE OF A-ResultRecord
+		piidACD PIID-ACD,                               --服务序号-优先级-ACD
+		finalFrameFlag BOOLEAN,                         --末帧标志
+		frameSeq LongUnsigned,                          --分帧序号
+		reseponseData CHOICE {                          --分帧响应
+			errCode [0] DAR,                            --错误信息
+			objAttrs [1] SEQUENCE OF A-ResultNormal,    --对象属性 
+			recObjAttrs [2] SEQUENCE OF A-ResultRecord  --记录型对象属性
 		}
 	}
 
+    GetResponseMD5 ::= SEQUENCE {
+        piidACD PIID-ACD, 				--服务序号-优先级-ACD
+        objDescr OAD, 					--记录型对象属性描述符
+        result CHOICE {					--结果
+            errCode [0] DAR, 			--错误信息
+            md5sum [1] Octet-string 	--MD5值
+        }
+    }
+
 	SET-Request ::= SEQUENCE {
-		设置一个对象属性请求 [1] SetRequestNormal,
-		设置若干个对象属性请求 [2] SetRequestNormalList,
-		设置后读取若干个对象属性请求 [3] SetThenGetRequestNormalList
+        setRequestNormal            [1] SetRequestNormal,           --设置一个对象属性请求
+        setRequestNormalList        [2] SetRequestNormalList,       --设置若干个对象属性请求
+        setThenGetRequestNormalList [3] SetThenGetRequestNormalList --设置后读取若干个对象属性请求
 	}
 
 	SetRequestNormal ::= SEQUENCE {
-		prioInvID PIID,
-		objDescr OAD,
-		data Data
+        prioInvID PIID,     --服务序号-优先级
+        objDescr OAD,       --一个对象属性描述符
+        data Data           --数据
 	}
 
-	SetRequestNormalList ::= SEQUENCE {
-		prioInvID PIID,
-		若干个对象属性 SEQUENCE OF {
-			objDescr OAD,
-			数据 Data
-		}
+    ObjAttrList ::= SEQUENCE {
+			objDescr OAD,           --一个对象属性描述符
+			data Data               --数据
+    }
+
+    SetRequestNormalList ::= SEQUENCE {
+		prioInvID PIID,                         --服务序号-优先级
+        objAttrList SEQUENCE OF ObjAttrList     --若干个对象属性
 	}
+
+    SetThenGetList ::= SEQUENCE {       --若干个设置后读取对象属性
+        setOad      OAD,                --一个设置的对象属性描述符
+        data        Data,               --数据
+        getOad	    OAD,                --一个读取的对象属性描述符
+        delay       Unsigned            --延时读取时间
+    }
 
 	SetThenGetRequestNormalList ::= SEQUENCE {
-		prioInvID PIID,
-		若干个设置后读取对象属性 SEQUENCE OF {
-			一个设置的对象属性 OAD,
-			数据 Data,
-			一个读取的对象属性 OAD,
-			延时读取时间 unsigned
-		}
+		prioInvID PIID,								--服务序号-优先级
+        setThenGetList SEQUENCE OF SetThenGetList
 	}
 
 	SET-Response ::= CHOICE {
-		设置一个对象属性的确认信息响应 [1] SetResponseNormal,
-		设置若干个对象属性的确认信息响应 [2] SetResponseNormalList,
-		设置的确认信息以及读取的响应 [3] SetThenGetResponseNormalList
-	}
+		setResponseNormal               [1] SetResponseNormal, 				--设置一个对象属性的确认信息响应
+        setResponseNormalList           [2] SetResponseNormalList, 			--设置若干个对象属性的确认信息响应
+        setThenGetResponseNormalList    [3] SetThenGetResponseNormalList 	--设置的确认信息以及读取的响应
+    }
 
 	SetResponseNormal ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		objDescr OAD,
-		设置执行结果 DAR
+		piidACD PIID-ACD,   --服务序号-优先级-ACD
+		objDescr OAD,       --一个对象属性描述符
+		dar DAR             --设置执行结果
 	}
+
+    ObjDARList ::= SEQUENCE {
+        objDescr OAD,
+        res DAR
+    }
 
 	SetResponseNormalList ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		若干个对象属性设置结果::= SEQUENCE OF {
-			objDescr OAD,
-			res DAR
-		}
+		piidACD PIID-ACD, --服务序号-优先级-ACD
+		setResponseNormalList SEQUENCE OF ObjDARList --若干个对象属性设置结果
 	}
 
+    SetThenReponseList ::= SEQUENCE {   --若干个对象属性设置后读取结果
+        setObjDescr     OAD,            --一个设置的对象属性描述符
+        dar             DAR,            --设置执行结果
+        readObjDescr    OAD,            --一个读取的对象属性描述符
+        a-ResultNormal  A-ResultNormal  --读取响应数据
+    }
+
 	SetThenGetResponseNormalList ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		若干个对象属性设置后读取结果::= SEQUENCE OF {
-			一个设置的objDescr OAD,
-			设置执行结果 DAR,
-			一个读取的objDescr OAD,
-			读取响应数据 Get-Result
-		}
+		piidACD PIID-ACD, 									--服务序号-优先级-ACD
+		setThenReponseList SEQUENCE OF SetThenReponseList 	--若干个对象属性设置后读取结果
 	}
 
 	ACTION-Request ::= CHOICE {
-		操作一个对象方法请求 [1] ActionRequest,
-		操作若干个对象方法请求 [2] ActionRequestList,
-		操作若干个对象方法后读取若干个对象属性请求 [3] ActionThenGetRequestNormalList
+        actionRequest                   [1] ActionRequest, 					--操作一个对象方法请求
+        actionRequestList               [2] ActionRequestList, 				--操作若干个对象方法请求
+        actionThenGetRequestNormalList  [3] ActionThenGetRequestNormalList 	--操作若干个对象方法后读取若干个对象属性请求  
 	}
 
 	ActionRequest ::= SEQUENCE {
-		prioInvID		PIID,
+		prioInvID		PIID,   --服务序号-优先级
 		objMethDescr	OMD,	--对象方法描述符
 		methArg			Data	--方法参数
 	}
 
+    ActionReqList ::= SEQUENCE {    --若干个方法及参数
+        objMethDescr OMD,           --对象方法描述符
+        methArg Data                --方法参数
+    }
+
 	ActionRequestList ::= SEQUENCE {
-		prioInvID PIID,
-		若干个对象属性 SEQUENCE OF {
-			objMethDescr OMD,
-			方法参数 Data
-		}
+		prioInvID PIID,                             --服务序号-优先级
+		actionRequestList SEQUENCE OF ActionReqList --若干个方法及参数
 	}
 
+    ActionThenGetList ::= SEQUENCE {    --若干个操作对象方法后读取对象属性
+        omd	    OMD,                    --一个设置的对象方法描述符
+        data    Data,                   --方法参数
+        oad     OAD,                    --一个读取的对象属性描述符objDescr
+        delay   Unsigned                --读取延时
+    }
+
 	ActionThenGetRequestNormalList ::= SEQUENCE {
-		prioInvID PIID,
-		若干个操作对象方法后读取对象属性 SEQUENCE OF {
-			一个设置的对象方法描述符 OMD,
-			方法参数 Data,
-			一个读取的objDescr OAD,
-			读取延时 unsigned
-		}
+		prioInvID PIID,                                 --服务序号-优先级
+		actionThenGetRequestNormalList SEQUENCE OF ActionThenGetList
 	}
 
 	ACTION-Response ::= CHOICE {
-		操作一个对象方法的响应 [1] ActionResponseNormal,
-		操作若干个对象方法的响应 [2] ActionResponseNormalList,
-		操作若干个对象方法后读取若干个属性的响应 [3] ActionThenGetResponseNormalList
+        actionResponseNormal	        [1] ActionResponseNormal,           --操作一个对象方法的响应
+        actionResponseNormalList	    [2] ActionResponseNormalList,       --操作若干个对象方法的响应
+        actionThenGetResponseNormalList	[3] ActionThenGetResponseNormalList --操作若干个对象方法后读取若干个属性的响应
 	}
 
 	ActionResponseNormal ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		objMethDescr OMD,
-		操作执行结果 DAR,
-		操作返回数据 Data OPTIONAL
+		piidACD PIID-ACD,           --服务序号-优先级-ACD
+		objMethDescr OMD,           --一个设置的对象方法描述符
+		dar DAR,                    --操作执行结果
+		data Data OPTIONAL          --操作返回数据
+	}
+
+	ActionResponseList ::= SEQUENCE {	--若干个对象方法操作结果
+		objMethDescr	OMD,        	--一个设置的对象方法描述符
+		dar				DAR,        	--操作执行结果
+		data			Data OPTIONAL	--操作返回数据
 	}
 
 	ActionResponseNormalList ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		若干个对象方法操作结果 SEQUENCE OF {
-			objMethDescr OMD,
-			操作执行结果 DAR,
-			操作返回数据 Data OPTIONAL
-		}
+		piidACD PIID-ACD,                       			--服务序号-优先级-ACD
+		actionResponseList SEQUENCE OF ActionResponseList	--若干个对象方法操作结果
+	}
+
+    ActionGetResponseList	::= SEQUENCE {      --操作若干个对象方法后读取属性的结果
+		objMethDescr    OMD,                    --一个设置的对象方法描述符
+		dar             DAR,                    --操作执行结果
+		data	        Data OPTIONAL,          --操作返回数据
+		a-ResultNormal  A-ResultNormal          --一个对象属性及其结果
 	}
 
 	ActionThenGetResponseNormalList ::= SEQUENCE {
-		服务序号-优先级-ACD PIID-ACD,
-		操作若干个对象方法后读取属性的结果 SEQUENCE OF {
-			一个设置的对象方法描述符 OMD,
-			操作执行结果 DAR,
-			操作返回数据 Data OPTIONAL,
-			一个读取的objDescr OAD,
-			读取响应数据 Get-Result
-		}
+		piidACD 				PIID-ACD,                           --服务序号-优先级-ACD
+		actionGetResponseList	SEQUENCE OF ActionGetResponseList   --操作若干个对象方法后读取属性的结果
 	}
 
-	AcqDocDef ::= Structure {	--采集档案配置单元.属性[2]
-		configId LongUnsigned,	--配置序号
-		basicInfo BasicObject,	--基本信息
-		extInfo ExtendedObject,--扩展信息
-		auxInfo AnnexObject	--附属信息
+    REPORT-Notification ::= CHOICE{
+        reportNotificationList			[1] ReportNotificationList, 		--上报若干个对象属性
+        reportNotificationRecordList	[2] ReportNotificationRecordList, 	--上报若干个记录型对象属性
+        reportNotificationTransData		[3] ReportNotificationTransData 	--上报透明数据
+    }
+
+    ReportNotificationList ::= SEQUENCE {
+        piidACD PIID-ACD, 								--服务序号-优先级-ACD
+        listOfa-ResultNormal SEQUENCE OF A-ResultNormal --若干个对象属性及其数据
+    }
+
+    ReportNotificationRecordList ::= SEQUENCE{
+        piidACD PIID-ACD, --服务序号-优先级-ACD
+        listOfa-ResultRecord SEQUENCE OF A-ResultRecord --若干个记录型对象属性及其数据
+    }
+
+    ReportNotificationTransData ::= SEQUENCE{
+        piidACD PIID-ACD, 					--服务序号-优先级-ACD
+        oad OAD, 							--数据来源端口号
+        dataList SEQUENCE OF Octet-string 	--透明数据
+    }
+
+    REPORT-Response ::= CHOICE{
+        reportResponseList			[1] ReportResponseList, 		--上报若干个对象属性的响应
+        reportResponseRecordList	[2] ReportResponseRecordList, 	--上报若干个记录型对象属性的响应
+        reportResponseTransData		[3] ReportResponseTransData 	--上报透明数据的响应
+    }
+
+    ReportResponseList ::= SEQUENCE{
+        prioInvID PIID, --服务序号-优先级
+        oadList SEQUENCE OF OAD --对应上报的若干个对象属性描述符
+    }
+
+    ReportResponseRecordList ::= SEQUENCE{
+        prioInvID PIID, --服务序号-优先级
+        oadList SEQUENCE OF OAD --对应上报的若干个对象属性描述符
+    }
+
+    ReportResponseTransData ::= SEQUENCE{
+        prioInvID PIID --服务序号-优先级
+    }
+
+    PROXY-Request ::= CHOICE{
+        proxyGetRequestList				[1] ProxyGetRequestList,			--代理读取若干个服务器的若干个对象属性请求
+        proxyGetRequestRecord			[2] ProxyGetRequestRecord,			--代理读取一个服务器的一个记录型对象属性请求
+        proxySetRequestList				[3] ProxySetRequestList,			--代理设置若干个服务器的若干个对象属性请求
+        proxySetThenGetRequestList		[4] ProxySetThenGetRequestList,		--代理设置后读取若干个服务器的若干个对象属性请求
+        proxyActionRequestList			[5] ProxyActionRequestList,			--代理操作若干个服务器的若干个对象方法请求
+        proxyActionThenGetRequestList	[6] ProxyActionThenGetRequestList,	--代理操作后读取若干个服务器的若干个对象方法和属性请求
+        proxyTransCommandRequest		[7] ProxyTransCommandRequest		--代理透明转发命令请求
+    }
+
+	ProxyRequestTSAOAD ::= SEQUENCE {--代理若干个服务器的对象属性读取
+		tsa	TSA , 					--一个目标服务器地址
+		delay	LongUnsigned,	 	--代理一个服务器的超时时间
+		oadList	SEQUENCE OF OAD		--若干个对象属性描述符
 	}
 
-	BasicObject ::= Structure {
-		addr TSA,				--通信地址
-		baud BaudRate,			--波特率 enum
-		protoType Enum {		--规约类型
-			unknow (0),
-			DLT6451997 (1),
-			DLT6452007 (2),
-			DLT698dot45 (3),
-			CJT188dot2004 (4)
-		},
-		port OAD,				--端口
-		passwd octet-string,	--通信密码
-		rateCnt unsigned,		--费率个数
-		userType unsigned,		--用户类型
-		wireType Enum {			--接线方式
-			unknow (0),
-			singlePhase (1),
-			threePhase3Wire (2),--三项三线
-			threePhase4wire (3)	--三项四线
-		},
-		nominalVoltage LongUnsigned,--额定电压(换算-1，单位 V)
-		nominalCurrent LongUnsigned	--额定电流(换算-1，单位 A)
+    ProxyGetRequestList ::= SEQUENCE {
+        prioInvID PIID, --服务序号-优先级
+        delay LongUnsigned , --整个代理请求的超时时间
+        proxyRequestList SEQUENCE OF ProxyRequestTSAOAD --代理若干个服务器的对象属性读取
+    }
+
+    ProxyGetRequestRecord ::= SEQUENCE {
+        prioInvID PIID, --服务序号-优先级
+        delay	LongUnsigned , --代理请求的超时时间
+        tsa	    TSA , --目标服务器地址
+        oad	    OAD , --对象属性描述符
+        rsd	    RSD , --记录选择描述符
+        rcsd    RCSD  --记录列选择描述符
+    }
+
+	ProxySetList ::= SEQUENCE {					--代理若干个服务器的对象属性设置
+		tsa	    TSA ,							--目标服务器地址
+		delay	LongUnsigned ,					--代理一个服务器的超时时间
+		listOfOadData SEQUENCE OF ObjAttrList   --若干个对象属性描述符及其数据
 	}
 
-	ExtendedObject ::= Structure {
-		collectorAddr TSA,		--采集器地址
-		AssetNO OctetString,	--资产号
-		PT LongUnsigned,
-		CT LongUnsigned
+    ProxySetRequestList ::= SEQUENCE {
+        prioInvID PIID,							--服务序号-优先级
+        delay LongUnsigned ,					--整个代理请求的超时时间
+        proxySetList SEQUENCE OF ProxySetList	--代理若干个服务器的对象属性设置
+    }
+
+	SetThenGetRequest ::= SEQUENCE {             --若干个对象属性的设置后读取
+		setOad OAD,                             --设置的对象属性描述符
+		data Data,                              --及其设置数值
+		readOad OAD,                            --读取的对象属性描述符
+		delay Unsigned                          --及其延时读取时间
 	}
 
-	AnnexObject ::= array Structure {
-		objDescr OAD,	--对象属性描述符
-		fieldValue Data	--属性值
+	SetThenGetRequestOneTsa ::= SEQUENCE {			--代理若干个服务器的对象属性设置后读取
+		tsa	    TSA ,								--目标服务器地址
+		delay	LongUnsigned ,						--代理一个服务器的超时时间
+		listOfOadData SEQUENCE OF SetThenGetRequest	--若干个对象属性的设置后读取
 	}
-	
-	
-	interface12 ::= Structure {
-	
+
+    ProxySetThenGetRequestList ::= SEQUENCE {
+        prioInvID PIID,													--服务序号-优先级
+        delay LongUnsigned ,											--整个代理请求的超时时间
+        proxySetThenGetRequestList SEQUENCE OF SetThenGetRequestOneTsa	--代理若干个服务器的对象属性设置后读取
+    }
+
+
+	OmdData ::= SEQUENCE {		--若干个对象方法描述符及其参数
+		objMethDescr	OMD,	--对象方法描述符
+		data            Data    --及其方法参数
 	}
+			
+	ProxyActionRequest ::= SEQUENCE { --代理若干个服务器的对象方法操作
+		tsa	    TSA , --目标服务器地址
+		delay	LongUnsigned , --代理一个服务器的超时时间
+		listOfOmdData SEQUENCE OF OmdData --若干个对象方法描述符及其参数
+	}
+
+    ProxyActionRequestList ::= SEQUENCE {
+        prioInvID PIID, --服务序号-优先级
+        delay LongUnsigned , --整个代理请求的超时时间
+        proxyActionRequestList SEQUENCE OF ProxyActionRequest --代理若干个服务器的对象方法操作
+    }
+
+	OmdDataGet ::= SEQUENCE { --若干个对象方法及属性的操作后读取
+		objMethDescr OMD , --操作的对象方法描述符
+		data Data , --及其方法参数
+		oad OAD , --读取的对象属性描述符
+		delay Unsigned --及其延时读取时间
+	}
+			
+	ProxyActionThenGetRequest ::= SEQUENCE { --代理若干个服务器的操作后读取
+		tsa	    TSA , --目标服务器地址
+		delay	LongUnsigned , --代理一个服务器的超时时间
+		listOfOmdData SEQUENCE OF OmdDataGet --若干个对象方法及属性的操作后读取
+	}
+
+
+    ProxyActionThenGetRequestList ::= SEQUENCE {
+        prioInvID PIID, --服务序号-优先级
+        delay LongUnsigned , --整个代理请求的超时时间
+        proxyActionThenGetRequestList SEQUENCE OF ProxyActionThenGetRequest --代理若干个服务器的操作后读取
+    }
+
+    ProxyTransCommandRequest ::= SEQUENCE {
+        prioInvID PIID, --服务序号-优先级
+        oad OAD , --数据转发端口
+        comConfig COMDCB , --端口通信控制块
+        delaySec LongUnsigned , --接收等待报文超时时间(秒)
+        delayMilliSec LongUnsigned , --接收等待字节超时时间(毫秒)
+        cmd Octet-string --透明转发命令
+    }
+
+    PROXY-Response ::= CHOICE {
+        proxyGetResponseList	        [1] ProxyGetResponseList,           --代理读取若干个服务器的若干个对象属性响应
+        proxyGetResponseRecord	        [2] ProxyGetResponseRecord,         --代理读取一个服务器的一个记录型对象属性响应
+        proxySetResponseList	        [3] ProxySetResponseList,           --代理设置若干个服务器的若干个对象属性响应
+        proxySetThenGetResponseList	    [4] ProxySetThenGetResponseList,    --代理设置后读取若干个服务器的若干个对象属性响应
+        proxyActionResponseList	        [5] ProxyActionResponseList,        --代理操作若干个服务器的若干个对象方法响应
+        proxyActionThenGetResponseList	[6] ProxyActionThenGetResponseList, --代理操作后读取若干个服务器的若干个对象方法和属性响应
+        proxyTransCommandResponse	    [7] ProxyTransCommandResponse       --代理透明转发命令响应
+    }
+
+	ProxyGetResponse ::= SEQUENCE {                      --代理若干个服务器的读取结果
+		tsa	    TSA ,                                   --目标服务器地址
+		listOfa-ResultNormal SEQUENCE OF A-ResultNormal --若干个对象属性及其结果
+	}
+
+    ProxyGetResponseList ::= SEQUENCE {
+        piidACD PIID-ACD,                                   --服务序号-优先级-ACD
+        proxyGetResponseList SEQUENCE OF ProxyGetResponse   --代理若干个服务器的读取结果
+    }
+
+    ProxyGetResponseRecord ::= SEQUENCE {
+        piidACD PIID-ACD,               --服务序号-优先级-ACD
+        tsa TSA,                        --目标服务器地址
+        a-ResultRecord A-ResultRecord   --一个记录型对象属性及其结果
+    }
+
+	ProxySetResponse ::= SEQUENCE {     --代理若干个服务器的读取结果
+		tsa	    TSA ,                       --目标服务器地址
+		listOfRes SEQUENCE OF ObjDARList    --若干个对象属性描述符及其结果
+	}
+
+    ProxySetResponseList ::= SEQUENCE {
+        piidACD PIID-ACD,                                   --服务序号-优先级-ACD
+        proxySetResponseList SEQUENCE OF ProxySetResponse   --代理若干个服务器的读取结果
+    }
+
+    OAD-DAR-A-ResultNormal ::= SEQUENCE {       --若干个对象属性设置后读取结果
+        oad OAD,                                --设置的对象属性描述符
+        dar DAR,                                --及其设置结果
+        a-ResultNormal A-ResultNormal           --一个对象属性及其结果
+    }
+
+    ProxySetThenGetResponse ::= SEQUENCE {              --代理若干个服务器的设置后读取结果
+        tsa	    TSA ,                                   --目标服务器地址
+        listOfRes SEQUENCE OF OAD-DAR-A-ResultNormal    --若干个对象属性设置后读取结果
+    }
+
+    ProxySetThenGetResponseList ::= SEQUENCE {
+        piidACD PIID-ACD,                                               --服务序号-优先级-ACD
+        proxySetThenGetResponseList SEQUENCE OF ProxySetThenGetResponse --代理若干个服务器的设置后读取结果
+    }
+
+    OMD-DAR-DATAOPTION ::= SEQUENCE {   --若干个对象方法描述符及其结果
+        objMethDescr OMD,               --对象方法描述符
+        dar DAR,                        --及其操作结果
+        data Data OPTIONAL              --操作返回数据
+    }
+
+    ProxyActionResponse ::= SEQUENCE {              --代理若干个服务器的操作结果
+        tsa	    TSA ,                               --目标服务器地址
+        listOfRes SEQUENCE OF OMD-DAR-DATAOPTION    --若干个对象方法描述符及其结果
+    }
+
+    ProxyActionResponseList ::= SEQUENCE {
+        piidACD PIID-ACD,                                       --服务序号-优先级-ACD
+        proxyActionResponseList SEQUENCE OF ProxyActionResponse --代理若干个服务器的操作结果
+    }
+
+    OMD-DAR-DATAOPTION-A-ResultNormal ::= SEQUENCE {    --若干个对象方法和属性操作后读取结果
+        objMethDescr OMD,                               --对象方法描述符
+        dar DAR,                                        --及其操作结果
+        data Data OPTIONAL,                             --操作返回数据
+        a-ResultNormal A-ResultNormal                   --一个对象属性及其结果
+    }
+
+    ProxyActionThenGetResponse ::= SEQUENCE {                   --代理若干个服务器的操作后读取结果
+        tsa	    TSA ,                                           --目标服务器地址
+        listOfRes SEQUENCE OF OMD-DAR-DATAOPTION-A-ResultNormal --若干个对象方法和属性操作后读取结果
+    }
+
+    ProxyActionThenGetResponseList ::= SEQUENCE {
+        piidACD PIID-ACD,                                                       --服务序号-优先级-ACD
+        proxyActionThenGetResponseList SEQUENCE OF ProxyActionThenGetResponse   --代理若干个服务器的操作后读取结果
+    }
+
+    ProxyTransCommandResponse ::= SEQUENCE {
+        piidACD PIID-ACD,   --服务序号-优先级-ACD
+        oad OAD,            --数据转发端口
+        res TransResult     --透明转发命令返回结果
+    }
+
+    TransResult ::= CHOICE {
+        dar [0] DAR,                --错误信息
+        retData [1] Octet-string    --返回数据
+    }
+
+
+    SECURITY-Request ::= SEQUENCE {
+        apdu CHOICE {                       --应用数据单元
+            plaintextApdu [0] Octet-string, --明文应用数据单元
+            cipherApdu [1] Octet-string     --密文应用数据单元
+        },
+        dataChkInfo CHOICE                  --数据验证信息
+        {
+            sid-mac     [0] SID-MAC,        --数据验证码
+            rn          [1] RN,             --随机数
+            mac         [2] RN-MAC,         --随机数+数据MAC
+            sid         [3] SID             --安全标识
+        }
+    }
+
+    RN-MAC ::= SEQUENCE {
+        rn RN,      -- 随机数
+        mac MAC     -- 数据
+    }
+
+    DataChkInfo ::= CHOICE {    --数据验证信息
+        mac [0] MAC             --数据MAC
+    }
+
+    SECURITY-Response ::= SEQUENCE {
+        apdu CHOICE {                         --应用数据单元
+            plaintextApdu   [0] Octet-string, --明文应用数据单元
+            cipherApdu      [1] Octet-string, --密文应用数据单元
+            dar             [2] DAR           --异常错误
+        },
+        dataChkInfo DataChkInfo OPTIONAL      --数据验证信息
+    }
+
+
+
+    ERROR-Response ::= SEQUENCE {
+        prioInvID PIID,         --服务序号-优先级
+        type ENUMERATED {       --异常类型
+            apduErr     (1),    --APDU无法解析
+            svrUnSpt    (2),    --服务不支持
+            other       (255)   --其他
+        }
+    }
+
+-----------------------------extend data type end-----------------------------------
+
+
 END
-
-
