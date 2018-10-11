@@ -35,7 +35,8 @@ SOURCES += \
     lib698/baseDataType.c \
     lib698/linkManager.c \
     lib698/apduManager.c \
-    qdlt698.cpp
+    qdlt698.cpp \
+    libcom/libcom.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,10 +48,13 @@ HEADERS += \
     lib698/baseDataType.h \
     lib698/linkManager.h \
     lib698/apduManager.h \
-    qdlt698.h
+    qdlt698.h \
+    libcom/libcom.h
 
 FORMS += \
-        mainwindow.ui
+        ui/mainwindow.ui \
+    ui/comconfig.ui \
+    ui/netconfig.ui
 
 DISTFILES += \
     lib698/dlt698.45.asn1

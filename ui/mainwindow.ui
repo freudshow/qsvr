@@ -173,9 +173,24 @@
      <x>0</x>
      <y>0</y>
      <width>830</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menucomConfig">
+    <property name="title">
+     <string>config</string>
+    </property>
+    <addaction name="actioncomconfig"/>
+    <addaction name="separator"/>
+    <addaction name="actionnetconfig"/>
+   </widget>
+   <widget class="QMenu" name="menuPreConnect">
+    <property name="title">
+     <string>PreConnect</string>
+    </property>
+   </widget>
+   <addaction name="menucomConfig"/>
+   <addaction name="menuPreConnect"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -186,6 +201,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actioncomconfig">
+   <property name="text">
+    <string>comconfig</string>
+   </property>
+  </action>
+  <action name="actionnetconfig">
+   <property name="text">
+    <string>netconfig</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

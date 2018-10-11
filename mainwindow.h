@@ -34,6 +34,9 @@ private:
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;
     bool listenState;
+
+    QList<QTcpSocket*> tcpClientList;
+    QTcpSocket *pCurrentClient;
 };
 
 #endif // MAINWINDOW_H
