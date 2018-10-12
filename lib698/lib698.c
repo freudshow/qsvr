@@ -2,9 +2,9 @@
 extern "C" {
 #endif
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "lib698.h"
 #include "fcs.h"
 #include "linkManager.h"
@@ -143,7 +143,7 @@ u8 processFrame(u8* buf, u16 bufSize)
     boolean ret = TRUE;
     frmHead_s frmhead;
 
-    bzero((u8*)&frmhead, sizeof(frmhead));
+    memset((u8*)&frmhead, 0, sizeof(frmhead));
     ret = checkFrame(buf, &bufSize, &frmhead);
     if( FALSE == ret) {
         DEBUG_TIME_LINE("frame invalid");
