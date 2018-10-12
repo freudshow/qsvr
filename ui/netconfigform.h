@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::netConfigForm *ui;
+
+signals:
+    void exited();
 };
 
 #endif // NETCONFIGFORM_H

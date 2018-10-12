@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += network
+QT       += core gui network serialport sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -38,7 +37,9 @@ SOURCES += \
         qdlt698.cpp \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
-        ui/netconfigform.cpp
+        ui/netconfigform.cpp \
+    libdb/libdb.cpp \
+    libnet/libnet.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,7 +54,9 @@ HEADERS += \
         qdlt698.h \
         libcom/libcom.h \
         ui/comconfigform.h \
-        ui/netconfigform.h
+        ui/netconfigform.h \
+    libdb/libdb.h \
+    libnet/libnet.h
 
 FORMS += \
         ui/mainwindow.ui \

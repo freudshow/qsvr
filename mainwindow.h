@@ -21,11 +21,14 @@ public:
 	~MainWindow();
 
 private slots:
+    void comUiExited();
+    void netUiExited();
+
 	void on_pushButton_Listen_clicked();
 	void on_pushButton_Send_clicked();
     void on_Button_ClrRcv_clicked();
     void on_actionComconfig_triggered();
-    void on_actionNetConfig_triggered();
+    void on_actionNetconfig_triggered();
 
 
     void serverNewConnect();
@@ -37,8 +40,8 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
-    comConfigForm comUi;
-    netConfigForm netUi;
+    comConfigForm *comUi;
+    netConfigForm *netUi;
 
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;

@@ -42,6 +42,8 @@ typedef double                  fp64;         /* Double precision floating point
 
 #define FILE_MAX_SIZE   (5*1024*1024)//5M
 
+#define TIME_OUT		500
+
 #define SET_POINTER_NULL(p)	((p) = Q_NULLPTR);
 #define RELEASE_POINTER_RESOURCE(p)	if ((p) != nullptr){\
                                             delete (p);\

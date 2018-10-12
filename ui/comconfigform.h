@@ -2,6 +2,9 @@
 #define COMCONFIGFORM_H
 
 #include <QWidget>
+#include <QSettings>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 namespace Ui {
 class comConfigForm;
@@ -17,6 +20,14 @@ public:
 
 private:
     Ui::comConfigForm *ui;
+
+    QSettings *m_comset;
+
+    void on_btnSave_clicked();
+    void on_btnExit_clicked();
+
+signals:
+    void exited();
 };
 
 #endif // COMCONFIGFORM_H

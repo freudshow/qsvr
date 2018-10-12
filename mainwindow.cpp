@@ -25,12 +25,17 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
 
     listenState = false;
+
+    comUi = nullptr;
+    netUi = nullptr;
 }
 
 MainWindow::~MainWindow()
 {
 	pServer->close();
 	pServer->deleteLater();
+    RELEASE_POINTER_RESOURCE(comUi)
+    RELEASE_POINTER_RESOURCE(netUi)
 	delete ui;
 }
 
@@ -78,12 +83,34 @@ void MainWindow::on_Button_ClrRcv_clicked()
 
 void MainWindow::on_actionComconfig_triggered()
 {
-    comUi.show();
+    if(nullptr == comUi) {
+        comUi = new comConfigForm();
+        connect(comUi, SIGNAL(exited()), this, SLOT(comUiExited()));
+        comUi->setWindowModality(Qt::ApplicationModal);
+        comUi->show();
+    }
 }
 
-void MainWindow::on_actionNetConfig_triggered()
+void MainWindow::on_actionNetconfig_triggered()
 {
-    netUi.show();
+    if(nullptr == netUi) {
+        netUi = new netConfigForm();
+        connect(netUi, SIGNAL(exited()), this, SLOT(netUiExited()));
+        netUi->setWindowModality(Qt::ApplicationModal);
+        netUi->show();
+    }
+}
+
+void MainWindow::comUiExited()
+{
+    delete comUi;
+    comUi = nullptr;
+}
+
+void MainWindow::netUiExited()
+{
+    delete netUi;
+    netUi = nullptr;
 }
 
 void MainWindow::sendMsg()
@@ -113,7 +140,7 @@ void MainWindow::sendMsg()
     } else {
 #if QT_VERSION < 0x050000
         buf = ui->textEdit_Send->toPlainText().toAscii();
-#else/home/floyd/qtproj
+#else
         buf = ui->textEdit_Send->toPlainText().toLocal8Bit();
 #endif
     }

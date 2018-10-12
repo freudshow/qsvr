@@ -2,16 +2,50 @@
 #define LIBCOM_H
 
 #include <QObject>
+#include <QDebug>
+#include <QThread>
+#include <QTimer>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include "basedef.h"
 
-class libcom : public QObject
+
+typedef struct {
+    QString					portName;
+    QSerialPort::BaudRate	baudrate;
+    QSerialPort::DataBits	databits;
+    QSerialPort::Parity		parity;
+    QSerialPort::StopBits	stopbits;
+} comInfoStr;
+typedef comInfoStr* comInfoPtr;
+
+class comObj : public QObject
 {
     Q_OBJECT
 public:
-    libcom();
+    comObj(QObject* parent = 0);
+    ~comObj();
+private:
+    QSerialPort* m_serialPort;
+    QByteArray m_readBuf;//数据缓冲区
+    QTimer* m_timer;
 
 signals:
+    void openComOK();
+    void openComFail();
+    void finished();
+    void readBufReady(QByteArray);
+public slots :
+    void startThread();
 
-public slots:
+    void openCom(comInfoPtr);
+    void closeCom();
+
+    void sendBuf(QByteArray);
+
+private slots :
+    void readBuf();
+    void sendData();
 };
 
 #endif // LIBCOM_H
