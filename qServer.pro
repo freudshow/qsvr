@@ -27,34 +27,39 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    lib698/lib698.c \
-    lib698/fcs.c \
-    basedef.c \
-    lib698/request.c \
-    lib698/apduType.c \
-    lib698/baseDataType.c \
-    lib698/linkManager.c \
-    lib698/apduManager.c \
-    qdlt698.cpp \
-    libcom/libcom.cpp
+        lib698/lib698.c \
+        lib698/fcs.c \
+        basedef.c \
+        lib698/request.c \
+        lib698/apduType.c \
+        lib698/baseDataType.c \
+        lib698/linkManager.c \
+        lib698/apduManager.c \
+        qdlt698.cpp \
+        libcom/libcom.cpp \
+        ui/comconfigform.cpp \
+        ui/netconfigform.cpp
 
 HEADERS += \
         mainwindow.h \
-    lib698/lib698.h \
-    basedef.h \
-    lib698/fcs.h \
-    lib698/request.h \
-    lib698/apduType.h \
-    lib698/baseDataType.h \
-    lib698/linkManager.h \
-    lib698/apduManager.h \
-    qdlt698.h \
-    libcom/libcom.h
+        lib698/lib698.h \
+        basedef.h \
+        lib698/fcs.h \
+        lib698/request.h \
+        lib698/apduType.h \
+        lib698/baseDataType.h \
+        lib698/linkManager.h \
+        lib698/apduManager.h \
+        qdlt698.h \
+        libcom/libcom.h \
+        ui/comconfigform.h \
+        ui/netconfigform.h
 
 FORMS += \
         ui/mainwindow.ui \
-        ui/comconfig.ui \
-        ui/netconfig.ui
+        ui/comconfigform.ui \
+    ui/netconfigform.ui
 
 DISTFILES += \
-    lib698/dlt698.45.asn1
+    lib698/dlt698.45.asn1 \
+    config/config.ini

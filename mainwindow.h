@@ -5,6 +5,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include "basedef.h"
+#include "ui/comconfigform.h"
+#include "ui/netconfigform.h"
 
 namespace Ui {
 	class MainWindow;
@@ -15,13 +17,17 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = Q_NULLPTR);
 	~MainWindow();
 
 private slots:
 	void on_pushButton_Listen_clicked();
 	void on_pushButton_Send_clicked();
     void on_Button_ClrRcv_clicked();
+    void on_actionComconfig_triggered();
+    void on_actionNetConfig_triggered();
+
+
     void serverNewConnect();
     void socketReadData();
     void socketDisconnected();
@@ -31,6 +37,9 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
+    comConfigForm comUi;
+    netConfigForm netUi;
+
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;
     bool listenState;

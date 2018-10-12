@@ -42,6 +42,24 @@ typedef double                  fp64;         /* Double precision floating point
 
 #define FILE_MAX_SIZE   (5*1024*1024)//5M
 
+#define SET_POINTER_NULL(p)	((p) = Q_NULLPTR);
+#define RELEASE_POINTER_RESOURCE(p)	if ((p) != nullptr){\
+                                            delete (p);\
+                                            (p) = nullptr;\
+                                    }
+#define RELEASE_TIMER_RESOURCE(pt)		if ((pt) != nullptr){\
+                                            if((pt)->isActive())\
+                                                (pt)->stop();\
+                                            delete (pt);\
+                                            (pt) = nullptr;\
+                                        }
+#define RELEASE_COM_RESOURCE(pcom)		if((pcom) != nullptr){\
+                                            if((pcom)->isOpen()){\
+                                                (pcom)->close();\
+                                            }\
+                                            delete (pcom);\
+                                        }
+
 extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 bufSize);
 extern void debugToStderr(const char* file, const char* func, u32 line, const char *fmt, ...);
 extern void debugToFile(const char* fname, const char* file, const char* func, u32 line, const char *fmt,...);

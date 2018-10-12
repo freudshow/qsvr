@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->textEdit_Recv, &QTextEdit::textChanged, this, &MainWindow::setRecvCursor);
 
 	pServer = new QTcpServer();
-    pSocket = NULL;
+    pSocket = Q_NULLPTR;
 
 	//连接信号槽
     connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
@@ -45,7 +45,7 @@ void MainWindow::on_pushButton_Listen_clicked()
 {
     qDebug() << "listenState: " << listenState;
     if(!listenState) {
-        quint16 port = ui->lineEdit_Port->text().toUInt();
+        quint16 port = (quint16)ui->lineEdit_Port->text().toUInt();
         if(!pServer->listen(QHostAddress::Any, port)){
             qDebug() << pServer->errorString();
 		}
@@ -76,6 +76,16 @@ void MainWindow::on_Button_ClrRcv_clicked()
     ui->textEdit_Recv->clear();
 }
 
+void MainWindow::on_actionComconfig_triggered()
+{
+    comUi.show();
+}
+
+void MainWindow::on_actionNetConfig_triggered()
+{
+    netUi.show();
+}
+
 void MainWindow::sendMsg()
 {
     QByteArray buf;
@@ -103,7 +113,7 @@ void MainWindow::sendMsg()
     } else {
 #if QT_VERSION < 0x050000
         buf = ui->textEdit_Send->toPlainText().toAscii();
-#else
+#else/home/floyd/qtproj
         buf = ui->textEdit_Send->toPlainText().toLocal8Bit();
 #endif
     }
