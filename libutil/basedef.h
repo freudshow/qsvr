@@ -45,21 +45,22 @@ typedef double                  fp64;         /* Double precision floating point
 #define TIME_OUT		500
 
 #define SET_POINTER_NULL(p)	((p) = Q_NULLPTR);
-#define RELEASE_POINTER_RESOURCE(p)	if ((p) != nullptr){\
+#define RELEASE_POINTER_RESOURCE(p)	if ((p) != Q_NULLPTR){\
                                             delete (p);\
-                                            (p) = nullptr;\
+                                            p = Q_NULLPTR;\
                                     }
-#define RELEASE_TIMER_RESOURCE(pt)		if ((pt) != nullptr){\
+#define RELEASE_TIMER_RESOURCE(pt)		if ((pt) != Q_NULLPTR){\
                                             if((pt)->isActive())\
                                                 (pt)->stop();\
                                             delete (pt);\
-                                            (pt) = nullptr;\
+                                            pt = Q_NULLPTR;\
                                         }
-#define RELEASE_COM_RESOURCE(pcom)		if((pcom) != nullptr){\
+#define RELEASE_COM_RESOURCE(pcom)		if((pcom) != Q_NULLPTR){\
                                             if((pcom)->isOpen()){\
                                                 (pcom)->close();\
                                             }\
                                             delete (pcom);\
+                                            pcom = Q_NULLPTR;\
                                         }
 
 extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 bufSize);

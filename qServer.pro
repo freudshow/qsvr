@@ -28,7 +28,7 @@ SOURCES += \
         mainwindow.cpp \
         lib698/lib698.c \
         lib698/fcs.c \
-        basedef.c \
+        libutil/basedef.c \
         lib698/request.c \
         lib698/apduType.c \
         lib698/baseDataType.c \
@@ -44,7 +44,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
         lib698/lib698.h \
-        basedef.h \
+        libutil/basedef.h \
         lib698/fcs.h \
         lib698/request.h \
         lib698/apduType.h \

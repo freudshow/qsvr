@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include <QSettings>
-#include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QCloseEvent>
 
 namespace Ui {
 class comConfigForm;
@@ -23,11 +23,18 @@ private:
 
     QSettings *m_comset;
 
+private slots:
     void on_btnSave_clicked();
     void on_btnExit_clicked();
 
+    void initCom();
+
+    void closeEvent(QCloseEvent *event);
+
 signals:
     void exited();
+    void configFreshed();
+    void configSaved();
 };
 
 #endif // COMCONFIGFORM_H

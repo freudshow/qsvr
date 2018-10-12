@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include "libutil/basedef.h"
 
 class libnet : public QObject
 {

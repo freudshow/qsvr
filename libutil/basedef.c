@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
@@ -145,8 +141,3 @@ void printBuf(u8* buf, u32 bufSize, u8 space, u8 inverse)
 
     fprintf(stderr, "%02X\n", buf[i]);
 }
-
-
-#ifdef __cplusplus
-}
-#endif

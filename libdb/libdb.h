@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QtSql>
-#include "basedef.h"
 
 #define DB_PATH		"db/hisdata.db"
 #define HIS_TABLE	"t_history_data"
@@ -39,7 +38,7 @@ class sqliteDb : public QObject
     Q_OBJECT
 
 public:
-    sqliteDb(QObject* parent = 0);
+    sqliteDb(QObject* parent = Q_NULLPTR);
     ~sqliteDb();
 
 private:

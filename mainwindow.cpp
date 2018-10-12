@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     listenState = false;
 
-    comUi = nullptr;
-    netUi = nullptr;
+    comUi = Q_NULLPTR;
+    netUi = Q_NULLPTR;
 }
 
 MainWindow::~MainWindow()
@@ -36,7 +36,7 @@ MainWindow::~MainWindow()
 	pServer->deleteLater();
     RELEASE_POINTER_RESOURCE(comUi)
     RELEASE_POINTER_RESOURCE(netUi)
-	delete ui;
+    RELEASE_POINTER_RESOURCE(ui);
 }
 
 void MainWindow::setRecvCursor()
@@ -83,34 +83,22 @@ void MainWindow::on_Button_ClrRcv_clicked()
 
 void MainWindow::on_actionComconfig_triggered()
 {
-    if(nullptr == comUi) {
-        comUi = new comConfigForm();
-        connect(comUi, SIGNAL(exited()), this, SLOT(comUiExited()));
-        comUi->setWindowModality(Qt::ApplicationModal);
-        comUi->show();
-    }
+    if(Q_NULLPTR != comUi)
+        delete comUi;
+
+    comUi = new comConfigForm();
+    comUi->setWindowModality(Qt::ApplicationModal);
+    comUi->show();
 }
 
 void MainWindow::on_actionNetconfig_triggered()
 {
-    if(nullptr == netUi) {
-        netUi = new netConfigForm();
-        connect(netUi, SIGNAL(exited()), this, SLOT(netUiExited()));
-        netUi->setWindowModality(Qt::ApplicationModal);
-        netUi->show();
-    }
-}
+    if(Q_NULLPTR != netUi)
+        delete netUi;
 
-void MainWindow::comUiExited()
-{
-    delete comUi;
-    comUi = nullptr;
-}
-
-void MainWindow::netUiExited()
-{
-    delete netUi;
-    netUi = nullptr;
+    netUi = new netConfigForm();
+    netUi->setWindowModality(Qt::ApplicationModal);
+    netUi->show();
 }
 
 void MainWindow::sendMsg()

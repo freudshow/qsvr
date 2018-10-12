@@ -1,6 +1,6 @@
 #ifndef	__FCS_H__
 #define	__FCS_H__
-#include "basedef.h"
+#include "libutil/basedef.h"
 
 #ifdef __cplusplus
 extern "C" {

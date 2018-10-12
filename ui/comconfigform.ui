@@ -316,7 +316,7 @@
    <item row="1" column="0">
     <widget class="QPushButton" name="btnSave">
      <property name="text">
-      <string>Open</string>
+      <string>Save</string>
      </property>
     </widget>
    </item>

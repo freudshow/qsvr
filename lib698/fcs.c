@@ -5,7 +5,7 @@
 * Code liberally borrowed from Mohsen Banan and D. Hugh Redelmeier.
 */
 
-#include "basedef.h"
+#include "fcs.h"
 
 /*
 * FCS lookup table as calculated by the table generator.

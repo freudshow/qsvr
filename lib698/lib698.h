@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "basedef.h"
+#include "libutil/basedef.h"
 
 #define FRM_PREFIX      0x68//start code of a frame
 #define FRM_SUFFIX      0x16//end code of a frame

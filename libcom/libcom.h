@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include "basedef.h"
+#include "libutil/basedef.h"
 
 
 typedef struct {
@@ -23,7 +23,7 @@ class comObj : public QObject
 {
     Q_OBJECT
 public:
-    comObj(QObject* parent = 0);
+    comObj(QObject* parent = Q_NULLPTR);
     ~comObj();
 private:
     QSerialPort* m_serialPort;

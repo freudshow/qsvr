@@ -1,5 +1,4 @@
 #include "libdb.h"
-#include "basedef.h"
 
 sqliteDb::sqliteDb(QObject* parent) : QObject(parent)
 {

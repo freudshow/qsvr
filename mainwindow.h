@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include "basedef.h"
+#include "libutil/basedef.h"
 #include "ui/comconfigform.h"
 #include "ui/netconfigform.h"
 
@@ -21,9 +21,6 @@ public:
 	~MainWindow();
 
 private slots:
-    void comUiExited();
-    void netUiExited();
-
 	void on_pushButton_Listen_clicked();
 	void on_pushButton_Send_clicked();
     void on_Button_ClrRcv_clicked();
