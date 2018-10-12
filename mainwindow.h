@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QSettings>
 #include "libutil/basedef.h"
 #include "ui/comconfigform.h"
 #include "ui/netconfigform.h"
@@ -42,6 +43,8 @@ private:
 
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;
+    QString m_tcpPort;
+    QSettings *m_config;
     bool listenState;
 
     QList<QTcpSocket*> tcpClientList;

@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	ui->lineEdit_Port->setText("8002");
 	ui->pushButton_Send->setEnabled(false);
     ui->checkBox_RecvHex->setChecked(true);
     ui->checkBox_SendHex->setChecked(true);
@@ -28,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     comUi = Q_NULLPTR;
     netUi = Q_NULLPTR;
+    m_config = Q_NULLPTR;
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +36,7 @@ MainWindow::~MainWindow()
 	pServer->deleteLater();
     RELEASE_POINTER_RESOURCE(comUi)
     RELEASE_POINTER_RESOURCE(netUi)
+    RELEASE_POINTER_RESOURCE(m_config)
     RELEASE_POINTER_RESOURCE(ui);
 }
 
@@ -48,9 +49,20 @@ void MainWindow::setRecvCursor()
 
 void MainWindow::on_pushButton_Listen_clicked()
 {
+
     qDebug() << "listenState: " << listenState;
+
+    if(Q_NULLPTR == m_config)
+        m_config =  new QSettings("config/config.ini", QSettings::IniFormat);
+
+    m_tcpPort = m_config->value("tcp/port").toString();
+    if(m_tcpPort.length() == 0) {
+        QMessageBox::warning(this, tr("Hint"), tr("please set tcp port first!"), QMessageBox::Ok);
+        return;
+    }
+
     if(!listenState) {
-        quint16 port = (quint16)ui->lineEdit_Port->text().toUInt();
+        quint16 port = static_cast<quint16>(m_tcpPort.toUInt());
         if(!pServer->listen(QHostAddress::Any, port)){
             qDebug() << pServer->errorString();
 		}
@@ -118,7 +130,7 @@ void MainWindow::sendMsg()
                 continue;
             if (list.at(i).isEmpty())
                 continue;
-            data = (char)list.at(i).toInt(&ok, 16);
+            data = static_cast<char>(list.at(i).toInt(&ok, 16));
             if (!ok){
                 QMessageBox::information(this, tr("Hint"), tr("data format error"), QMessageBox::Ok);
                 return;
@@ -167,12 +179,12 @@ QString MainWindow::byteArrayToString(QByteArray buffer, bool read)
 
     for (i = 0; i < buffer.count() - 1; i++) {
         s.clear();
-        s.sprintf("%02X ", (unsigned char)buffer.at(i));
+        s.sprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
         buf += s;
     }
 
     s.clear();
-    s.sprintf("%02X", (unsigned char)buffer.at(i));
+    s.sprintf("%02X", static_cast<unsigned char>(buffer.at(i)));
     buf += s;
     s.clear();
     s.sprintf("\n");
