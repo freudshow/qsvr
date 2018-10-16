@@ -1,6 +1,8 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QTextCursor>
+#include <QSerialPort>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "lib698/lib698.h"
@@ -28,15 +30,17 @@ MainWindow::MainWindow(QWidget *parent) :
     comUi = Q_NULLPTR;
     netUi = Q_NULLPTR;
     m_config = Q_NULLPTR;
+    m_comObj = Q_NULLPTR;
 }
 
 MainWindow::~MainWindow()
 {
 	pServer->close();
 	pServer->deleteLater();
+    RELEASE_POINTER_RESOURCE(m_comObj)
+    RELEASE_POINTER_RESOURCE(m_config)
     RELEASE_POINTER_RESOURCE(comUi)
     RELEASE_POINTER_RESOURCE(netUi)
-    RELEASE_POINTER_RESOURCE(m_config)
     RELEASE_POINTER_RESOURCE(ui);
 }
 
@@ -47,7 +51,62 @@ void MainWindow::setRecvCursor()
     ui->textEdit_Recv->setTextCursor(cursor);
 }
 
-void MainWindow::on_pushButton_Listen_clicked()
+void MainWindow::on_btnOpenCom_clicked()
+{
+    comInfoStr comInfo;
+
+    if(Q_NULLPTR == m_config)
+        m_config = new QSettings("config/config.ini", QSettings::IniFormat);
+    if(Q_NULLPTR == m_comObj)
+        m_comObj = new comObj();
+
+    comInfo.portName = m_config->value("ComSettings/ComName").toString();
+    comInfo.baudrate = static_cast<QSerialPort::BaudRate>(m_config->value("ComSettings/BaudRate").toInt());
+    comInfo.databits = static_cast<QSerialPort::DataBits>(m_config->value("ComSettings/DataBit").toInt());
+
+    switch(m_config->value("ComSettings/Parity").toInt()){
+        case PARITY_NO:
+            comInfo.parity = QSerialPort::NoParity;
+            break;
+        case PARITY_ODD:
+            comInfo.parity = QSerialPort::OddParity;
+            break;
+        case PARITY_EVEN:
+           comInfo.parity = QSerialPort::EvenParity;
+            break;
+        default:
+            comInfo.parity = QSerialPort::NoParity;
+            qDebug("set to default : NoParity");
+            break;
+    }
+
+    switch(m_config->value("ComSettings/StopBit").toInt()){
+        case STOP_ONE:
+            comInfo.stopbits = QSerialPort::OneStop;
+            break;
+        case STOP_ONEANDHALF:
+            comInfo.stopbits = QSerialPort::OneAndHalfStop;
+            break;
+        case STOP_TWO:
+           comInfo.stopbits = QSerialPort::TwoStop;
+            break;
+        default:
+            comInfo.stopbits = QSerialPort::OneStop;
+            qDebug("set to default : OneStop");
+            break;
+    }
+
+    //todo: m_comObj->moveTo(m_comThread)
+
+    if(m_comObj->openCom(&comInfo)) {
+        ui->btnOpenCom->setEnabled(false);
+        QMessageBox::information(this, tr("Hint"), tr("open com OK!"), QMessageBox::Ok);
+    } else {
+        QMessageBox::critical(this, tr("critical"), tr("open com fail!"), QMessageBox::Ok);
+    }
+}
+
+void MainWindow::on_btnListenTcp_clicked()
 {
 
     qDebug() << "listenState: " << listenState;
@@ -67,7 +126,7 @@ void MainWindow::on_pushButton_Listen_clicked()
             qDebug() << pServer->errorString();
 		}
 
-        ui->pushButton_Listen->setText(tr("Don't Listen"));
+        ui->btnListenTcp->setText(tr("Don't Listen"));
 		qDebug()<< "Listen succeessfully!";
     } else {
         if(Q_NULLPTR != pSocket) {
@@ -76,7 +135,7 @@ void MainWindow::on_pushButton_Listen_clicked()
             pServer->close();
             pSocket = Q_NULLPTR;
         }
-        ui->pushButton_Listen->setText(tr("Listen"));
+        ui->btnListenTcp->setText(tr("Listen"));
         ui->pushButton_Send->setEnabled(false);
     }
     listenState = !listenState;

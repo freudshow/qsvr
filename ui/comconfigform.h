@@ -3,8 +3,18 @@
 
 #include <QWidget>
 #include <QSettings>
+#include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QCloseEvent>
+
+
+#define PARITY_NO	0
+#define PARITY_ODD	1
+#define PARITY_EVEN	2
+
+#define STOP_ONE			0
+#define STOP_ONEANDHALF     1
+#define STOP_TWO			2
 
 namespace Ui {
 class comConfigForm;

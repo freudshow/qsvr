@@ -19,6 +19,16 @@ typedef struct {
 } comInfoStr;
 typedef comInfoStr* comInfoPtr;
 
+class comThread : public QThread
+{
+    Q_OBJECT
+
+public:
+
+private:
+
+};
+
 class comObj : public QObject
 {
     Q_OBJECT
@@ -38,14 +48,14 @@ signals:
 public slots :
     void startThread();
 
-    void openCom(comInfoPtr);
+    bool openCom(comInfoPtr);
     void closeCom();
 
-    void sendBuf(QByteArray);
+    void sendBuf(QByteArray);//send data to com
 
 private slots :
     void readBuf();
-    void sendData();
+    void sendData();//send data to caller
 };
 
 #endif // LIBCOM_H

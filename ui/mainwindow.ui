@@ -18,14 +18,14 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QPushButton" name="pushButton_Listen_2">
+       <widget class="QPushButton" name="btnOpenCom">
         <property name="text">
          <string>OpenCom</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_Listen">
+       <widget class="QPushButton" name="btnListenTcp">
         <property name="text">
          <string>ListenTCP</string>
         </property>

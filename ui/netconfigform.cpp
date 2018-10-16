@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "netconfigform.h"
 #include "ui_netconfigform.h"
 
@@ -23,6 +24,7 @@ netConfigForm::~netConfigForm()
 void netConfigForm::on_btnSave_clicked()
 {
     m_config->setValue("tcp/port", ui->lineEditPort->text());
+     QMessageBox::information(this, tr("Hint"), tr("save OK!"), QMessageBox::Ok);
 }
 
 void netConfigForm::on_btnExit_clicked()

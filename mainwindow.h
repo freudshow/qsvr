@@ -5,7 +5,10 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QSettings>
+
 #include "libutil/basedef.h"
+#include "libcom/libcom.h"
+#include "libnet/libnet.h"
 #include "ui/comconfigform.h"
 #include "ui/netconfigform.h"
 
@@ -22,12 +25,13 @@ public:
 	~MainWindow();
 
 private slots:
-	void on_pushButton_Listen_clicked();
+    void on_btnOpenCom_clicked();
+    void on_btnListenTcp_clicked();
 	void on_pushButton_Send_clicked();
     void on_Button_ClrRcv_clicked();
+
     void on_actionComconfig_triggered();
     void on_actionNetconfig_triggered();
-
 
     void serverNewConnect();
     void socketReadData();
@@ -49,6 +53,11 @@ private:
 
     QList<QTcpSocket*> tcpClientList;
     QTcpSocket *pCurrentClient;
+
+    comObj *m_comObj;
+    comThread *m_comThread;
+
+
 };
 
 #endif // MAINWINDOW_H
