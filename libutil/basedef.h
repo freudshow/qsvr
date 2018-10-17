@@ -44,11 +44,12 @@ typedef double                  fp64;         /* Double precision floating point
 
 #define TIME_OUT		500
 
-#define CONNECT_THREAD(OBJECT, THREAD)	connect((THREAD), SIGNAL(started()), (OBJECT), SLOT(startThread()));\
-                                            connect((OBJECT), SIGNAL(finished()), (THREAD), SLOT(quit()));\
-                                            connect((OBJECT), SIGNAL(finished()), (OBJECT), SLOT(deleteLater()));\
-                                            connect((THREAD), SIGNAL(finished()), (THREAD), SLOT(deleteLater()));\
-                                            (THREAD)->start()
+#define CONNECT_THREAD(object, run, thread)     (object)->moveToThread(thread);\
+                                                connect((thread), SIGNAL(started()), (object), SLOT(run()));\
+                                                connect((object), SIGNAL(finished()), (thread), SLOT(quit()));\
+                                                connect((object), SIGNAL(finished()), (object), SLOT(deleteLater()));\
+                                                connect((thread), SIGNAL(finished()), (thread), SLOT(deleteLater()));\
+                                                (thread)->start()
 
 #define SET_POINTER_NULL(p)	((p) = Q_NULLPTR);
 

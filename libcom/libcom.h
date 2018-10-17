@@ -19,16 +19,6 @@ typedef struct {
 } comInfoStr;
 typedef comInfoStr* comInfoPtr;
 
-class comThread : public QThread
-{
-    Q_OBJECT
-
-public:
-
-private:
-
-};
-
 class comObj : public QObject
 {
     Q_OBJECT
@@ -45,6 +35,7 @@ signals:
     void openComFail();
     void finished();
     void readBufReady(QByteArray);
+
 public slots :
     void startThread();
 

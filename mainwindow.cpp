@@ -31,13 +31,13 @@ MainWindow::MainWindow(QWidget *parent) :
     netUi = Q_NULLPTR;
     m_config = Q_NULLPTR;
     m_comObj = Q_NULLPTR;
+    m_comThread = Q_NULLPTR;
 }
 
 MainWindow::~MainWindow()
 {
 	pServer->close();
 	pServer->deleteLater();
-    RELEASE_POINTER_RESOURCE(m_comObj)
     RELEASE_POINTER_RESOURCE(m_config)
     RELEASE_POINTER_RESOURCE(comUi)
     RELEASE_POINTER_RESOURCE(netUi)
@@ -59,6 +59,8 @@ void MainWindow::on_btnOpenCom_clicked()
         m_config = new QSettings("config/config.ini", QSettings::IniFormat);
     if(Q_NULLPTR == m_comObj)
         m_comObj = new comObj();
+    if(Q_NULLPTR == m_comThread)
+        m_comThread = new QThread();
 
     comInfo.portName = m_config->value("ComSettings/ComName").toString();
     comInfo.baudrate = static_cast<QSerialPort::BaudRate>(m_config->value("ComSettings/BaudRate").toInt());
@@ -96,14 +98,15 @@ void MainWindow::on_btnOpenCom_clicked()
             break;
     }
 
-    //todo: m_comObj->moveTo(m_comThread)
-
     if(m_comObj->openCom(&comInfo)) {
         ui->btnOpenCom->setEnabled(false);
         QMessageBox::information(this, tr("Hint"), tr("open com OK!"), QMessageBox::Ok);
     } else {
         QMessageBox::critical(this, tr("critical"), tr("open com fail!"), QMessageBox::Ok);
+        return;
     }
+
+    CONNECT_THREAD(m_comObj, startThread, m_comThread);
 }
 
 void MainWindow::on_btnListenTcp_clicked()

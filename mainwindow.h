@@ -55,7 +55,7 @@ private:
     QTcpSocket *pCurrentClient;
 
     comObj *m_comObj;
-    comThread *m_comThread;
+    QThread *m_comThread;
 
 
 };
