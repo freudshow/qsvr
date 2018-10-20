@@ -27,10 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     listenState = false;
 
-    comUi = Q_NULLPTR;
-    netUi = Q_NULLPTR;
-    m_config = Q_NULLPTR;
-    m_comObj = Q_NULLPTR;
+    comUi       = Q_NULLPTR;
+    netUi       = Q_NULLPTR;
+    m_config    = Q_NULLPTR;
+    m_comObj    = Q_NULLPTR;
     m_comThread = Q_NULLPTR;
 }
 
