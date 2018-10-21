@@ -132,7 +132,7 @@ typedef struct {
 
 #pragma pack(pop)
 
-extern u8 processFrame(u8* buf, u16 bufSize);
+extern u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead);
 
 #ifdef __cplusplus
 }

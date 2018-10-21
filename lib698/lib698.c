@@ -135,34 +135,34 @@ void scamCode(u8 *buf,int len, boolean addScam)
  * @bufSize: frame length
  * return: FALSE-frame invalid; TRUE-frame valid.
  */
-u8 processFrame(u8* buf, u16 bufSize)
+u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
 {
-    if((NULL == buf) || (0 == bufSize))
+    if((NULL == buf) || (0 == bufSize) || (NULL == pFrmhead))
         return FALSE;
 
     boolean ret = TRUE;
-    frmHead_s frmhead;
+    ;
 
-    memset((u8*)&frmhead, 0, sizeof(frmhead));
-    ret = checkFrame(buf, &bufSize, &frmhead);
+    memset((u8*)pFrmhead, 0, sizeof(pFrmhead));
+    ret = checkFrame(buf, &bufSize, pFrmhead);
     if( FALSE == ret) {
         DEBUG_TIME_LINE("frame invalid");
         ret = FALSE;
         goto onret;
     }
 
-    switch (frmhead.ctlChar.ctl.func) {
+    switch (pFrmhead->ctlChar.ctl.func) {
     case FUNC_LINK_MANAGE:
-        ret = linkManager(buf, bufSize, &frmhead);
+        ret = linkManager(buf, bufSize, pFrmhead);
         break;
     case FUNC_LINK_UERDATA:
-        ret = userDataManager(buf, bufSize, &frmhead);
+        ret = userDataManager(buf, bufSize, pFrmhead);
         break;
     default:
         break;
     }
 
-    switch (frmhead.ctlChar.dirPrm.dpAssem) {
+    switch (pFrmhead->ctlChar.dirPrm.dpAssem) {
     case DIR_PRM_CLT_RESPONSE:
 
         break;
@@ -180,8 +180,8 @@ u8 processFrame(u8* buf, u16 bufSize)
     }
 
  onret:
-    if(frmhead.sa.sa != NULL)
-        free(frmhead.sa.sa);
+    if(pFrmhead->sa.sa != NULL)
+        free(pFrmhead->sa.sa);
 
     return ret;
 }

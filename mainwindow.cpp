@@ -259,9 +259,10 @@ void MainWindow::socketReadData()
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
     QByteArray buffer = pSocket->readAll();
+    frmHead_s frmhead = {};
 
     if(!buffer.isEmpty()) {
-        u8 ret = processFrame((u8*)(buffer.data()), buffer.length());
+        u8 ret = processFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
         if(TRUE == ret) {
             qDebug() << "frame valid";
         } else {
