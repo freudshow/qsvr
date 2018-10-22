@@ -130,6 +130,7 @@ void MainWindow::on_btnListenTcp_clicked()
 		}
 
         ui->btnListenTcp->setText(tr("Don't Listen"));
+        ui->pushButton_Send->setEnabled(true);
 		qDebug()<< "Listen succeessfully!";
     } else {
         if(Q_NULLPTR != pSocket) {
