@@ -36,6 +36,9 @@ private slots:
     void serverNewConnect();
     void socketReadData();
     void socketDisconnected();
+
+    void comReadData(QByteArray);
+
     void sendMsg();
     void setRecvCursor();
     QString byteArrayToString(QByteArray, bool);
@@ -57,7 +60,8 @@ private:
     comObj *m_comObj;
     QThread *m_comThread;
 
-
+signals:
+    void sendBuf(QByteArray);
 };
 
 #endif // MAINWINDOW_H

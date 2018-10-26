@@ -42,7 +42,7 @@ typedef double                  fp64;         /* Double precision floating point
 
 #define FILE_MAX_SIZE   (5*1024*1024)//5M
 
-#define TIME_OUT		500
+#define TIME_OUT		2000
 
 #define CONNECT_THREAD(object, run, thread)     (object)->moveToThread(thread);\
                                                 connect((thread), SIGNAL(started()), (object), SLOT(run()));\

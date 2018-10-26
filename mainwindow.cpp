@@ -99,7 +99,11 @@ void MainWindow::on_btnOpenCom_clicked()
     }
 
     if(m_comObj->openCom(&comInfo)) {
+        connect(m_comObj, SIGNAL(readBufReady(QByteArray)), this, SLOT(comReadData(QByteArray)));
+        connect(this, SIGNAL(sendBuf(QByteArray)), m_comObj, SLOT(sendBuf(QByteArray)));
+
         ui->btnOpenCom->setEnabled(false);
+        ui->pushButton_Send->setEnabled(true);
         QMessageBox::information(this, tr("Hint"), tr("open com OK!"), QMessageBox::Ok);
     } else {
         QMessageBox::critical(this, tr("critical"), tr("open com fail!"), QMessageBox::Ok);
@@ -107,6 +111,23 @@ void MainWindow::on_btnOpenCom_clicked()
     }
 
     CONNECT_THREAD(m_comObj, startThread, m_comThread);
+}
+
+void MainWindow::comReadData(QByteArray buffer)
+{
+    bool isHex = ui->checkBox_RecvHex->isChecked();
+    frmHead_s frmhead = {};
+
+    if(!buffer.isEmpty()) {
+        u8 ret = processFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
+        if(TRUE == ret) {
+            qDebug() << "frame valid";
+        } else {
+            qDebug() << "frame invalid";
+        }
+
+        ui->textEdit_Recv->append(isHex ? byteArrayToString(buffer, true) : tr(buffer));
+    }
 }
 
 void MainWindow::on_btnListenTcp_clicked()
@@ -208,8 +229,12 @@ void MainWindow::sendMsg()
 #endif
     }
 
-    pSocket->write(buf);
-    pSocket->flush();
+    if(Q_NULLPTR != pSocket) {
+        pSocket->write(buf);
+        pSocket->flush();
+    }
+
+    emit sendBuf(buf);
 
     QString str = ui->textEdit_Recv->toPlainText();
     str += byteArrayToString(buf, false);
