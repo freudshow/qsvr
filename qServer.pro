@@ -39,7 +39,9 @@ SOURCES += \
         ui/comconfigform.cpp \
         ui/netconfigform.cpp \
     libdb/libdb.cpp \
-    libnet/libnet.cpp
+    libnet/libnet.cpp \
+    ui/setlogicaddr.cpp \
+    ui/setrs485.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -56,12 +58,16 @@ HEADERS += \
         ui/comconfigform.h \
         ui/netconfigform.h \
     libdb/libdb.h \
-    libnet/libnet.h
+    libnet/libnet.h \
+    ui/setlogicaddr.h \
+    ui/setrs485.h
 
 FORMS += \
         ui/mainwindow.ui \
         ui/comconfigform.ui \
-    ui/netconfigform.ui
+    ui/netconfigform.ui \
+    ui/setlogicaddr.ui \
+    ui/setrs485.ui
 
 DISTFILES += \
     lib698/dlt698.45.asn1 \

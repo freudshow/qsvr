@@ -11,6 +11,8 @@
 #include "libnet/libnet.h"
 #include "ui/comconfigform.h"
 #include "ui/netconfigform.h"
+#include "ui/setrs485.h"
+#include "ui/setlogicaddr.h"
 
 namespace Ui {
 	class MainWindow;
@@ -32,6 +34,8 @@ private slots:
 
     void on_actionComconfig_triggered();
     void on_actionNetconfig_triggered();
+    void on_actionSetLogicAddr_triggered();
+    void on_actionSetRS485Config_triggered();
 
     void serverNewConnect();
     void socketReadData();
@@ -47,6 +51,8 @@ private:
 	Ui::MainWindow *ui;
     comConfigForm *comUi;
     netConfigForm *netUi;
+    setLogicAddr *logicAddrUi;
+    setRS485 *rs485Ui;
 
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;

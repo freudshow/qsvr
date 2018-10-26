@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     comUi       = Q_NULLPTR;
     netUi       = Q_NULLPTR;
+    logicAddrUi = Q_NULLPTR;
+    rs485Ui     = Q_NULLPTR;
     m_config    = Q_NULLPTR;
     m_comObj    = Q_NULLPTR;
     m_comThread = Q_NULLPTR;
@@ -41,6 +43,8 @@ MainWindow::~MainWindow()
     RELEASE_POINTER_RESOURCE(m_config)
     RELEASE_POINTER_RESOURCE(comUi)
     RELEASE_POINTER_RESOURCE(netUi)
+    RELEASE_POINTER_RESOURCE(logicAddrUi)
+    RELEASE_POINTER_RESOURCE(rs485Ui)
     RELEASE_POINTER_RESOURCE(ui);
 }
 
@@ -195,6 +199,26 @@ void MainWindow::on_actionNetconfig_triggered()
     netUi = new netConfigForm();
     netUi->setWindowModality(Qt::ApplicationModal);
     netUi->show();
+}
+
+void MainWindow::on_actionSetLogicAddr_triggered()
+{
+    if(Q_NULLPTR != logicAddrUi)
+        delete logicAddrUi;
+
+    logicAddrUi = new setLogicAddr();
+    logicAddrUi->setWindowModality(Qt::ApplicationModal);
+    logicAddrUi->show();
+}
+
+void MainWindow::on_actionSetRS485Config_triggered()
+{
+    if(Q_NULLPTR != rs485Ui)
+        delete rs485Ui;
+
+    rs485Ui = new setRS485();
+    rs485Ui->setWindowModality(Qt::ApplicationModal);
+    rs485Ui->show();
 }
 
 void MainWindow::sendMsg()

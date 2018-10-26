@@ -17,13 +17,10 @@ void comConfigForm::closeEvent(QCloseEvent *event)
 
 void comConfigForm::initCom()
 {
-    QList<QSerialPortInfo> portList = QSerialPortInfo::availablePorts();
-    int count = portList.count();
-    foreach (const QSerialPortInfo &info, portList) {
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
         ui->portNameComboBox->addItem(info.portName());
     }
 
-    //load default parameters
     m_comset = new QSettings("config/config.ini", QSettings::IniFormat);
 
     if (m_comset) {
