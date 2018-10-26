@@ -26,14 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        lib698/lib698.c \
-        lib698/fcs.c \
+        libproto/lib698/lib698.c \
+        libproto/lib698/fcs.c \
         libutil/basedef.c \
-        lib698/request.c \
-        lib698/apduType.c \
-        lib698/baseDataType.c \
-        lib698/linkManager.c \
-        lib698/apduManager.c \
+        libproto/lib698/request.c \
+        libproto/lib698/apduType.c \
+        libproto/lib698/baseDataType.c \
+        libproto/lib698/linkManager.c \
+        libproto/lib698/apduManager.c \
         qdlt698.cpp \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
@@ -45,14 +45,14 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-        lib698/lib698.h \
+        libproto/lib698/lib698.h \
         libutil/basedef.h \
-        lib698/fcs.h \
-        lib698/request.h \
-        lib698/apduType.h \
-        lib698/baseDataType.h \
-        lib698/linkManager.h \
-        lib698/apduManager.h \
+        libproto/lib698/fcs.h \
+        libproto/lib698/request.h \
+        libproto/lib698/apduType.h \
+        libproto/lib698/baseDataType.h \
+        libproto/lib698/linkManager.h \
+        libproto/lib698/apduManager.h \
         qdlt698.h \
         libcom/libcom.h \
         ui/comconfigform.h \
@@ -70,5 +70,5 @@ FORMS += \
     ui/setrs485.ui
 
 DISTFILES += \
-    lib698/dlt698.45.asn1 \
+    libproto/lib698/dlt698.45.asn1 \
     config/config.ini

@@ -5,7 +5,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "lib698/lib698.h"
+#include "libproto/lib698/lib698.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -203,12 +203,17 @@ void MainWindow::on_actionNetconfig_triggered()
 
 void MainWindow::on_actionSetLogicAddr_triggered()
 {
-    if(Q_NULLPTR != logicAddrUi)
-        delete logicAddrUi;
+//    if(Q_NULLPTR != logicAddrUi)
+//        delete logicAddrUi;
 
-    logicAddrUi = new setLogicAddr();
-    logicAddrUi->setWindowModality(Qt::ApplicationModal);
-    logicAddrUi->show();
+//    logicAddrUi = new setLogicAddr();
+//    logicAddrUi->setWindowModality(Qt::ApplicationModal);
+//    logicAddrUi->show();
+    unsigned char buf[] = {0x68, 0x1b, 0x00, 0x43, 0x03, 0x07, 0x00, 0x00, 0x00, 0x10, 0xf6, 0xa4, 0x06, 0x01, 0x00, 0x40, 0x01, 0x02, 0x00, 0x09, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0xe4, 0x41, 0x16};
+        QByteArray sendbuf;
+        for(int i=0;i<sizeof(buf);i++)
+            sendbuf.append(buf[i]);
+        emit sendBuf(sendbuf);
 }
 
 void MainWindow::on_actionSetRS485Config_triggered()
@@ -219,6 +224,12 @@ void MainWindow::on_actionSetRS485Config_triggered()
     rs485Ui = new setRS485();
     rs485Ui->setWindowModality(Qt::ApplicationModal);
     rs485Ui->show();
+
+    u8 buf[] = {0x68, 0x24, 0x00, 0x43, 0x03, 0x07, 0x00, 0x00, 0x00, 0x10, 0x73, 0x3a, 0x07, 0x01, 0x00, 0xf2, 0x01, 0x7f, 0x00, 0x02, 0x03, 0x51, 0xf2, 0x01, 0x02, 0x01, 0x5f, 0x03, 0x02, 0x08, 0x01, 0x00, 0x16, 0x01, 0x00, 0x28, 0xb2, 0x16};
+    QByteArray sendbuf;
+    for(int i=0;i<sizeof(buf);i++)
+        sendbuf.append(buf[i]);
+    emit sendBuf(sendbuf);
 }
 
 void MainWindow::sendMsg()
