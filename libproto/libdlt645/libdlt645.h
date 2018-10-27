@@ -1,5 +1,5 @@
-#ifndef LIBPROTO_H
-#define LIBPROTO_H
+#ifndef LIBDLT645_H
+#define LIBDLT645_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,4 +11,4 @@ extern "C" {
 }
 #endif
 
-#endif // LIBPROTO_H
+#endif // LIBDLT645_H

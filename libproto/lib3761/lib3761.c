@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "libproto.h"
+#include "lib3761.h"
 
-int processProto()
+int process3761()
 {
     return 0;
 }

@@ -34,14 +34,19 @@ SOURCES += \
         libproto/lib698/baseDataType.c \
         libproto/lib698/linkManager.c \
         libproto/lib698/apduManager.c \
+        libproto/lib3761/lib3761.c \
+        libproto/lib3762/lib3762.c \
+        libproto/libcj188/libcj188.c \
+        libproto/libdlt645/libdlt645.c \
+        libproto/libproto.c \
         qdlt698.cpp \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
         ui/netconfigform.cpp \
-    libdb/libdb.cpp \
-    libnet/libnet.cpp \
-    ui/setlogicaddr.cpp \
-    ui/setrs485.cpp
+        libdb/libdb.cpp \
+        libnet/libnet.cpp \
+        ui/setlogicaddr.cpp \
+        ui/setrs485.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,14 +58,19 @@ HEADERS += \
         libproto/lib698/baseDataType.h \
         libproto/lib698/linkManager.h \
         libproto/lib698/apduManager.h \
+        libproto/lib3761/lib3761.h \
+        libproto/lib3762/lib3762.h \
+        libproto/libcj188/libcj188.h \
+        libproto/libdlt645/libdlt645.h \
+        libproto/libproto.h \
         qdlt698.h \
         libcom/libcom.h \
         ui/comconfigform.h \
         ui/netconfigform.h \
-    libdb/libdb.h \
-    libnet/libnet.h \
-    ui/setlogicaddr.h \
-    ui/setrs485.h
+        libdb/libdb.h \
+        libnet/libnet.h \
+        ui/setlogicaddr.h \
+        ui/setrs485.h
 
 FORMS += \
         ui/mainwindow.ui \

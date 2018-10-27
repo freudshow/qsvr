@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "libproto.h"
+#include "libcj188.h"
 
-int processProto()
+int processCj188()
 {
-    return 0;
+	return 0;
 }
