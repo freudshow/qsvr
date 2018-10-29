@@ -26,9 +26,9 @@ public:
     comObj(QObject* parent = Q_NULLPTR);
     ~comObj();
 private:
-    QSerialPort* m_serialPort;
+    QSerialPort* m_serialPort;//下行通信接口
     QByteArray m_readBuf;//数据缓冲区
-    QTimer* m_timer;
+    QTimer* m_timer; //上行通信的定时器
 
 signals:
     void openComOK();
