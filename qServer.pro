@@ -38,7 +38,6 @@ SOURCES += \
         libproto/lib3762/lib3762.c \
         libproto/libcj188/libcj188.c \
         libproto/libdlt645/libdlt645.c \
-        libproto/libproto.c \
         qdlt698.cpp \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
@@ -46,7 +45,8 @@ SOURCES += \
         libdb/libdb.cpp \
         libnet/libnet.cpp \
         ui/setlogicaddr.cpp \
-        ui/setrs485.cpp
+        ui/setrs485.cpp \
+    libproto/protocolobj.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -62,7 +62,6 @@ HEADERS += \
         libproto/lib3762/lib3762.h \
         libproto/libcj188/libcj188.h \
         libproto/libdlt645/libdlt645.h \
-        libproto/libproto.h \
         qdlt698.h \
         libcom/libcom.h \
         ui/comconfigform.h \
@@ -70,7 +69,8 @@ HEADERS += \
         libdb/libdb.h \
         libnet/libnet.h \
         ui/setlogicaddr.h \
-        ui/setrs485.h
+        ui/setrs485.h \
+    libproto/protocolobj.h
 
 FORMS += \
         ui/mainwindow.ui \

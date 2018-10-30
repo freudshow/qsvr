@@ -11,10 +11,12 @@ class libnet : public QObject
     Q_OBJECT
 public:
     explicit libnet(QObject *parent = nullptr);
+    ~libnet();
 
 signals:
 
 public slots:
+    void startThread();
 };
 
 #endif // LIBNET_H

@@ -152,6 +152,8 @@ void MainWindow::on_btnListenTcp_clicked()
         quint16 port = static_cast<quint16>(m_tcpPort.toUInt());
         if(!pServer->listen(QHostAddress::Any, port)){
             qDebug() << pServer->errorString();
+            QMessageBox::critical(this, tr("Hint"), pServer->errorString(), QMessageBox::Ok);
+            return;
 		}
 
         ui->btnListenTcp->setText(tr("Don't Listen"));
@@ -209,10 +211,7 @@ void MainWindow::on_actionSetLogicAddr_triggered()
 //    logicAddrUi = new setLogicAddr();
 //    logicAddrUi->setWindowModality(Qt::ApplicationModal);
 //    logicAddrUi->show();
-    unsigned char buf[] = {0x68, 0x1b, 0x00, 0x43, 0x03, 0x07, 0x00, 0x00, 0x00, 0x10, 0xf6, 0xa4, 0x06, 0x01, 0x00, 0x40, 0x01, 0x02, 0x00, 0x09, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0xe4, 0x41, 0x16};
-        QByteArray sendbuf;
-        for(int i=0;i<sizeof(buf);i++)
-            sendbuf.append(buf[i]);
+        QByteArray sendbuf("\x68\x1b\x00\x43\x03\x07\x00\x00\x00\x10\xf6\xa4\x06\x01\x00\x40\x01\x02\x00\x09\x04\x00\x00\x00\x08\x00\xe4\x41\x16", 29);
         emit sendBuf(sendbuf);
 }
 
@@ -225,10 +224,8 @@ void MainWindow::on_actionSetRS485Config_triggered()
     rs485Ui->setWindowModality(Qt::ApplicationModal);
     rs485Ui->show();
 
-    u8 buf[] = {0x68, 0x24, 0x00, 0x43, 0x03, 0x07, 0x00, 0x00, 0x00, 0x10, 0x73, 0x3a, 0x07, 0x01, 0x00, 0xf2, 0x01, 0x7f, 0x00, 0x02, 0x03, 0x51, 0xf2, 0x01, 0x02, 0x01, 0x5f, 0x03, 0x02, 0x08, 0x01, 0x00, 0x16, 0x01, 0x00, 0x28, 0xb2, 0x16};
-    QByteArray sendbuf;
-    for(int i=0;i<sizeof(buf);i++)
-        sendbuf.append(buf[i]);
+    QByteArray sendbuf("0x68\x24\x00\x43\x03\x07\x00\x00\x00\x10\x73\x3a\x07\x01\x00\xf2\x01\x7f\x00\x02\x03\x51\xf2\x01\x02\x01\x5f\x03\x02\x08\x01\x00\x16\x01\x00\x28\xb2\x16");
+
     emit sendBuf(sendbuf);
 }
 

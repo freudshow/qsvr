@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QUdpSocket>
 #include <QSettings>
 
 #include "libutil/basedef.h"
@@ -56,6 +57,7 @@ private:
 
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;
+    QUdpSocket* m_pUdpSoket;
     QString m_tcpPort;
     QSettings *m_config;
     bool listenState;

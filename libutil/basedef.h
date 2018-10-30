@@ -27,6 +27,9 @@ typedef double                  fp64;         /* Double precision floating point
 #define isDigit(c) ((unsigned) ((c)-'0') < 10)
 #define isHex(c) (((unsigned) ((c)-'0') < 10) || ((unsigned) ((c)-'A') < 6) || ((unsigned) ((c)-'a') < 6) )
 #define isDelim(c) (c == ' ' || c == '\n' || c == 't' || c == '\r')
+#define isCOMBCD(x) (((((x)>>4)&0x0F) <= 9u) && (((x)&0x0F) <= 9u))
+#define ELEM_NUM(array)         (sizeof(array)/sizeof(array[0]))
+
 #define HEX_TO_ASCII(x) ((x<=0x09)?(x+0x30):(x+0x37))
 
 #define U8_TO_ASCII_H(x) HEX_TO_ASCII(((x)&0x0F))
@@ -43,6 +46,22 @@ typedef double                  fp64;         /* Double precision floating point
 #define FILE_MAX_SIZE   (5*1024*1024)//5M
 
 #define TIME_OUT		2000
+
+/*************************************************************
+ * swap two number(u8/s8, u16/s16, u32/s32).
+ * note: 'a' and 'b' must be the same datatype.
+ * if a == b, then this macro do not swap them.
+ * ***********************************************************/
+#define SWAP(a, b)      do{\
+                            if((a) ^ (b)) {\
+                                (a) = (a)^(b);\
+                                (b) = (a)^(b);\
+                                (a) = (a)^(b);\
+                            }\
+                        }while(0)
+
+#define min(X, Y)  ((X) < (Y) ? (X) : (Y))
+#define max(X, Y)  ((X) > (Y) ? (X) : (Y))
 
 #define CONNECT_THREAD(object, run, thread)     (object)->moveToThread(thread);\
                                                 connect((thread), SIGNAL(started()), (object), SLOT(run()));\
