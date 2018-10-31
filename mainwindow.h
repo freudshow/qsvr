@@ -61,6 +61,8 @@ private:
     QString m_tcpPort;
     QSettings *m_config;
     bool listenState;
+    netSvr *m_netSvr;
+    QList<clientInfo_s> m_clientList;
 
     QList<QTcpSocket*> tcpClientList;
     QTcpSocket *pCurrentClient;

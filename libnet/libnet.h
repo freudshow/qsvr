@@ -10,7 +10,14 @@
 #include <QTcpSocket>
 #include <QThread>
 #include "libutil/basedef.h"
+#include "libproto/protocolobj.h"
 
+typedef struct  clientInfo {
+    protoTypes_e m_protoType;
+    QString m_logicAddr;
+    QString hostAddr;
+    bool connected;
+}clientInfo_s;
 
 class threadObj : public QThread
 {
@@ -24,6 +31,7 @@ public:
 signals:
     void dataIn(QByteArray);
     void error(QTcpSocket::SocketError socketerror);
+    void clientInfo(clientInfo_s);
 
 public slots:
     void readyRead();
@@ -33,7 +41,8 @@ public slots:
 private:
     QTcpSocket *m_socket;
     qintptr m_socketDescriptor;
-
+    protocolObj *m_proto;
+    clientInfo_s m_clientInfo;
     QByteArray m_buffer;
 };
 
@@ -43,7 +52,15 @@ class netSvr : public QTcpServer
 public:
     explicit netSvr(QObject *parent = Q_NULLPTR);
     bool startServer(quint16);
+
+private:
+
+
 signals:
+    void dataIn(QByteArray);
+    void error(QTcpSocket::SocketError socketerror);
+    void clientInfo(clientInfo_s);
+    void dataSend(QByteArray);
 
 public slots:
     void socketError(QTcpSocket::SocketError);

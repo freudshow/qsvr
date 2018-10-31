@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//连接信号槽
     connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
 
+    m_netSvr = new netSvr(this);
     listenState = false;
 
     comUi       = Q_NULLPTR;
@@ -40,6 +41,8 @@ MainWindow::~MainWindow()
 {
 	pServer->close();
 	pServer->deleteLater();
+    m_netSvr->close();
+    m_netSvr->deleteLater();
     RELEASE_POINTER_RESOURCE(m_config)
     RELEASE_POINTER_RESOURCE(comUi)
     RELEASE_POINTER_RESOURCE(netUi)

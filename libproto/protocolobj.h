@@ -22,6 +22,7 @@ public:
 
 public slots:
     protoTypes_e analyFrame(QByteArray buf);
+    void processFrame(QByteArray);
 };
 
 #endif // PROTOCOLOBJ_H
