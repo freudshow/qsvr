@@ -27,12 +27,14 @@ signals:
 
 public slots:
     void readyRead();
-    void sendFrame(QByteArray);
+    void writeFrame(QByteArray);
     void disconnected();
 
 private:
     QTcpSocket *m_socket;
-    qintptr socketDescriptor;
+    qintptr m_socketDescriptor;
+
+    QByteArray m_buffer;
 };
 
 class netSvr : public QTcpServer

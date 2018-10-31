@@ -3,7 +3,7 @@
 threadObj::threadObj(qintptr ID, QObject *parent) :
     QThread(parent)
 {
-    this->socketDescriptor = ID;
+    this->m_socketDescriptor = ID;
 }
 
 void threadObj::run()
@@ -12,7 +12,7 @@ void threadObj::run()
 
     m_socket = new QTcpSocket();
     connect(this, SIGNAL(error()), this, SLOT(deleteLater()));
-    if(!m_socket->setSocketDescriptor(this->socketDescriptor)) {
+    if(!m_socket->setSocketDescriptor(this->m_socketDescriptor)) {
         emit error(m_socket->error());
         return;
     }
@@ -20,7 +20,7 @@ void threadObj::run()
     connect(m_socket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::DirectConnection);
     connect(m_socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
-    qDebug() << "socketDescriptor: " << socketDescriptor << " Client connected";
+    qDebug() << "socketDescriptor: " << m_socketDescriptor << " Client connected";
     qDebug() << "Client:" << m_socket->peerAddress()
              << m_socket->peerPort() << m_socket->peerName()
              << "connect!";
@@ -31,18 +31,19 @@ void threadObj::run()
 void threadObj::readyRead()
 {
     QByteArray b = m_socket->readAll();
-    qDebug() << socketDescriptor << " Data in: " << b;
+    m_buffer.append(b);
+    qDebug() << m_socketDescriptor << " Data in: " << b;
     emit dataIn(b);
 }
 
-void threadObj::sendFrame(QByteArray b)
+void threadObj::writeFrame(QByteArray b)
 {
     m_socket->write(b);
 }
 
 void threadObj::disconnected()
 {
-    qDebug() << socketDescriptor << " Disconnected";
+    qDebug() << m_socketDescriptor << " Disconnected";
 
     m_socket->deleteLater();
     exit(0);
