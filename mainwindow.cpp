@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_netSvr = new netSvr(this);
     listenState = false;
+    m_clientList.clear();
 
     comUi       = Q_NULLPTR;
     netUi       = Q_NULLPTR;

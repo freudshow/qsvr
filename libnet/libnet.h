@@ -17,6 +17,7 @@ typedef struct  clientInfo {
     QString m_logicAddr;
     QString hostAddr;
     bool connected;
+    QTcpSocket *pSocket;
 }clientInfo_s;
 
 class threadObj : public QThread

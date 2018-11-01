@@ -39,6 +39,7 @@ private slots:
     void on_actionSetRS485Config_triggered();
 
     void serverNewConnect();
+    void newclient(clientInfo_s);
     void socketReadData();
     void socketDisconnected();
 

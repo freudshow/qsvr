@@ -14,8 +14,7 @@ typedef enum protoTypes {
     e_unknow_type
 } protoTypes_e;
 
-class protocolObj
-{
+class protocolObj {
 public:
     protocolObj();
     ~protocolObj();
@@ -23,6 +22,10 @@ public:
 public slots:
     protoTypes_e analyFrame(QByteArray buf);
     void processFrame(QByteArray);
+
+signals:
+    void sendFrame(QByteArray);
+
 };
 
 #endif // PROTOCOLOBJ_H

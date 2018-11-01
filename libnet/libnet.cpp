@@ -8,6 +8,7 @@ threadObj::threadObj(qintptr ID, QObject *parent) :
     m_clientInfo.hostAddr.clear();
     m_clientInfo.m_logicAddr.clear();
     m_clientInfo.m_protoType = protoTypes_e::e_unknow_type;
+    m_clientInfo.pSocket = Q_NULLPTR;
 }
 
 void threadObj::run()
@@ -32,6 +33,7 @@ void threadObj::run()
     m_clientInfo.connected = true;
     m_clientInfo.hostAddr = tr("%1:%2-%3").arg(m_socket->peerAddress().toString().split("::ffff:")[1])\
                                        .arg(m_socket->peerPort()).arg(m_socketDescriptor);
+    m_clientInfo.pSocket = m_socket;
     emit clientInfo(m_clientInfo);
     exec();
 }
