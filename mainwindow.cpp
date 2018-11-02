@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
 
     m_netSvr = new netSvr(this);
+    connect(m_netSvr, SIGNAL(clientInfo(clientInfo_s)), this, SLOT(newclient(clientInfo_s)));
     listenState = false;
     m_clientList.clear();
 
@@ -289,6 +290,33 @@ void MainWindow::serverNewConnect()
     qDebug() << "Client IP:" << pSocket->peerAddress()
              << pSocket->peerPort() << pSocket->peerName()
              << "connect!";
+}
+
+void MainWindow::newclient(clientInfo_s client)
+{
+    bool found = false;
+    int idx = -1;
+    for(int i=0;i<m_clientList.count();i++) {
+        if(m_clientList.at(i).pSocket == client.pSocket) {
+            found = true;
+            idx = i;
+            break;
+        }
+    }
+
+    if(found) {
+        m_clientList.append(client);
+        QTableWidgetItem *clientItem = Q_NULLPTR;
+        clientItem->setTextAlignment(Qt::AlignCenter);
+        ui->tblTerminalList->setRowCount(ui->tblTerminalList->rowCount()+1);
+        for(int i=0; i<ui->tblTerminalList->columnCount();i++) {
+            clientItem = ui->tblTerminalList->item(ui->tblTerminalList->rowCount()-1, i);
+            clientItem->setTextAlignment(Qt::AlignCenter);
+            clientItem->setFlags(Qt::NoItemFlags);
+        }
+    } else {
+
+    }
 }
 
 QString MainWindow::byteArrayToString(QByteArray buffer, bool read)

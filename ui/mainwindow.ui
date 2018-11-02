@@ -6,16 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>815</width>
-    <height>558</height>
+    <width>1044</width>
+    <height>572</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QPushButton" name="btnOpenCom">
@@ -46,22 +46,50 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item row="1" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QTextBrowser" name="textBrowser">
+       <widget class="QTableWidget" name="tblTerminalList">
         <property name="minimumSize">
          <size>
-          <width>160</width>
-          <height>250</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>200</width>
+          <width>350</width>
           <height>16777215</height>
          </size>
         </property>
+        <property name="columnCount">
+         <number>5</number>
+        </property>
+        <column>
+         <property name="text">
+          <string>No.</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>LogicAddr</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>protoType</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>lastCommu</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>nowState</string>
+         </property>
+        </column>
        </widget>
       </item>
       <item>
@@ -191,7 +219,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>815</width>
+     <width>1044</width>
      <height>17</height>
     </rect>
    </property>
