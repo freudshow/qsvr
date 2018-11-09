@@ -89,5 +89,6 @@ void netSvr::incomingConnection(qintptr socketDescriptor)
 
 void netSvr::socketError(QTcpSocket::SocketError err)
 {
+    Q_UNUSED(err)
     qDebug() << "socketError";
 }

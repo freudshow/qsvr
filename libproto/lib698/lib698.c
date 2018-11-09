@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,7 +25,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 
     while((FRM_PREFIX != *p) && (*bufSize > 0)) {//find start code
         p++;
-        *bufSize--;
+        (*bufSize)--;
     }
 
     buf = p;
@@ -185,7 +181,3 @@ u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
 
     return ret;
 }
-
-#ifdef __cplusplus
-}
-#endif

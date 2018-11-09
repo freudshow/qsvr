@@ -63,6 +63,8 @@ typedef double                  fp64;         /* Double precision floating point
 #define min(X, Y)  ((X) < (Y) ? (X) : (Y))
 #define max(X, Y)  ((X) > (Y) ? (X) : (Y))
 
+#define NOT_USED(x) (void)(x)
+
 #define CONNECT_THREAD(object, run, thread)     (object)->moveToThread(thread);\
                                                 connect((thread), SIGNAL(started()), (object), SLOT(run()));\
                                                 connect((object), SIGNAL(finished()), (thread), SLOT(quit()));\

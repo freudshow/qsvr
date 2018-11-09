@@ -296,6 +296,7 @@ void MainWindow::newclient(clientInfo_s client)
 {
     bool found = false;
     int idx = -1;
+    Q_UNUSED(idx)
     for(int i=0;i<m_clientList.count();i++) {
         if(m_clientList.at(i).pSocket == client.pSocket) {
             found = true;
