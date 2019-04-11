@@ -46,7 +46,8 @@ SOURCES += \
         libnet/libnet.cpp \
         ui/setlogicaddr.cpp \
         ui/setrs485.cpp \
-    libproto/protocolobj.cpp
+    libproto/protocolobj.cpp \
+    libproto/libstate/libstate.c
 
 HEADERS += \
         mainwindow.h \
@@ -70,7 +71,8 @@ HEADERS += \
         libnet/libnet.h \
         ui/setlogicaddr.h \
         ui/setrs485.h \
-    libproto/protocolobj.h
+    libproto/protocolobj.h \
+    libproto/libstate/libstate.h
 
 FORMS += \
         ui/mainwindow.ui \
