@@ -3,6 +3,12 @@
 #include <string.h>
 #include "libstate.h"
 
+typedef struct {
+    u8 cur;
+    u8 next;
+
+}trans_s;
+
 typedef enum {
     state_start = 0,
     state_len,
