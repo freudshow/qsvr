@@ -161,7 +161,7 @@ s8 getWaterData(cj188_p pCj188, waterData_p pdata)
         return ERR_RCVD_LOST;
 
     s8 ret = CHK_SUC;
-    bzero(pdata, sizeof(waterData_s));
+    memset(pdata, 0, sizeof(waterData_s));
 
     switch (pCj188->data.DI) {
         case DI_MEASURE:
@@ -283,7 +283,7 @@ s8 getHotData(cj188_p pCj188, hotData_p pdata)
         return ERR_RCVD_LOST;
 
     s8 ret = CHK_SUC;
-    bzero(pdata, sizeof(hotData_s));
+    memset(pdata, 0, sizeof(hotData_s));
 
     switch (pCj188->data.DI) {
         case DI_MEASURE:
@@ -405,7 +405,7 @@ s8 getGasData(cj188_p pCj188, gasData_p pdata)
         return ERR_RCVD_LOST;
 
     s8 ret = CHK_SUC;
-    bzero(pdata, sizeof(gasData_s));
+    memset(pdata, 0, sizeof(gasData_s));
 
     switch (pCj188->data.DI) {
         case DI_MEASURE:
