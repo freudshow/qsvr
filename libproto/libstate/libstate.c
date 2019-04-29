@@ -3,6 +3,12 @@
 #include <string.h>
 #include "libstate.h"
 
+typedef struct {
+    u8 cur;
+    u8 next;
+
+}trans_s;
+
 typedef enum {
     state_start = 0,
     state_len,
@@ -19,9 +25,9 @@ typedef enum {
     state_data
 }state3762userData_e;
 
-static u8 StateTransTable3762[][] = {
+//static u8 StateTransTable3762[][] = {
 
-};
+//};
 
 
 int recgonizeFrame(u8* buf, u16 len)

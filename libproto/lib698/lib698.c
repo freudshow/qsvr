@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lib698.h"
-#include "fcs.h"
 #include "linkManager.h"
 #include "apduManager.h"
 

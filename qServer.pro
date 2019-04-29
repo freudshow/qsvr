@@ -27,7 +27,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         libproto/lib698/lib698.c \
-        libproto/lib698/fcs.c \
         libutil/basedef.c \
         libproto/lib698/request.c \
         libproto/lib698/apduType.c \
@@ -47,13 +46,13 @@ SOURCES += \
         ui/setlogicaddr.cpp \
         ui/setrs485.cpp \
     libproto/protocolobj.cpp \
-    libproto/libstate/libstate.c
+    libproto/libstate/libstate.c \
+    ui/toolsdialog.cpp
 
 HEADERS += \
         mainwindow.h \
         libproto/lib698/lib698.h \
         libutil/basedef.h \
-        libproto/lib698/fcs.h \
         libproto/lib698/request.h \
         libproto/lib698/apduType.h \
         libproto/lib698/baseDataType.h \
@@ -72,14 +71,16 @@ HEADERS += \
         ui/setlogicaddr.h \
         ui/setrs485.h \
     libproto/protocolobj.h \
-    libproto/libstate/libstate.h
+    libproto/libstate/libstate.h \
+    ui/toolsdialog.h
 
 FORMS += \
         ui/mainwindow.ui \
         ui/comconfigform.ui \
     ui/netconfigform.ui \
     ui/setlogicaddr.ui \
-    ui/setrs485.ui
+    ui/setrs485.ui \
+    ui/toolsdialog.ui
 
 DISTFILES += \
     libproto/lib698/dlt698.45.asn1 \

@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     netUi       = Q_NULLPTR;
     logicAddrUi = Q_NULLPTR;
     rs485Ui     = Q_NULLPTR;
+    toolsDiag   = Q_NULLPTR;
     m_config    = Q_NULLPTR;
     m_comObj    = Q_NULLPTR;
     m_comThread = Q_NULLPTR;
@@ -50,6 +51,7 @@ MainWindow::~MainWindow()
     RELEASE_POINTER_RESOURCE(netUi)
     RELEASE_POINTER_RESOURCE(logicAddrUi)
     RELEASE_POINTER_RESOURCE(rs485Ui)
+    RELEASE_POINTER_RESOURCE(toolsDiag)
     RELEASE_POINTER_RESOURCE(ui);
 }
 
@@ -232,6 +234,21 @@ void MainWindow::on_actionSetRS485Config_triggered()
     QByteArray sendbuf("0x68\x24\x00\x43\x03\x07\x00\x00\x00\x10\x73\x3a\x07\x01\x00\xf2\x01\x7f\x00\x02\x03\x51\xf2\x01\x02\x01\x5f\x03\x02\x08\x01\x00\x16\x01\x00\x28\xb2\x16");
 
     emit sendBuf(sendbuf);
+}
+
+void MainWindow::on_actionSums_triggered()
+{
+    RELEASE_POINTER_RESOURCE(toolsDiag)
+
+    toolsDiag = new toolsDialog();
+    toolsDiag->setWindowModality(Qt::ApplicationModal);
+    QObject::connect(toolsDiag, SIGNAL(toolExit()), this, SLOT(closeTool()));
+    toolsDiag->show();
+}
+
+void MainWindow::closeTool()
+{
+    RELEASE_POINTER_RESOURCE(toolsDiag)
 }
 
 void MainWindow::sendMsg()

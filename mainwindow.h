@@ -14,6 +14,7 @@
 #include "ui/netconfigform.h"
 #include "ui/setrs485.h"
 #include "ui/setlogicaddr.h"
+#include "ui/toolsdialog.h"
 
 namespace Ui {
 	class MainWindow;
@@ -27,6 +28,9 @@ public:
     explicit MainWindow(QWidget *parent = Q_NULLPTR);
 	~MainWindow();
 
+public slots:
+    void closeTool();
+
 private slots:
     void on_btnOpenCom_clicked();
     void on_btnListenTcp_clicked();
@@ -37,6 +41,7 @@ private slots:
     void on_actionNetconfig_triggered();
     void on_actionSetLogicAddr_triggered();
     void on_actionSetRS485Config_triggered();
+    void on_actionSums_triggered();
 
     void serverNewConnect();
     void newclient(clientInfo_s);
@@ -55,6 +60,7 @@ private:
     netConfigForm *netUi;
     setLogicAddr *logicAddrUi;
     setRS485 *rs485Ui;
+    toolsDialog* toolsDiag;
 
 	QTcpServer* pServer;
 	QTcpSocket* pSocket;

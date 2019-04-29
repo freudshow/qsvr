@@ -4,33 +4,6 @@
 #include "libdlt645.h"
 
 
-u8 dlt645Sum(u8* buf, u16 bufSize)
-{
-    u16 i = 0;
-    u8 sum = 0;
-
-    for (i = 0, sum = 0; i < bufSize; i++)
-        sum += buf[i];
-
-    return sum;
-}
-
-void dlt645Add33(u8* buf, u16 bufSize)
-{
-    u16 i = 0;
-
-    for (i = 0; i < bufSize; i++)
-        buf[i] += DLT645_BIAS;
-}
-
-void dlt645Minus33(u8* buf, u16 bufSize)
-{
-    u16 i = 0;
-
-    for (i = 0; i < bufSize; i++)
-        buf[i] -= DLT645_BIAS;
-}
-
 /***************************************
  * CJ/T188 报文检查, 检查以下内容:
  * 1. 检查bufSize
@@ -59,11 +32,10 @@ s8 dlt645Chk(u8* buf, u16 bufSize)
         return DLT645_ERR_RCVD_LOST;
     if (buf[bufSize - 1] != DLT645_END_CHAR)
         return DLT645_ERR_LOST_0x16;
-    if (dlt645Sum(&buf[0], bufSize - 2) != buf[bufSize - 2])
+    if (chkSum(&buf[0], bufSize - 2) != buf[bufSize - 2])
         return DLT645_ERR_SUM_ERROR;   // 校验失败
     return DLT645_CHK_SUC;
 }
-
 
 static void printAddress(u8* addr)
 {
@@ -181,7 +153,7 @@ s8 DLT645_parseDownReadData(DLT645_p pdlt645, dlt645Data_p pData)
         return DLT645_ERR_RCVD_LOST;
 
     memcpy(&di, pdlt645->d, sizeof(di645_u));
-    dlt645Minus33(di.list, 4);//协议没有指出数据标识不需要加减0x33
+    minus33(di.list, 4);//协议没有指出数据标识不需要加减0x33
     switch(di.u32b) {
         case DLT645_DI_CUR_TIME://下行读取系统日期时间, 只有数据标识
             pData->u.readData.e = e_645exdownRDSystime;
@@ -408,7 +380,7 @@ s8 DLT645_Compose(DLT645_p pdlt645, u8* buf, u16* bufSize, u8 preCnt)
     memcpy(p, &pdlt645->d, pdlt645->head.len);
     p += pdlt645->head.len;
     //校验和
-    *p = dlt645Sum(buf+preCnt, (p-buf)-preCnt);
+    *p = chkSum(buf+preCnt, (p-buf)-preCnt);
     p++;
     //结束符
     *p = DLT645_END_CHAR;
@@ -445,7 +417,7 @@ s8 DLT645_upComposeTransAll(DLT645_p pdlt645, u8* buf, u16* bufSize, u8* mbuf, u
     pdlt645->head.ctl.ctl.func = CTL_645_RDATA;
 
     di.u32b = DLT645_DI_TRANSMIT;
-    dlt645Add33(&di.list[0], sizeof(di645_u));
+    add33(&di.list[0], sizeof(di645_u));
     memcpy(p, &di, sizeof(di645_u));
     p += sizeof(di645_u);
     memcpy(p, mbuf, mbufSize);
@@ -453,7 +425,6 @@ s8 DLT645_upComposeTransAll(DLT645_p pdlt645, u8* buf, u16* bufSize, u8* mbuf, u
 
     return DLT645_Compose(pdlt645, buf, bufSize, preCnt);
 }
-
 
 /*
  * @pdlt645: 外部调用函数负责加入地址域
@@ -481,7 +452,7 @@ s8 DLT645_upComposeTrans188(DLT645_p pdlt645, u8* buf, u16* bufSize, u8* mbuf, u
     pdlt645->head.ctl.ctl.func = CTL_645_RDATA;
 
     di.u32b = DLT645_DI_TRANS188;
-    dlt645Add33(&di.list[0], sizeof(di645_u));
+    add33(&di.list[0], sizeof(di645_u));
     memcpy(p, &di, sizeof(di645_u));
     p += sizeof(di645_u);
     memcpy(p, mbuf, mbufSize);
@@ -512,7 +483,6 @@ u8 getPort(dlt645Port_e port, u8 no)
     }
 }
 
-
 /*
  * @pdlt645: 外部调用函数负责加入地址域
  * @buf: 下行报文缓冲区
@@ -533,7 +503,7 @@ s8 DLT645_downComposeTransAll(DLT645_p pdlt645, dlt645TransAll_p pData, u8* buf,
     pdlt645->head.len = ( DLT645_TRANSALL_MIN + pData->len);
 
     pData->di.u32b = DLT645_DI_TRANSMIT;
-    dlt645Add33(&pData->di.list[0], sizeof(di645_u));
+    add33(&pData->di.list[0], sizeof(di645_u));
     memcpy(pdlt645->d, &pData->di.list[0], pdlt645->head.len);
 
     return DLT645_Compose(pdlt645, buf, bufSize, preCnt);
@@ -553,7 +523,7 @@ s8 DLT645_downComposeTrans188(DLT645_p pdlt645, dlt645Trans188_p pData, u8* buf,
     pdlt645->head.len = ( DLT645_TRANSALL_MIN + pData->len);
 
     pData->di.u32b = DLT645_DI_TRANS188;
-    dlt645Add33(&pData->di.list[0], sizeof(di645_u));
+    add33(&pData->di.list[0], sizeof(di645_u));
     memcpy(pdlt645->d, &pData->di.list[0], pdlt645->head.len);
 
     return DLT645_Compose(pdlt645, buf, bufSize, preCnt);

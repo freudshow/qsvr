@@ -21,6 +21,8 @@ typedef double                  fp64;         /* Double precision floating point
 #define TRUE        1
 #define FALSE       0
 
+#define POLY		0xA001	//CRC16校验中的生成多项式
+
 #define HEX_TO_BCD(x) (((x)/0x0A)*0x10+((x)%0x0A))
 #define BCD_TO_HEX(x) (((x)/0x10)*0x0A+((x)%0x10))
 #define ASCII_TO_HEX(c) (((c) >='0' && (c) <='9')?((c)-'0'):(((c)>='A'&&(c)<='F')?((c)-'A'+10):(((c)>='a'&&c<='f')?((c)-'a'+10):0)))
@@ -65,28 +67,30 @@ typedef double                  fp64;         /* Double precision floating point
 
 #define NOT_USED(x) (void)(x)
 
-#define CONNECT_THREAD(object, run, thread)     (object)->moveToThread(thread);\
-                                                connect((thread), SIGNAL(started()), (object), SLOT(run()));\
-                                                connect((object), SIGNAL(finished()), (thread), SLOT(quit()));\
-                                                connect((object), SIGNAL(finished()), (object), SLOT(deleteLater()));\
-                                                connect((thread), SIGNAL(finished()), (thread), SLOT(deleteLater()));\
-                                                (thread)->start()
+#define CONNECT_THREAD(object, run, thread)     do {\
+                                                    (object)->moveToThread(thread);\
+                                                    connect((thread), SIGNAL(started()), (object), SLOT(run()));\
+                                                    connect((object), SIGNAL(finished()), (thread), SLOT(quit()));\
+                                                    connect((object), SIGNAL(finished()), (object), SLOT(deleteLater()));\
+                                                    connect((thread), SIGNAL(finished()), (thread), SLOT(deleteLater()));\
+                                                    (thread)->start();\
+                                                }while(0)
 
 #define SET_POINTER_NULL(p)	((p) = Q_NULLPTR);
 
-#define RELEASE_POINTER_RESOURCE(p)	if ((p) != Q_NULLPTR){\
+#define RELEASE_POINTER_RESOURCE(p)	if (Q_NULLPTR != (p)){\
                                             delete (p);\
                                             p = Q_NULLPTR;\
                                     }
 
-#define RELEASE_TIMER_RESOURCE(pt)		if ((pt) != Q_NULLPTR){\
+#define RELEASE_TIMER_RESOURCE(pt)		if (Q_NULLPTR != (pt)){\
                                             if((pt)->isActive())\
                                                 (pt)->stop();\
                                             delete (pt);\
                                             pt = Q_NULLPTR;\
                                         }
 
-#define RELEASE_COM_RESOURCE(pcom)		if((pcom) != Q_NULLPTR){\
+#define RELEASE_COM_RESOURCE(pcom)		if(Q_NULLPTR != (pcom)){\
                                             if((pcom)->isOpen()){\
                                                 (pcom)->close();\
                                             }\
@@ -98,6 +102,12 @@ extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 
 extern void debugToStderr(const char* file, const char* func, u32 line, const char *fmt, ...);
 extern void debugToFile(const char* fname, const char* file, const char* func, u32 line, const char *fmt,...);
 extern void printBuf(u8* buf, u32 bufSize, u8 space, u8 inverse);
+extern u16 crc16TblDrv(const u8 *nData, u16 wLength);
+extern u16 calcModRtuCRC(u8 *buf, int len);
+extern u16 fcs16(unsigned char *cp, int  len);
+extern void add33(u8* buf, u16 bufSize);
+extern void minus33(u8* buf, u16 bufSize);
+extern u8 chkSum(u8* buf, u16 bufSize);
 
 #ifdef __cplusplus
 }

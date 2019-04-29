@@ -220,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1044</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menucomConfig">
@@ -242,10 +242,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionFCS"/>
-    <addaction name="actionCRC16"/>
-    <addaction name="actionSUM"/>
-    <addaction name="actionAdd0x33"/>
+    <addaction name="actionSums"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -277,24 +274,9 @@
     <string>netconfig</string>
    </property>
   </action>
-  <action name="actionFCS">
+  <action name="actionSums">
    <property name="text">
-    <string>FCS</string>
-   </property>
-  </action>
-  <action name="actionCRC16">
-   <property name="text">
-    <string>CRC16</string>
-   </property>
-  </action>
-  <action name="actionSUM">
-   <property name="text">
-    <string>SUM</string>
-   </property>
-  </action>
-  <action name="actionAdd0x33">
-   <property name="text">
-    <string>0x33</string>
+    <string>sums</string>
    </property>
   </action>
   <action name="actionAbout">
