@@ -150,7 +150,7 @@ u16 calcModRtuCRC(u8 *buf, int len)
     for (int pos = 0; pos < len; pos++) {
         crc ^= (u16)buf[pos];
 
-        for (int i = sizeof(u8); i > 0; i--) {
+        for (int i = 8; i > 0; i--) {
             if (crc & 0x0001) {
                 crc >>= 1;
                 crc ^= POLY;
@@ -163,7 +163,7 @@ u16 calcModRtuCRC(u8 *buf, int len)
     return crc;
 }
 
-u16 crc16TblDrv(const u8 *nData, u16 wLength)
+u16 crc16TblDrv(const u8 *nData, int wLength)
 {
     static const u16 wCRCTable[] = {
         0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
@@ -270,7 +270,7 @@ u16 fcs16(unsigned char *cp, int  len)
     return fcs;
 }
 
-u8 chkSum(u8* buf, u16 bufSize)
+u8 chkSum(u8* buf, int bufSize)
 {
     u16 i = 0;
     u8 sum = 0;
@@ -281,7 +281,7 @@ u8 chkSum(u8* buf, u16 bufSize)
     return sum;
 }
 
-void add33(u8* buf, u16 bufSize)
+void add33(u8* buf, int bufSize)
 {
     u16 i = 0;
 
@@ -289,7 +289,7 @@ void add33(u8* buf, u16 bufSize)
         buf[i] += 0x33;
 }
 
-void minus33(u8* buf, u16 bufSize)
+void minus33(u8* buf, int bufSize)
 {
     u16 i = 0;
 

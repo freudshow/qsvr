@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QRadioButton>
 #include <QMessageBox>
+#include <QMap>
 #include "libutil/basedef.h"
 
 typedef enum calcMethod {
@@ -16,9 +17,14 @@ typedef enum calcMethod {
     e_calcInverse
 } calcMethod_e;
 
+
+
 namespace Ui {
 class toolsDialog;
 }
+
+class toolsDialog;
+typedef void (toolsDialog::*calc_f)();
 
 class toolsDialog : public QDialog
 {
@@ -32,12 +38,19 @@ private:
     Ui::toolsDialog *ui;
 
     calcMethod_e m_calcMethod;
-    QString m_str;
+    QMap<calcMethod_e, calc_f> m_map;
+
+    void calcCRC16();
+    void calcFCS();
+    void calcSumChk();
+    void calcAdd33();
+    void calcMinus33();
+    void calcInverse();
 
 private slots:
-    void on_text_input_textChanged();
     void on_btn_calc_clicked();
     void on_btn_exit_clicked();
+    void on_btn_copy_clicked();
 
     void btnToggle(int);
     void prepareText(); //检查textEdit的输入字符串格式是否合法, 并将textEdit的字符串自动用空格分隔

@@ -102,12 +102,12 @@ extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 
 extern void debugToStderr(const char* file, const char* func, u32 line, const char *fmt, ...);
 extern void debugToFile(const char* fname, const char* file, const char* func, u32 line, const char *fmt,...);
 extern void printBuf(u8* buf, u32 bufSize, u8 space, u8 inverse);
-extern u16 crc16TblDrv(const u8 *nData, u16 wLength);
+extern u16 crc16TblDrv(const u8 *nData, int wLength);
 extern u16 calcModRtuCRC(u8 *buf, int len);
 extern u16 fcs16(unsigned char *cp, int  len);
-extern void add33(u8* buf, u16 bufSize);
-extern void minus33(u8* buf, u16 bufSize);
-extern u8 chkSum(u8* buf, u16 bufSize);
+extern void add33(u8* buf, int bufSize);
+extern void minus33(u8* buf, int bufSize);
+extern u8 chkSum(u8* buf, int bufSize);
 
 #ifdef __cplusplus
 }
