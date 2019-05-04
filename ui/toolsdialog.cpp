@@ -8,6 +8,7 @@ toolsDialog::toolsDialog(QWidget *parent) :
     ui(new Ui::toolsDialog)
 {
     ui->setupUi(this);
+    ui->label_formatError->setText("");
     QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
 
     m_calcMethod = e_calcNothing;
@@ -40,10 +41,13 @@ void toolsDialog::prepareText()
     QStringList list;
     QString s;
 
-    s = ui->text_input->toPlainText();
-    s.remove(QRegExp("\\n")).remove(QRegExp("\\r")).remove(QRegExp("\\s")).remove(QRegExp("\\t"));
+    s = ui->text_input->toPlainText().remove(QRegExp("\\n")).
+                                      remove(QRegExp("\\r")).
+                                      remove(QRegExp("\\s")).
+                                      remove(QRegExp("\\t"));
 
     if(re.exactMatch(s) && (s.count()%2) == 0) {
+        ui->label_formatError->setText("");
         QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
         QString t;
         for (int i = 0; i<s.count();i+=2) {
@@ -52,7 +56,7 @@ void toolsDialog::prepareText()
         ui->text_input->setText(t.trimmed());
         QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
     } else {
-        QMessageBox::information(this, tr("error!"), tr("input format error!"), QMessageBox::Ok);
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
     }
 }
 
@@ -80,7 +84,7 @@ void toolsDialog::btnToggle(int idx)
 
 void toolsDialog::calcCRC16()
 {
-    QString s = ui->text_input->toPlainText();
+    QString s;
     QByteArray b;
     QStringList l;
     bool ok;
@@ -88,7 +92,7 @@ void toolsDialog::calcCRC16()
     b.clear();
     l.clear();
 
-    l = s.split(" ");
+    l = ui->text_input->toPlainText().split(" ");
 
     for (int i = 0; i< l.count();i++) {
         b.append((char)l.at(i).toInt(&ok, 16));
@@ -102,7 +106,7 @@ void toolsDialog::calcCRC16()
 
 void toolsDialog::calcFCS()
 {
-    QString s = ui->text_input->toPlainText();
+    QString s;
     QByteArray b;
     QStringList l;
     bool ok;
@@ -110,7 +114,7 @@ void toolsDialog::calcFCS()
     b.clear();
     l.clear();
 
-    l = s.split(" ");
+    l = ui->text_input->toPlainText().split(" ");
 
     for (int i = 0; i< l.count();i++) {
         b.append((char)l.at(i).toInt(&ok, 16));
@@ -124,7 +128,7 @@ void toolsDialog::calcFCS()
 
 void toolsDialog::calcSumChk()
 {
-    QString s = ui->text_input->toPlainText();
+    QString s;
     QByteArray b;
     QStringList l;
     bool ok;
@@ -132,7 +136,7 @@ void toolsDialog::calcSumChk()
     b.clear();
     l.clear();
 
-    l = s.split(" ");
+    l = ui->text_input->toPlainText().split(" ");
 
     for (int i = 0; i< l.count();i++) {
         b.append((char)l.at(i).toInt(&ok, 16));
@@ -146,7 +150,6 @@ void toolsDialog::calcSumChk()
 
 void toolsDialog::calcAdd33()
 {
-    QString s = ui->text_input->toPlainText();
     QByteArray b;
     QStringList l;
     bool ok;
@@ -154,20 +157,17 @@ void toolsDialog::calcAdd33()
     b.clear();
     l.clear();
 
-    l = s.split(" ");
+    l = ui->text_input->toPlainText().split(" ");
 
     for (int i = 0; i< l.count();i++) {
         b.append((char)l.at(i).toInt(&ok, 16)+0x33);
     }
 
-    s.clear();
-    s.append(b.toHex(' '));
-    ui->lineEdit_result->setText(s);
+    ui->lineEdit_result->setText(b.toHex(' '));
 }
 
 void toolsDialog::calcMinus33()
 {
-    QString s = ui->text_input->toPlainText();
     QByteArray b;
     QStringList l;
     bool ok;
@@ -175,20 +175,17 @@ void toolsDialog::calcMinus33()
     b.clear();
     l.clear();
 
-    l = s.split(" ");
+    l = ui->text_input->toPlainText().split(" ");
 
     for (int i = 0; i< l.count();i++) {
         b.append((char)l.at(i).toInt(&ok, 16)-0x33);
     }
 
-    s.clear();
-    s.append(b.toHex(' '));
-    ui->lineEdit_result->setText(s);
+    ui->lineEdit_result->setText(b.toHex(' '));
 }
 
 void toolsDialog::calcInverse()
 {
-    QString s = ui->text_input->toPlainText();
     QByteArray b;
     QStringList l;
     int len = 0;
@@ -197,14 +194,12 @@ void toolsDialog::calcInverse()
     b.clear();
     l.clear();
 
-    l = s.split(" ");
+    l = ui->text_input->toPlainText().split(" ");
 
     len = l.count();
     for (int i = 0; i< len;i++) {
         b.append((char)l.at(len-1-i).toInt(&ok, 16));
     }
 
-    s.clear();
-    s.append(b.toHex(' '));
-    ui->lineEdit_result->setText(s);
+    ui->lineEdit_result->setText(b.toHex(' '));
 }
