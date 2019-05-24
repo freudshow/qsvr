@@ -98,6 +98,11 @@ typedef double                  fp64;         /* Double precision floating point
                                             pcom = Q_NULLPTR;\
                                         }
 
+typedef struct bcdCode {
+    u8  low     :4;
+    u8  high    :4;
+}bcd_s;
+
 extern void debugBuf(const char* file, const char* func, u32 line, u8* buf, u32 bufSize);
 extern void debugToStderr(const char* file, const char* func, u32 line, const char *fmt, ...);
 extern void debugToFile(const char* fname, const char* file, const char* func, u32 line, const char *fmt,...);
