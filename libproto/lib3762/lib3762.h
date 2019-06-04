@@ -81,10 +81,6 @@ typedef struct infoDomain3762{
     };
 } infoDomain3762_s;
 
-typedef struct bcd {
-    u8 low  :4;
-    u8 high :4;
-} bcd_s;
 
 typedef struct logicAddr {
     bcd_s bcd[6];
