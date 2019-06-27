@@ -13,7 +13,7 @@ class netConfigForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit netConfigForm(QWidget *parent = nullptr);
+    explicit netConfigForm(QWidget *parent = Q_NULLPTR);
     ~netConfigForm();
 
 private:

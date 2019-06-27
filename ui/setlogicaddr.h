@@ -12,7 +12,7 @@ class setLogicAddr : public QDialog
     Q_OBJECT
 
 public:
-    explicit setLogicAddr(QWidget *parent = nullptr);
+    explicit setLogicAddr(QWidget *parent = Q_NULLPTR);
     ~setLogicAddr();
 
 private:

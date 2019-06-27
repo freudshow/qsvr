@@ -12,7 +12,7 @@ class setRS485 : public QDialog
     Q_OBJECT
 
 public:
-    explicit setRS485(QWidget *parent = nullptr);
+    explicit setRS485(QWidget *parent = Q_NULLPTR);
     ~setRS485();
 
 private:

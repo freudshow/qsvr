@@ -25,7 +25,7 @@ class comConfigForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit comConfigForm(QWidget *parent = nullptr);
+    explicit comConfigForm(QWidget *parent = Q_NULLPTR);
     ~comConfigForm();
 
 private:

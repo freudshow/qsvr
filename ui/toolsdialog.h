@@ -31,7 +31,7 @@ class toolsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit toolsDialog(QWidget *parent = nullptr);
+    explicit toolsDialog(QWidget *parent = Q_NULLPTR);
     ~toolsDialog();
 
 private:
