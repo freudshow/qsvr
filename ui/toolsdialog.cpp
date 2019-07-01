@@ -82,6 +82,27 @@ void toolsDialog::btnToggle(int idx)
     m_calcMethod = static_cast<calcMethod_e>(idx);
 }
 
+QString toolsDialog::byteArrayToString(QByteArray buffer)
+{
+    QString buf;
+    QString s;
+    int i = 0;
+
+    buf.clear();
+
+    for (i = 0; i < buffer.count() - 1; i++) {
+        s.clear();
+        s.sprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
+        buf += s;
+    }
+
+    s.clear();
+    s.sprintf("%02X", static_cast<unsigned char>(buffer.at(i)));
+    buf += s;
+
+    return buf;
+}
+
 void toolsDialog::calcCRC16()
 {
     QString s;
@@ -163,7 +184,8 @@ void toolsDialog::calcAdd33()
         b.append((char)l.at(i).toInt(&ok, 16)+0x33);
     }
 
-    ui->lineEdit_result->setText(b.toHex(' '));
+//    ui->lineEdit_result->setText(b.toHex(' '));
+    ui->lineEdit_result->setText(byteArrayToString(b));//qt 5.5 does not have QByteArray.toHex(char separator) const
 }
 
 void toolsDialog::calcMinus33()
@@ -181,7 +203,7 @@ void toolsDialog::calcMinus33()
         b.append((char)l.at(i).toInt(&ok, 16)-0x33);
     }
 
-    ui->lineEdit_result->setText(b.toHex(' '));
+    ui->lineEdit_result->setText(byteArrayToString(b));
 }
 
 void toolsDialog::calcInverse()
@@ -201,5 +223,5 @@ void toolsDialog::calcInverse()
         b.append((char)l.at(len-1-i).toInt(&ok, 16));
     }
 
-    ui->lineEdit_result->setText(b.toHex(' '));
+    ui->lineEdit_result->setText(byteArrayToString(b));
 }

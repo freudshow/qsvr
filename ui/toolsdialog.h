@@ -54,7 +54,7 @@ private slots:
 
     void btnToggle(int);
     void prepareText(); //检查textEdit的输入字符串格式是否合法, 并将textEdit的字符串自动用空格分隔
-
+    QString byteArrayToString(QByteArray buffer);
 signals:
     void toolExit();
 };
