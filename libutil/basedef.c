@@ -146,12 +146,12 @@ void printBuf(u8* buf, u32 bufSize, u8 space, u8 inverse)
 u16 calcModRtuCRC(u8 *buf, int len)
 {
     u16 crc = 0xFFFF;
-
     int pos = 0;
-    for ( pos = 0; pos < len; pos++) {
+    int i = 0;
+
+    for (pos = 0; pos < len; pos++) {
         crc ^= (u16)buf[pos];
 
-        int i = 0;
         for (i = 8; i > 0; i--) {
             if (crc & 0x0001) {
                 crc >>= 1;
