@@ -147,10 +147,12 @@ u16 calcModRtuCRC(u8 *buf, int len)
 {
     u16 crc = 0xFFFF;
 
-    for (int pos = 0; pos < len; pos++) {
+    int pos = 0;
+    for ( pos = 0; pos < len; pos++) {
         crc ^= (u16)buf[pos];
 
-        for (int i = 8; i > 0; i--) {
+        int i = 0;
+        for (i = 8; i > 0; i--) {
             if (crc & 0x0001) {
                 crc >>= 1;
                 crc ^= POLY;
