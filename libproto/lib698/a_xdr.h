@@ -7,11 +7,28 @@ extern "C" {
 
 #include "libutil/basedef.h"
 
+/*!
+ * a-xdr base types:
+ * integer
+ * boolean
+ * enumerated
+ * bit string
+ * byte string
+ * choice
+ * tags
+ * optional, default
+ * sequence
+ * sequence of
+ * VisibleString
+ * GeneralizedTime
+ * NULL
+ */
 
 #pragma pack(push)
 #pragma pack(1)
 
-
+int parseSequenceOf(u8* buf, u32 buflen);
+int composeSequenceOf(u8* buf, u32 buflen);
 
 
 #pragma pack(pop)

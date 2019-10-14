@@ -6,11 +6,9 @@ extern "C" {
 #endif
 
 #include "libutil/basedef.h"
+#include "lib698.h"
 #pragma pack(push)
 #pragma pack(1)
-
-#define DLT69845_START_CHAR    0x68    //开始符
-#define DLT69845_END_CHAR      0x16    //结束符
 
 
 

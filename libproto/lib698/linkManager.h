@@ -8,7 +8,6 @@
 extern "C" {
 #endif
 
-
 extern boolean linkManager(u8* buf, u16 bufSize, frmHead_s* pFrmHead);
 
 
