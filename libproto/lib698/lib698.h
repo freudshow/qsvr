@@ -106,8 +106,8 @@ typedef struct {
  **************************/
 
 #define DLT69845_HEAD_LEN_BEFORE_SA  (sizeof(u8)+sizeof(u16)+sizeof(ctl_u)+sizeof(sa_u))
-#define DLT69845_HEAD_LEN_EXCEPT_SA  (HEAD_LEN_BEFORE_SA+sizeof(u8)+sizeof(u16))
-#define DLT69845_HEAD_LEN(saLen)    (HEAD_LEN_EXCEPT_SA+SA_LEN(saLen))
+#define DLT69845_HEAD_LEN_EXCEPT_SA  (DLT69845_HEAD_LEN_BEFORE_SA+sizeof(u8)+sizeof(u16))
+#define DLT69845_HEAD_LEN(saLen)    (DLT69845_HEAD_LEN_EXCEPT_SA+DLT69845_SA_LEN(saLen))
 
 typedef struct frameHead {
     u8          startChar;//start code

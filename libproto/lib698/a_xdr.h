@@ -8,17 +8,17 @@ extern "C" {
 #include "libutil/basedef.h"
 
 /*!
- * a-xdr base types:
- * integer
- * boolean
- * enumerated
- * bit string
- * byte string
- * choice
- * tags
- * optional, default
- * sequence
- * sequence of
+ * A-XDR BASE TYPES:
+ * INTEGER
+ * BOOLEAN
+ * ENUMERATED
+ * BIT STRING
+ * BYTE STRING
+ * CHOICE
+ * TAGS
+ * OPTIONAL, DEFAULT
+ * SEQUENCE
+ * SEQUENCE OF
  * VisibleString
  * GeneralizedTime
  * NULL

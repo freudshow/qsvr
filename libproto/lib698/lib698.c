@@ -22,7 +22,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     u8* p = buf;
 
 
-    while((FRM_PREFIX != *p) && (*bufSize > 0)) {//find start code
+    while((DLT69845_START_CHAR != *p) && (*bufSize > 0)) {//find start code
         p++;
         (*bufSize)--;
     }
@@ -33,14 +33,14 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
         return FALSE;
 
      //check end code
-    if(FRM_SUFFIX != p[*bufSize-1])
+    if(DLT69845_END_CHAR != p[*bufSize-1])
         return FALSE;
 
     //check head length
-    if(*bufSize <= HEAD_LEN_EXCEPT_SA)
+    if(*bufSize <= DLT69845_HEAD_LEN_EXCEPT_SA)
         return FALSE;
 
-    memcpy(pFrmhead, p, HEAD_LEN_BEFORE_SA);
+    memcpy(pFrmhead, p, DLT69845_HEAD_LEN_BEFORE_SA);
 
     DEBUG_TIME_LINE("frmLen: %u,\n dir: sent by %s,\n prm: promoted by %s,\n divS: %s apdu,\n func: %s",
                     pFrmhead->frmLen.len.len,
@@ -50,25 +50,25 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
                     (pFrmhead->ctlChar.ctl.func==1?"link managment, logon, heart beat and logout.":(\
                      pFrmhead->ctlChar.ctl.func==3? "apdu managment and data exchange." : "unknown function code" )));
 
-    pFrmhead->headLen = HEAD_LEN(pFrmhead->sa.saLen.sa.saLen);
+    pFrmhead->headLen = DLT69845_HEAD_LEN(pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("head's len: %u", pFrmhead->headLen);
     if(*bufSize < pFrmhead->headLen)
         return FALSE;
 
-    pFrmhead->sa.saLen.sa.saLen = SA_LEN(pFrmhead->sa.saLen.sa.saLen);
+    pFrmhead->sa.saLen.sa.saLen = DLT69845_SA_LEN(pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("server's len: %u, logicAddr: %02X, ", pFrmhead->sa.saLen.sa.saLen,
     		pFrmhead->sa.saLen.sa.logicAddr);
 	switch (pFrmhead->sa.saLen.sa.saType) {
-	case SA_TYPE_SINGLE:
+    case DLT69845_SA_TYPE_SINGLE:
 		fprintf(stderr, "single address\n");
 		break;
-	case SA_TYPE_WILDCARD:
+    case DLT69845_SA_TYPE_WILDCARD:
 		fprintf(stderr, "wildcard address\n");
 		break;
-	case SA_TYPE_GROUP:
+    case DLT69845_SA_TYPE_GROUP:
 		fprintf(stderr, "group address\n");
 		break;
-	case SA_TYPE_BROADCAST:
+    case DLT69845_SA_TYPE_BROADCAST:
 		fprintf(stderr, "broadcast address\n");
 		break;
 	default:
@@ -80,7 +80,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     if(NULL == pFrmhead->sa.sa)
         return FALSE;
 
-    memcpy((u8*)(pFrmhead->sa.sa), (p+HEAD_LEN_BEFORE_SA), pFrmhead->sa.saLen.sa.saLen);
+    memcpy((u8*)(pFrmhead->sa.sa), (p+DLT69845_HEAD_LEN_BEFORE_SA), pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("server id:");
     printBuf((u8*)pFrmhead->sa.sa, pFrmhead->sa.saLen.sa.saLen, 0, 1);
 
@@ -88,11 +88,11 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     if(*bufSize != (pFrmhead->frmLen.len.len+2))
         return FALSE;
 
-    pFrmhead->ca = *(p+HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen);
+    pFrmhead->ca = *(p+DLT69845_HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("client id: %02X", pFrmhead->ca);
     //check head's crc
     memcpy(&pFrmhead->headChk,
-           (p+HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen+sizeof(u8)),
+           (p+DLT69845_HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen+sizeof(u8)),
            sizeof(u16));
 
     crc = fcs16((p+1), (pFrmhead->headLen-3));
@@ -147,10 +147,10 @@ u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
     }
 
     switch (pFrmhead->ctlChar.ctl.func) {
-    case FUNC_LINK_MANAGE:
+    case DLT69845_FUNC_LINK_MANAGE:
         ret = linkManager(buf, bufSize, pFrmhead);
         break;
-    case FUNC_LINK_UERDATA:
+    case DLT69845_FUNC_LINK_UERDATA:
         ret = userDataManager(buf, bufSize, pFrmhead);
         break;
     default:
@@ -158,16 +158,16 @@ u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
     }
 
     switch (pFrmhead->ctlChar.dirPrm.dpAssem) {
-    case DIR_PRM_CLT_RESPONSE:
+    case DLT69845_DIR_PRM_CLT_RESPONSE:
 
         break;
-    case DIR_PRM_CLT_REQUEST:
+    case DLT69845_DIR_PRM_CLT_REQUEST:
 
         break;
-    case DIR_PRM_SRV_REPORT:
+    case DLT69845_DIR_PRM_SRV_REPORT:
 
         break;
-    case DIR_PRM_SRV_RESPONSE:
+    case DLT69845_DIR_PRM_SRV_RESPONSE:
 
         break;
     default:
