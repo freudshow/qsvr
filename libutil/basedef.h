@@ -41,6 +41,8 @@ typedef double                  fp64;         /* Double precision floating point
 
 #define	FILE_LINE		__FILE__,__FUNCTION__,__LINE__
 
+#define UNUSEDV(v)      (void)v
+
 #define	DEBUG_BUFF(data, dataSize)		debugBuf(FILE_LINE, data, dataSize)
 #define	DEBUG_TIME_LINE(format, ...)	debugToStderr(FILE_LINE, format, ##__VA_ARGS__)
 #define DEBUG_TO_FILE(fname, format, ...)	debugToFile(fname, FILE_LINE, format, ##__VA_ARGS__)

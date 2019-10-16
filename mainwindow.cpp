@@ -127,7 +127,8 @@ void MainWindow::on_btnOpenCom_clicked()
 void MainWindow::comReadData(QByteArray buffer)
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
-    frmHead_s frmhead = {};
+    frmHead_s frmhead;
+    memset(&frmhead, 0, sizeof(frmhead));
 
     if(!buffer.isEmpty()) {
         u8 ret = processFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
@@ -367,7 +368,8 @@ void MainWindow::socketReadData()
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
     QByteArray buffer = pSocket->readAll();
-    frmHead_s frmhead = {};
+    frmHead_s frmhead;
+    memset(&frmhead, 0, sizeof(frmhead));
 
     if(!buffer.isEmpty()) {
         u8 ret = processFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
