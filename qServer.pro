@@ -24,7 +24,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    libproto/lib698/a_xdr.c \
         main.cpp \
         mainwindow.cpp \
         libproto/lib698/lib698.c \
@@ -50,7 +49,6 @@ SOURCES += \
     ui/toolsdialog.cpp
 
 HEADERS += \
-    libproto/lib698/a_xdr.h \
         mainwindow.h \
         libproto/lib698/lib698.h \
         libutil/basedef.h \
