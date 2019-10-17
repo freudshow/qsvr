@@ -38,7 +38,6 @@ SOURCES += \
         libproto/lib3762/lib3762.c \
         libproto/libcj188/libcj188.c \
         libproto/libdlt645/libdlt645.c \
-        qdlt698.cpp \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
         ui/netconfigform.cpp \
@@ -64,7 +63,6 @@ HEADERS += \
         libproto/lib3762/lib3762.h \
         libproto/libcj188/libcj188.h \
         libproto/libdlt645/libdlt645.h \
-        qdlt698.h \
         libcom/libcom.h \
         ui/comconfigform.h \
         ui/netconfigform.h \
