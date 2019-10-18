@@ -18,8 +18,8 @@ typedef signed long long  		s64;          /* Unsigned 64 bit quantity          *
 typedef float                   fp32;         /* Single precision floating point   */
 typedef double                  fp64;         /* Double precision floating point   */
 
-#define TRUE        1
-#define FALSE       0
+#define TRUE        1       //作为比较的结果, 真; 或者函数的返回值, 无错误发生
+#define FALSE       0       //作为比较的结果, 假; 或者函数的返回值, 有错误发生
 
 #define POLY		0xA001	//CRC16校验中的生成多项式
 
@@ -57,15 +57,26 @@ typedef double                  fp64;         /* Double precision floating point
  * if a == b, then this macro do not swap them.
  * ***********************************************************/
 #define SWAP(a, b)      do{\
-                            if((a) ^ (b)) {\
-                                (a) = (a)^(b);\
-                                (b) = (a)^(b);\
-                                (a) = (a)^(b);\
-                            }\
+                            (a) = (a)^(b);\
+                            (b) = (a)^(b);\
+                            (a) = (a)^(b);\
                         }while(0)
 
 #define min(X, Y)  ((X) < (Y) ? (X) : (Y))
 #define max(X, Y)  ((X) > (Y) ? (X) : (Y))
+
+#define max_typeof(x, y)   ({\
+                        typeof(x) _x = x;\
+                        typeof(y) _y = y;\
+                        _x > _y ? _x : _y;\
+                    })
+
+#define auto_max(x,y) ({\
+                        __auto_type _x = x;\
+                        __auto_type _y = y;\
+                        _x > _y ? _x : _y;\
+                    })
+
 
 #define NOT_USED(x) (void)(x)
 

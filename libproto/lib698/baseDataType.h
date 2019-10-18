@@ -74,6 +74,20 @@ typedef fp64 float64_t; //64位浮点数
 
 #pragma pack(pop)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #ifdef __cplusplus
 }
 #endif
