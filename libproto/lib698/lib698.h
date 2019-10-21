@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "libutil/basedef.h"
+#include "apduType.h"
 
 #define DLT69845_START_CHAR    0x68    //start code of a frame
 #define DLT69845_END_CHAR      0x16    //end code of a frame
@@ -119,7 +120,7 @@ typedef struct frameHead {
     u8          headLen;//length of frame's head, including startChar
 }frmHead_s;
 
-typedef union apduStruct {//todo:to be completed
+typedef union apduStruct {//todo: to be completed
     u8   foo;
 } apdu_s;
 

@@ -77,6 +77,18 @@ typedef double                  fp64;         /* Double precision floating point
                         _x > _y ? _x : _y;\
                     })
 
+typedef enum { bigEndian=0, littleEndian=1 } endianess;
+#ifndef CPU_LITTLE_ENDIAN
+static int isLittleEndian(void)
+{
+    const union {
+        u32 u;
+        u8 c[4];
+    } one = { 1 };   /* don't use static : performance detrimental  */
+    return one.c[0];
+}
+#   define CPU_LITTLE_ENDIAN   isLittleEndian()
+#endif
 
 #define NOT_USED(x) (void)(x)
 
