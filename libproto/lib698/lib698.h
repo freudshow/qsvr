@@ -120,20 +120,17 @@ typedef struct frameHead {
     u8          headLen;//length of frame's head, including startChar
 }frmHead_s;
 
-typedef union apduStruct {//todo: to be completed
-    u8   foo;
-} apdu_s;
 
 typedef struct {
     frmHead_s   head;
-    apdu_s*     apdu;
+    apdu_t*     apdu;
     u16         frmChk;
     u8          endChar;
 } frm698_s;
 
 #pragma pack(pop)
 
-extern u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead);
+extern u8 decodeFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead);
 
 #ifdef __cplusplus
 }

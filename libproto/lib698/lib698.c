@@ -130,7 +130,7 @@ void scamCode(u8 *buf,int len, boolean addScam)
  * @bufSize: frame length
  * return: FALSE-frame invalid; TRUE-frame valid.
  */
-u8 processFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
+u8 decodeFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
 {
     if((NULL == buf) || (0 == bufSize) || (NULL == pFrmhead))
         return FALSE;

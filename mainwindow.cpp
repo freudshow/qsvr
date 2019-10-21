@@ -131,7 +131,7 @@ void MainWindow::comReadData(QByteArray buffer)
     memset(&frmhead, 0, sizeof(frmhead));
 
     if(!buffer.isEmpty()) {
-        u8 ret = processFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
+        u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
         if(TRUE == ret) {
             qDebug() << "frame valid";
         } else {
@@ -372,7 +372,7 @@ void MainWindow::socketReadData()
     memset(&frmhead, 0, sizeof(frmhead));
 
     if(!buffer.isEmpty()) {
-        u8 ret = processFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
+        u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
         if(TRUE == ret) {
             qDebug() << "frame valid";
         } else {

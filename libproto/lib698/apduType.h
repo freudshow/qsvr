@@ -42,6 +42,9 @@ typedef struct link_response_s {
 } link_response_t;
 
 
+typedef union apduStruct {//todo: to be completed
+    u8   foo;
+} apdu_t;
 
 
 
@@ -61,12 +64,13 @@ typedef struct link_apdu_s {
         link_response_t link_response;      //预连接响应
     } l;
 } link_apdu_t;
+typedef link_apdu_t* link_apdu_p;
 
 /*************************************************
  * link-apdu end
  *************************************************/
 
-
+extern boolean decodeLinkApdu(u8* apdu, u32 apduLen, link_apdu_p pLinkApdu);
 
 #ifdef __cplusplus
 }
