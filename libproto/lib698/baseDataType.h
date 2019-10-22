@@ -6,7 +6,8 @@ extern "C" {
 #endif
 
 #include "libutil/basedef.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 
 /******************************************************
  * 通用数据类型的标记与 Data 类型中的
@@ -149,6 +150,15 @@ typedef union piid_acd_s {
  * month, day_of_month, day_of_week, hour, minute, second=FFH表示无效.
  * day_of_week: 0 表示周日, 1...6 分别表示周一到周六.
  */
+#define INVALID_DATE_TIME_YEAR          0xFFFF
+#define INVALID_DATE_TIME_MILLISECOND   0xFFFF
+#define INVALID_DATE_TIME_MONTH         0xFF
+#define INVALID_DATE_TIME_DAY_OF_MONTH	0xFF
+#define INVALID_DATE_TIME_DAY_OF_WEEK	0xFF
+#define INVALID_DATE_TIME_HOUR          0xFF
+#define INVALID_DATE_TIME_MINUTE        0xFF
+#define INVALID_DATE_TIME_SECOND        0xFF
+#define DATE_TIME_SIZE                  10  //报文中 date_time_t 的长度
 typedef struct date_time_s {
     long_unsigned_t year;
     unsigned_t      month;
@@ -185,8 +195,10 @@ typedef struct date_timeS_s {
 /*************************************************
  * decode and encode functions start
  *************************************************/
-
-
+extern u16 decode_unsigned(u8*buf, u16 bufSize, unsigned_t* pValue);
+extern u16 decode_long_unsigned(u8*buf, u16 bufSize, long_unsigned_t* pValue);
+extern u16 decode_piid_acd(u8*buf, u16 bufSize, piid_acd_t* pValue);
+extern u16 decode_date_time(u8* buf, u16 bufSize, date_time_t* pValue);
 
 
 

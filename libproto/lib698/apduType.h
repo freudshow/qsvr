@@ -2,8 +2,7 @@
 #define APDUTYPE_H
 
 #include "baseDataType.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 #ifdef __cplusplus
 extern "C" {

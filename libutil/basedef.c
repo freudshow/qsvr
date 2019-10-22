@@ -298,3 +298,11 @@ void minus33(u8* buf, int bufSize)
     for (i = 0; i < bufSize; i++)
         buf[i] -= 0x33;
 }
+
+void inverseArray(u8* buf, u16 bufSize)
+{
+    u16 i = 0;
+    for (i = 0; i < bufSize / 2; i++) {//swap two symmetric elements
+        SWAP(buf[i], buf[bufSize - i - 1]);
+    }
+}
