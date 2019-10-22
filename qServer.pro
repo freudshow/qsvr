@@ -46,7 +46,8 @@ SOURCES += \
         ui/setrs485.cpp \
     libproto/protocolobj.cpp \
     libproto/libstate/libstate.c \
-    ui/toolsdialog.cpp
+    ui/toolsdialog.cpp \
+    libproto/lib698/lib698obj.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -70,7 +71,8 @@ HEADERS += \
         ui/setrs485.h \
     libproto/protocolobj.h \
     libproto/libstate/libstate.h \
-    ui/toolsdialog.h
+    ui/toolsdialog.h \
+    libproto/lib698/lib698obj.h
 
 FORMS += \
         ui/mainwindow.ui \
