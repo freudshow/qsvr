@@ -2,6 +2,8 @@
 #define APDUTYPE_H
 
 #include "baseDataType.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,12 +43,17 @@ typedef struct link_response_s {
     date_time_t    responseTime;
 } link_response_t;
 
+/*************************************************
+ * link-apdu end
+ *************************************************/
 
-typedef union apduStruct {//todo: to be completed
-    u8   foo;
-} apdu_t;
 
 
+
+typedef enum {
+    e_link_request_type = 1,
+    e_link_response_type = 129
+} apdu_type_e;
 
 /*
  * LINK-APDU ::= CHOICE {
@@ -54,23 +61,17 @@ typedef union apduStruct {//todo: to be completed
  *      linkResponse [129] LINK-Response	--预连接响应
  * }
  */
-typedef struct link_apdu_s {
-    enum {
-        e_link_request_type = 1,
-        e_link_response_type = 129
-    } e;
-    union {
-        link_request_t link_request;        //预连接请求
-        link_response_t link_response;      //预连接响应
-    } l;
-} link_apdu_t;
-typedef link_apdu_t* link_apdu_p;
+typedef union apdu_s {//todo: to be completed
+    apdu_type_e e;
+    link_request_t link_request;        //预连接请求
+    link_response_t link_response;      //预连接响应
+} apdu_t;
+typedef apdu_t* apdu_p;
 
-/*************************************************
- * link-apdu end
- *************************************************/
 
-extern boolean decodeLinkApdu(u8* apdu, u32 apduLen, link_apdu_p pLinkApdu);
+
+
+extern boolean decodeLinkApdu(u8* apdu, u16 apduLen, apdu_p link_apdu_p);
 
 #ifdef __cplusplus
 }

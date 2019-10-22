@@ -127,16 +127,35 @@ void MainWindow::on_btnOpenCom_clicked()
 void MainWindow::comReadData(QByteArray buffer)
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
-    frmHead_s frmhead;
-    memset(&frmhead, 0, sizeof(frmhead));
+    frm698_s frm698 = {};
+    memset(&frm698, 0, sizeof(frm698));
 
     if(!buffer.isEmpty()) {
-        u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
+        u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frm698);
         if(TRUE == ret) {
             qDebug() << "frame valid";
         } else {
             qDebug() << "frame invalid";
         }
+
+
+        switch (frm698.head.ctlChar.dirPrm.dpAssem) {
+        case DLT69845_DIR_PRM_CLT_RESPONSE:
+
+            break;
+        case DLT69845_DIR_PRM_CLT_REQUEST:
+
+            break;
+        case DLT69845_DIR_PRM_SRV_REPORT:
+
+            break;
+        case DLT69845_DIR_PRM_SRV_RESPONSE:
+
+            break;
+        default:
+            break;
+        }
+
 
         ui->textEdit_Recv->append(isHex ? byteArrayToString(buffer, true) : tr(buffer));
     }
@@ -368,11 +387,11 @@ void MainWindow::socketReadData()
 {
     bool isHex = ui->checkBox_RecvHex->isChecked();
     QByteArray buffer = pSocket->readAll();
-    frmHead_s frmhead;
-    memset(&frmhead, 0, sizeof(frmhead));
+    frm698_s frm698;
+    memset(&frm698, 0, sizeof(frm698));
 
     if(!buffer.isEmpty()) {
-        u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frmhead);
+        u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frm698);
         if(TRUE == ret) {
             qDebug() << "frame valid";
         } else {

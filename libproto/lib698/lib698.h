@@ -17,11 +17,6 @@ extern "C" {
 #pragma pack(push)
 #pragma pack(1)
 
-//698.45扩展数据类型-------------------------------------
-typedef unsigned char   MAC_698;//数据安全MAC
-typedef unsigned char   RN_698;	//random number
-typedef unsigned short  OI_698;	//object's identifier
-
 typedef union {//little endian
     u8 u8b;//convenient to set value to 0
     struct {
@@ -123,14 +118,15 @@ typedef struct frameHead {
 
 typedef struct {
     frmHead_s   head;
-    apdu_t*     apdu;
+    apdu_t      apdu;
     u16         frmChk;
     u8          endChar;
 } frm698_s;
+typedef frm698_s* frm698_p;
 
 #pragma pack(pop)
 
-extern u8 decodeFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead);
+extern u8 decodeFrame(u8* buf, u16 bufSize, frm698_p pFrm);
 
 #ifdef __cplusplus
 }

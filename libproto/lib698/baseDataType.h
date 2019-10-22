@@ -74,6 +74,11 @@ typedef fp32 float32_t; //32位浮点数
 typedef fp64 float64_t; //64位浮点数
 typedef u8 enumerated_t;
 
+typedef unsigned char*   MAC_t; //Message Authentication Code, octet-string
+typedef unsigned char*   RN_t;	//random number, octet-string
+typedef long_unsigned_t  OI_t;	//object identification
+
+
 typedef struct asn_struct_ctx_s {
     short phase;		/* Decoding phase */
     short step;		/* Elementary step of a phase */

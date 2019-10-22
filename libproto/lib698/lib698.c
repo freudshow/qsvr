@@ -125,58 +125,43 @@ void scamCode(u8 *buf,int len, boolean addScam)
 }
 
 /*
- * process 698 frame
+ * decodeFrame 698 frame
  * @buf: frame buffer
  * @bufSize: frame length
- * return: FALSE-frame invalid; TRUE-frame valid.
+ * @return: FALSE-frame invalid; TRUE-frame valid.
  */
-u8 decodeFrame(u8* buf, u16 bufSize, frmHead_s* pFrmhead)
+boolean decodeFrame(u8* buf, u16 bufSize, frm698_p pFrame)
 {
-    if((NULL == buf) || (0 == bufSize) || (NULL == pFrmhead))
+    if((NULL == buf) || (0 == bufSize) || (NULL == pFrame))
         return FALSE;
 
     boolean ret = TRUE;
-    ;
+    u8* pApduBuf = NULL;
+    u16 apduLen = 0;
 
-    memset((u8*)pFrmhead, 0, sizeof(pFrmhead));
-    ret = checkFrame(buf, &bufSize, pFrmhead);
+    ret = checkFrame(buf, &bufSize, &pFrame->head);
     if( FALSE == ret) {
         DEBUG_TIME_LINE("frame invalid");
         ret = FALSE;
         goto onret;
     }
 
-    switch (pFrmhead->ctlChar.ctl.func) {
+    pApduBuf = buf + pFrame->head.headLen;
+    apduLen = bufSize-pFrame->head.headLen - 3;
+    switch (pFrame->head.ctlChar.ctl.func) {
     case DLT69845_FUNC_LINK_MANAGE:
-        ret = linkManager(buf, bufSize, pFrmhead);
+        ret = decodeLinkApdu(pApduBuf, apduLen, &pFrame->apdu);
         break;
     case DLT69845_FUNC_LINK_UERDATA:
-        ret = userDataManager(buf, bufSize, pFrmhead);
-        break;
-    default:
-        break;
-    }
-
-    switch (pFrmhead->ctlChar.dirPrm.dpAssem) {
-    case DLT69845_DIR_PRM_CLT_RESPONSE:
-
-        break;
-    case DLT69845_DIR_PRM_CLT_REQUEST:
-
-        break;
-    case DLT69845_DIR_PRM_SRV_REPORT:
-
-        break;
-    case DLT69845_DIR_PRM_SRV_RESPONSE:
-
+        ret = userDataManager(buf, bufSize, &pFrame->apdu);
         break;
     default:
         break;
     }
 
  onret:
-    if(pFrmhead->sa.sa != NULL)
-        free(pFrmhead->sa.sa);
+    if(pFrame->head.sa.sa != NULL)
+        free(pFrame->head.sa.sa);
 
     return ret;
 }
