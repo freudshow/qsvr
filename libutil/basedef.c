@@ -306,3 +306,4 @@ void inverseArray(u8* buf, u16 bufSize)
         SWAP(buf[i], buf[bufSize - i - 1]);
     }
 }
+

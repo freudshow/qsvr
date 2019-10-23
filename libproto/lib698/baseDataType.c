@@ -4,6 +4,24 @@
 extern "C" {
 #endif
 
+typedef enum { bigEndian=0, littleEndian=1 } endianess;
+#ifndef CPU_LITTLE_ENDIAN
+#   define CPU_LITTLE_ENDIAN   (isLittleEndian() == littleEndian)
+static int isLittleEndian()
+{
+    const union {
+        u32 u;
+        u8 c[4];
+    } one = { 1 };  // only set one.u to 1, so u32 u's bit pattern is 0x00 00 00 01 logically.
+                    // if cpu is little endian, then u's physical bit pattern is 0x01 00 00 00,
+                    // from LSB(Least Significant Bit) to MSB(Most Significant Bit), so one.c[0]
+                    // is 0x01.
+                    // if cpu is big endian, u's physical bit pattern is 0x00 00 00 01, so one.c[0]
+                    // is 0x00.
+    return one.c[0];
+}
+#endif
+
 u16 decode_unsigned(u8*buf, u16 bufSize, unsigned_t* pValue)
 {
     if ( NULL == buf || bufSize < 2 || NULL == pValue)
@@ -26,7 +44,7 @@ u16 decode_long_unsigned(u8*buf, u16 bufSize, long_unsigned_t* pValue)
      * little endian, you need to inverse the
      * value
      */
-    if (isLittleEndian() == littleEndian)
+    if (CPU_LITTLE_ENDIAN)
         inverseArray((u8*)pValue, sizeof(long_unsigned_t));
 
     return sizeof(long_unsigned_t);

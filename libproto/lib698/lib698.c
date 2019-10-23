@@ -11,16 +11,14 @@
  * @bufSize: frame length
  * return: FALSE-invalid; TRUE-valid.
  */
-u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
+boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 {
-
     if((NULL == buf) || (NULL == bufSize) || (NULL == pFrmhead))
         return FALSE;
 
     u16 crc = 0;
     u16 fcs = 0;
     u8* p = buf;
-
 
     while((DLT69845_START_CHAR != *p) && (*bufSize > 0)) {//find start code
         p++;
@@ -58,6 +56,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     pFrmhead->sa.saLen.sa.saLen = DLT69845_SA_LEN(pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("server's len: %u, logicAddr: %02X, ", pFrmhead->sa.saLen.sa.saLen,
     		pFrmhead->sa.saLen.sa.logicAddr);
+
 	switch (pFrmhead->sa.saLen.sa.saType) {
     case DLT69845_SA_TYPE_SINGLE:
 		fprintf(stderr, "single address\n");
@@ -74,6 +73,7 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 	default:
 		break;
 	}
+
     if(NULL != pFrmhead->sa.sa)
         return FALSE;
     pFrmhead->sa.sa = calloc(1, pFrmhead->sa.saLen.sa.saLen*sizeof(*(pFrmhead->sa.sa)));
@@ -97,7 +97,6 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 
     crc = fcs16((p+1), (pFrmhead->headLen-3));
 
-
     if(crc != pFrmhead->headChk)
         return FALSE;
 
@@ -105,9 +104,9 @@ u8 checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     memcpy(&crc, p+*bufSize-3, sizeof(u16));
 
     fcs = fcs16((p+1), (pFrmhead->frmLen.len.len-2));
-    if(crc != fcs) {
+    if(crc != fcs)
         return FALSE;
-    }
+
     return TRUE;
 }
 

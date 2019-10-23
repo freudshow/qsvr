@@ -391,6 +391,14 @@ void MainWindow::socketReadData()
     memset(&frm698, 0, sizeof(frm698));
 
     if(!buffer.isEmpty()) {
+        /*
+         * 1. add data to queue of 698
+         * 2. get a complete frame of 698 from queue
+         * 3. decode frame
+         * 4. analysis decode struct, do what frame ask
+         * 5. if need response, then encode response frame
+         *    and send it to relative terminal
+         */
         u8 ret = decodeFrame((u8*)(buffer.data()), buffer.length(), &frm698);
         if(TRUE == ret) {
             qDebug() << "frame valid";
