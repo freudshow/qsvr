@@ -49,7 +49,8 @@ SOURCES += \
     ui/toolsdialog.cpp \
     libproto/lib698/lib698obj.cpp \
     libproto/lib698/oiclass.c \
-    libproto/lib698/objectidentify.c
+    libproto/lib698/objectidentify.c \
+    update698.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -76,7 +77,8 @@ HEADERS += \
     ui/toolsdialog.h \
     libproto/lib698/lib698obj.h \
     libproto/lib698/interfaceclass.h \
-    libproto/lib698/objectidentify.h
+    libproto/lib698/objectidentify.h \
+    update698.h
 
 FORMS += \
         ui/mainwindow.ui \
@@ -84,7 +86,8 @@ FORMS += \
     ui/netconfigform.ui \
     ui/setlogicaddr.ui \
     ui/setrs485.ui \
-    ui/toolsdialog.ui
+    ui/toolsdialog.ui \
+    update698.ui
 
 DISTFILES += \
     libproto/lib698/dlt698.45.asn1 \

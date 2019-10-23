@@ -180,3 +180,45 @@ boolean decodeFrame(u8* buf, u16 bufSize, frm698_p pFrame)
 
     return ret;
 }
+
+/*
+ * decodeFrame 698 frame
+ * @buf: frame buffer
+ * @bufSize: frame length
+ * @return: FALSE-frame invalid; TRUE-frame valid.
+ */
+boolean encodeFrame(u8* buf, u16 bufSize, frm698_p pFrame)
+{
+    if((NULL == buf) || (0 == bufSize) || (NULL == pFrame))
+        return FALSE;
+
+    boolean ret = TRUE;
+    u8* pApduBuf = NULL;
+    u16 apduLen = 0;
+
+    ret = checkFrame(buf, &bufSize, &pFrame->head);
+    if( FALSE == ret) {
+        DEBUG_TIME_LINE("frame invalid");
+        ret = FALSE;
+        goto onret;
+    }
+
+    pApduBuf = buf + pFrame->head.headLen;
+    apduLen = bufSize-pFrame->head.headLen - 3;
+    switch (pFrame->head.ctlChar.ctl.func) {
+    case DLT69845_FUNC_LINK_MANAGE:
+        ret = decodeLinkApdu(pApduBuf, apduLen, &pFrame->apdu);
+        break;
+    case DLT69845_FUNC_LINK_UERDATA:
+        ret = userDataManager(buf, bufSize, &pFrame->apdu);
+        break;
+    default:
+        break;
+    }
+
+ onret:
+    if(pFrame->head.sa.sa != NULL)
+        free(pFrame->head.sa.sa);
+
+    return ret;
+}
