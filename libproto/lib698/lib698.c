@@ -5,6 +5,20 @@
 #include "linkManager.h"
 #include "apduManager.h"
 
+
+void scamCode(u8 *buf, u16 len, boolean addScam)
+{
+    int i=0;
+
+    if(TRUE == addScam) {
+        for(i=0;i<len;i++)
+            buf[i] = buf[i] + 0x33;
+    } else {
+        for(i=0;i<len;i++)
+            buf[i] = buf[i] - 0x33;
+    }
+}
+
 /*
  * check if this frame is valid
  * @buf: frame buffer
@@ -20,7 +34,8 @@ boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     u16 fcs = 0;
     u8* p = buf;
 
-    while((DLT69845_START_CHAR != *p) && (*bufSize > 0)) {//find start code
+    //find start code
+    while((DLT69845_START_CHAR != *p) && (*bufSize > 0)) {
         p++;
         (*bufSize)--;
     }
@@ -40,11 +55,12 @@ boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 
     memcpy(pFrmhead, p, DLT69845_HEAD_LEN_BEFORE_SA);
 
-    DEBUG_TIME_LINE("frmLen: %u,\n dir: sent by %s,\n prm: promoted by %s,\n divS: %s apdu,\n func: %s",
+    DEBUG_TIME_LINE("frmLen: %u,\n dir: sent by %s,\n prm: promoted by %s,\n divS: %s apdu,\n ScramblingCode: %s,\n func: %s",
                     pFrmhead->frmLen.len.len,
                     (pFrmhead->ctlChar.ctl.dir==0?"client":"server"),
                     (pFrmhead->ctlChar.ctl.prm==0?"server":"client"),
                     (pFrmhead->ctlChar.ctl.divS==0?"whole":"piece of"),
+                    (pFrmhead->ctlChar.ctl.sc == 1?"ScramblingCode added ":"ScramblingCode not added"),
                     (pFrmhead->ctlChar.ctl.func==1?"link managment, logon, heart beat and logout.":(\
                      pFrmhead->ctlChar.ctl.func==3? "apdu managment and data exchange." : "unknown function code" )));
 
@@ -53,6 +69,7 @@ boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     if(*bufSize < pFrmhead->headLen)
         return FALSE;
 
+    pFrmhead->apduLen = pFrmhead->frmLen.len.len - pFrmhead->headLen - 1;
     pFrmhead->sa.saLen.sa.saLen = DLT69845_SA_LEN(pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("server's len: %u, logicAddr: %02X, ", pFrmhead->sa.saLen.sa.saLen,
     		pFrmhead->sa.saLen.sa.logicAddr);
@@ -74,8 +91,10 @@ boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 		break;
 	}
 
+    /*copy server address*/
     if(NULL != pFrmhead->sa.sa)
         return FALSE;
+
     pFrmhead->sa.sa = calloc(1, pFrmhead->sa.saLen.sa.saLen*sizeof(*(pFrmhead->sa.sa)));
     if(NULL == pFrmhead->sa.sa)
         return FALSE;
@@ -83,14 +102,18 @@ boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
     memcpy((u8*)(pFrmhead->sa.sa), (p+DLT69845_HEAD_LEN_BEFORE_SA), pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("server id:");
     printBuf((u8*)pFrmhead->sa.sa, pFrmhead->sa.saLen.sa.saLen, 0, 1);
+    /*copy server address done*/
 
     //check frame length
-    if(*bufSize != (pFrmhead->frmLen.len.len+2))
+    if(*bufSize < (pFrmhead->frmLen.len.len+2))
         return FALSE;
+
+    *bufSize = pFrmhead->frmLen.len.len + 2;
 
     pFrmhead->ca = *(p+DLT69845_HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen);
     DEBUG_TIME_LINE("client id: %02X", pFrmhead->ca);
-    //check head's crc
+
+    /*check head's crc*/
     memcpy(&pFrmhead->headChk,
            (p+DLT69845_HEAD_LEN_BEFORE_SA+pFrmhead->sa.saLen.sa.saLen+sizeof(u8)),
            sizeof(u16));
@@ -99,28 +122,21 @@ boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead)
 
     if(crc != pFrmhead->headChk)
         return FALSE;
+    /*check head's crc done*/
 
-    //check frame's crc
-    memcpy(&crc, p+*bufSize-3, sizeof(u16));
+    /*check frame's crc*/
+    memcpy(&crc, p + *bufSize-3, sizeof(u16));
 
     fcs = fcs16((p+1), (pFrmhead->frmLen.len.len-2));
     if(crc != fcs)
         return FALSE;
+    /*check frame's crc done*/
+
+    //remove Scrambling Code if existing
+    if (pFrmhead->ctlChar.ctl.sc == DLT69845_SCAMBLE_WITH)
+        scamCode(buf+pFrmhead->headLen, pFrmhead->apduLen, FALSE);
 
     return TRUE;
-}
-
-void scamCode(u8 *buf,int len, boolean addScam)
-{
-    int i=0;
-
-    if(TRUE == addScam) {
-        for(i=0;i<len;i++)
-            buf[i] = buf[i] + 0x33;
-    } else {
-        for(i=0;i<len;i++)
-            buf[i] = buf[i] - 0x33;
-    }
 }
 
 /*

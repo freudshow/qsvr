@@ -112,7 +112,8 @@ typedef struct frameHead {
     srvAddr_s   sa;//server address
     u8          ca;//client address
     u16         headChk;//crc of head
-    u8          headLen;//length of frame's head, including startChar
+    u16          headLen;//length of frame's head, including startChar
+    u16          apduLen;//length of apdu
 }frmHead_s;
 
 

@@ -1,0 +1,5 @@
+#ifndef OBJECTIDENTIFY_H
+#define OBJECTIDENTIFY_H
+
+
+#endif // OBJECTIDENTIFY_H

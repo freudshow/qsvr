@@ -47,7 +47,9 @@ SOURCES += \
     libproto/protocolobj.cpp \
     libproto/libstate/libstate.c \
     ui/toolsdialog.cpp \
-    libproto/lib698/lib698obj.cpp
+    libproto/lib698/lib698obj.cpp \
+    libproto/lib698/oiclass.c \
+    libproto/lib698/objectidentify.c
 
 HEADERS += \
         mainwindow.h \
@@ -72,7 +74,9 @@ HEADERS += \
     libproto/protocolobj.h \
     libproto/libstate/libstate.h \
     ui/toolsdialog.h \
-    libproto/lib698/lib698obj.h
+    libproto/lib698/lib698obj.h \
+    libproto/lib698/interfaceclass.h \
+    libproto/lib698/objectidentify.h
 
 FORMS += \
         ui/mainwindow.ui \
