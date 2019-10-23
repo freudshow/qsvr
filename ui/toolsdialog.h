@@ -9,15 +9,14 @@
 
 typedef enum calcMethod {
     e_calcNothing = -1,
-    e_calcCRC16 = 0,
+    e_calcFrameCount = 0,
+    e_calcCRC16,
     e_calcFCS,
     e_calcSumChk,
     e_calcAdd33,
     e_calcMinus33,
     e_calcInverse
 } calcMethod_e;
-
-
 
 namespace Ui {
 class toolsDialog;
@@ -40,6 +39,7 @@ private:
     calcMethod_e m_calcMethod;
     QMap<calcMethod_e, calc_f> m_map;
 
+    void calcFrameCount();
     void calcCRC16();
     void calcFCS();
     void calcSumChk();
