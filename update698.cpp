@@ -2,6 +2,7 @@
 #include "ui_update698.h"
 #include <QFileDialog>
 #include <QDir>
+#include <QMessageBox>
 
 update698::update698(QWidget *parent) :
     QMainWindow(parent),
@@ -26,6 +27,7 @@ void update698::browse()
     QString filename =  QFileDialog::getOpenFileName(this, tr("Open File"),
                                                QDir::homePath(),
                                                tr("all file (*)"));
+    ui->lineEdit_filename->setText(filename);
     QFile file(filename);
 
     if (!file.open(QIODevice::ReadOnly)) {
@@ -37,6 +39,6 @@ void update698::browse()
     file.seek(0);
     m_filesize = file.size();
     m_fileblock = file.readAll();
-    m_fileblock.mid(i, len);
+//    m_fileblock.mid(i, len);
     file.close();
 }
