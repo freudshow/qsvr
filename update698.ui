@@ -53,7 +53,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rBtn_256">
+       <widget class="QRadioButton" name="rbtn_256">
         <property name="text">
          <string>256</string>
         </property>
@@ -123,7 +123,7 @@
      <x>0</x>
      <y>0</y>
      <width>569</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
