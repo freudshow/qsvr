@@ -15,7 +15,6 @@ toolsDialog::toolsDialog(QWidget *parent) :
 
     m_map.clear();
 
-    m_map[e_calcFrameCount] = &toolsDialog::calcCRC16;
     m_map[e_calcCRC16] = &toolsDialog::calcCRC16;
     m_map[e_calcFCS] = &toolsDialog::calcFCS;
     m_map[e_calcSumChk] = &toolsDialog::calcSumChk;
@@ -23,7 +22,6 @@ toolsDialog::toolsDialog(QWidget *parent) :
     m_map[e_calcMinus33] = &toolsDialog::calcMinus33;
     m_map[e_calcInverse] = &toolsDialog::calcInverse;
 
-    ui->rbtnGroup_calc->setId(ui->rbtn_count, e_calcFrameCount);
     ui->rbtnGroup_calc->setId(ui->rbtn_crc16, e_calcCRC16);
     ui->rbtnGroup_calc->setId(ui->rbtn_fcs, e_calcFCS);
     ui->rbtnGroup_calc->setId(ui->rbtn_sum, e_calcSumChk);
@@ -41,8 +39,8 @@ toolsDialog::~toolsDialog()
 void toolsDialog::prepareText()
 {
     QRegExp re("[\\x0-9a-fA-F]+");
-    QStringList list;
     QString s;
+    int i =0;
 
     s = ui->text_input->toPlainText().remove(QRegExp("\\n")).
                                       remove(QRegExp("\\r")).
@@ -53,11 +51,12 @@ void toolsDialog::prepareText()
         ui->label_formatError->setText("");
         QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
         QString t;
-        for (int i = 0; i<s.count();i+=2) {
+        for (i = 0; i<s.count();i+=2)
               t.append(s.at(i)).append(s.at(i+1)).append(" ");
-        }
+
         ui->text_input->setText(t.trimmed());
         QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
+        ui->label_formatError->setText(QString::number(i/2) + tr(" bytes"));
     } else {
         ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
     }
@@ -104,13 +103,6 @@ QString toolsDialog::byteArrayToString(QByteArray buffer)
     buf += s;
 
     return buf;
-}
-
-void toolsDialog::calcFrameCount()
-{
-    QStringList l;
-    l = ui->text_input->toPlainText().split(" ");
-    ui->lineEdit_result->setText(QString::number(l.count()));
 }
 
 void toolsDialog::calcCRC16()
