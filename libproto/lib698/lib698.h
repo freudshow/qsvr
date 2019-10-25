@@ -127,6 +127,8 @@ typedef frm698_s* frm698_p;
 
 #pragma pack(pop)
 
+
+extern boolean checkFrame(u8* buf, u16* bufSize, frmHead_s* pFrmhead);
 extern u8 decodeFrame(u8* buf, u16 bufSize, frm698_p pFrm);
 
 #ifdef __cplusplus

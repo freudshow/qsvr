@@ -79,10 +79,9 @@ void update698::calcBlocks()
     m_blockCount = m_filesize/m_oneBlockSize + (((m_filesize%m_oneBlockSize)==0) ? 0 : 1);
     m_blockList.clear();
 
-    for (i = 0; (i + m_oneBlockSize) < m_filesize; i += m_oneBlockSize)
+    for (i = 0; (i + m_oneBlockSize) <= m_filesize; i += m_oneBlockSize)
         m_blockList.append(m_fileblock.mid(i, m_oneBlockSize));
 
-    if (m_blockList.count() < m_blockCount) {
+    if ((m_filesize-i) > 0)
         m_blockList.append(m_fileblock.mid(i, (m_filesize-i)));
-    }
 }
