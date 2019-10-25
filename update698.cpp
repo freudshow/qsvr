@@ -3,10 +3,12 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
+#include <QSettings>
 
 update698::update698(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::update698)
+    ui(new Ui::update698),
+    m_settings(new QSettings("config/qcheck.ini", QSettings::IniFormat, this))
 {
     ui->setupUi(this);
     connect(ui->btn_browse, SIGNAL(clicked(bool)), this, SLOT(browse()));
@@ -16,6 +18,9 @@ update698::update698(QWidget *parent) :
     ui->buttonGroup->setId(ui->rbtn_512, 1);
     ui->buttonGroup->setId(ui->rbtn_1024, 2);
     QObject::connect(ui->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(btnToggle(int)));
+
+    m_settings("config/qcheck.ini", QSettings::IniFormat, this);
+
 }
 
 update698::~update698()
@@ -67,7 +72,7 @@ void update698::browse()
     m_blockCount = m_filesize/m_oneBlockSize + (((m_filesize%m_oneBlockSize)==0) ? 0 : 1);
     m_blockList.clear();
 
-    for (i = 0; i < m_blockCount; i++)
+    for (i = 0; i < m_blockCount; i+=m_oneBlockSize)
         m_blockList.append(m_fileblock.mid(i, m_oneBlockSize));
 
     file.close();

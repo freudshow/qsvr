@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QByteArray>
 #include <QList>
+#include <QSettings>
 
 namespace Ui {
 class update698;
@@ -27,6 +28,7 @@ private:
     qint64 m_filesize;      //whole file length
     qint64 m_oneBlockSize;  //size of per file block
     qint64 m_blockCount;    //counts of update file
+    QSettings m_settings;
 
 private slots:
     void browse();
