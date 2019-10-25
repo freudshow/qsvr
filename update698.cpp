@@ -8,23 +8,23 @@
 update698::update698(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::update698),
-    m_settings(new QSettings("config/qcheck.ini", QSettings::IniFormat, this))
+    m_settings(new QSettings("config/config.ini", QSettings::IniFormat, this))
 {
     ui->setupUi(this);
     connect(ui->btn_browse, SIGNAL(clicked(bool)), this, SLOT(browse()));
 
-    m_oneBlockSize = 512;
+    int size = m_settings->value("fileBlocks/defaultSize").toInt();
+    m_oneBlockSize = (size > 0 ? size : 512);
     ui->buttonGroup->setId(ui->rbtn_256, 0);
     ui->buttonGroup->setId(ui->rbtn_512, 1);
     ui->buttonGroup->setId(ui->rbtn_1024, 2);
     QObject::connect(ui->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(btnToggle(int)));
-
-    m_settings("config/qcheck.ini", QSettings::IniFormat, this);
-
+    ui->buttonGroup->button(m_settings->value("fileBlocks/rbtnIndex").toInt()%3)->setChecked(true);
 }
 
 update698::~update698()
 {
+    m_settings->setValue("fileBlocks/rbtnIndex", ui->buttonGroup->checkedId());
     delete ui;
 }
 
@@ -53,7 +53,6 @@ void update698::btnToggle(int i)
 
 void update698::browse()
 {
-    int i = 0;
     QString filename =  QFileDialog::getOpenFileName(this, tr("Open File"),
                                                QDir::homePath(),
                                                tr("all file (*)"));
@@ -67,13 +66,23 @@ void update698::browse()
     }
 
     file.seek(0);
-    m_filesize = file.size();
     m_fileblock = file.readAll();
+    file.close();
+    calcBlocks();
+}
+
+void update698::calcBlocks()
+{
+    int i = 0;
+
+    m_filesize = m_fileblock.count();
     m_blockCount = m_filesize/m_oneBlockSize + (((m_filesize%m_oneBlockSize)==0) ? 0 : 1);
     m_blockList.clear();
 
-    for (i = 0; i < m_blockCount; i+=m_oneBlockSize)
+    for (i = 0; (i + m_oneBlockSize) < m_filesize; i += m_oneBlockSize)
         m_blockList.append(m_fileblock.mid(i, m_oneBlockSize));
 
-    file.close();
+    if (m_blockList.count() < m_blockCount) {
+        m_blockList.append(m_fileblock.mid(i, (m_filesize-i)));
+    }
 }

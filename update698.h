@@ -25,13 +25,14 @@ private:
 
     QList<QByteArray> m_blockList;
     QByteArray m_fileblock; //whole file bytes
-    qint64 m_filesize;      //whole file length
-    qint64 m_oneBlockSize;  //size of per file block
-    qint64 m_blockCount;    //counts of update file
-    QSettings m_settings;
+    int m_filesize;      //whole file length
+    int m_oneBlockSize;  //size of per file block
+    int m_blockCount;    //counts of update file
+    QSettings* m_settings;
 
 private slots:
     void browse();
+    void calcBlocks();
     void on_btn_exit_clicked(bool);
     void btnToggle(int);
 };
