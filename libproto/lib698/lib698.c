@@ -187,7 +187,7 @@ boolean decodeFrame(u8* buf, u16 bufSize, frm698_p pFrame)
  * @bufSize: frame length
  * @return: FALSE-frame invalid; TRUE-frame valid.
  */
-boolean encodeFrame(u8* buf, u16 bufSize, frm698_p pFrame)
+boolean encodeFrame(u8* buf, u16* bufSize, frm698_p pFrame)
 {
     if((NULL == buf) || (0 == bufSize) || (NULL == pFrame))
         return FALSE;

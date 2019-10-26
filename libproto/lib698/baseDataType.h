@@ -174,16 +174,64 @@ typedef struct date_time_s {
  * year=FFFFH 表示无效.
  * month, day, hour, minute, second=FFH表示无效.
  */
-typedef struct date_timeS_s {
+#define DATE_TIME_S_SIZE                  10  //报文中 date_time_s_t 的长度
+typedef struct date_time_s_s {
     long_unsigned_t year;
     unsigned_t      month;
     unsigned_t      day;
     unsigned_t      hour;
     unsigned_t      minute;
     unsigned_t      second;
-}date_timeS_t;
+}date_time_s_t;
 
 
+typedef enum {
+    e_null_type = 0,
+    e_array_type = 1,
+    e_structure_type = 2,
+    e_bool_type = 3,
+    e_bit_string_type = 4,
+    e_double_long_type = 5,
+    e_double_longun_signed_type = 6,
+
+    e_octet_string_type = 9,
+    e_visible_string_type = 10,
+    e_utf8_string_type = 12,
+    e_integer_type = 15,
+    e_long_type = 16,
+    e_unsigned_type = 17,
+
+    e_long_unsigned_type = 18,
+    e_long64_type = 20,
+    e_long64_unsigned_type = 21,
+    e_enum_type = 22,
+    e_float32_type = 23,
+    e_float64_type = 24,
+
+    e_datetime_type = 25,
+    e_date_type = 26,
+    e_time_type = 27,
+    e_date_time_s_type = 28,
+    e_oi_type = 80,
+    e_oad_type = 81,
+    e_road_type = 82,
+    e_omd_type = 83,
+
+    e_ti_type = 84,
+    e_tsa_type = 85,
+    e_mac_type = 86,
+    e_rn_type = 87,
+    e_region_type = 88,
+    e_scaler_unit_type = 89,
+    e_rsd_type = 90,
+    e_csd_type = 91,
+    e_ms_type = 92,
+
+    e_sid_type = 93,
+    e_sid_mac_type = 94,
+    e_com_dcb_type = 95,
+    e_rcsd_type = 96
+} e_data_types;
 
 /*************************************************
  * sequence types end
