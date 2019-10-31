@@ -1,6 +1,10 @@
 #ifndef UPDATE698_H
 #define UPDATE698_H
 
+#include "libproto/lib698/lib698obj.h"
+#include "libdb/libdb.h"
+#include "libnet/libnet.h"
+
 #include <QMainWindow>
 #include <QString>
 #include <QFile>
@@ -29,6 +33,10 @@ private:
     int m_oneBlockSize;  //size of per file block
     int m_blockCount;    //counts of update file
     QSettings* m_settings;
+
+    lib698Obj* m_lib698Obj;
+    sqliteDb* m_db;
+    netSvr *m_netSvr;
 
 private slots:
     void browse();

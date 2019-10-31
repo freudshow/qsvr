@@ -25,7 +25,7 @@ s8 dlt645Chk(u8* buf, u16 bufSize)
     if (buf[0] != DLT645_START_CHAR || buf[7] != DLT645_START_CHAR)
         return DLT645_ERR_LOST1_0x68;
     for (i = 0; i < 6; i++) {
-        if (!isCOMBCD(buf[i + 1]))
+        if (!isCOMBCD_c(buf[i + 1]))
             return DLT645_ERR_RCVD_LOST;
     }
     if (bufSize != (buf[9] + DLT645_MINSIZE))

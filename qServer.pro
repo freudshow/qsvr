@@ -92,3 +92,5 @@ FORMS += \
 DISTFILES += \
     libproto/lib698/dlt698.45.asn1 \
     config/config.ini
+
+RC_ICONS = icon/gk.ico

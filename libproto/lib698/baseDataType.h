@@ -88,12 +88,12 @@ typedef struct asn_struct_ctx_s {
     s32 left;	/* Number of bytes left, -1 for indefinite */
 } asn_struct_ctx_t;
 
-typedef struct BIT_STRING_s {
-    u8 *buf;	/* BIT STRING body */
+typedef struct bit_string_s {
+    u8 *buf;	/* bit string body */
     u32 size;	/* Size of the above buffer */
-    int bits_unused;/* Unused trailing bits in the last octet (0..7) */
-    asn_struct_ctx_t _asn_ctx;	/* Parsing across buffer boundaries */
-} BIT_STRING_t;
+    int bits_unused;/* unused trailing bits in the last octet (0..7) */
+    asn_struct_ctx_t _asn_ctx;	/* parsing across buffer boundaries */
+} bit_string_t;
 
 
 
@@ -185,6 +185,9 @@ typedef struct date_time_s_s {
 }date_time_s_t;
 
 
+/*
+ * Data 数据类型的 CHOICE 编码
+ */
 typedef enum {
     e_null_type = 0,
     e_array_type = 1,
@@ -232,6 +235,13 @@ typedef enum {
     e_com_dcb_type = 95,
     e_rcsd_type = 96
 } e_data_types;
+
+typedef struct data_s {
+    e_data_types e;
+    union {
+
+    } d;
+} data_t;
 
 /*************************************************
  * sequence types end
