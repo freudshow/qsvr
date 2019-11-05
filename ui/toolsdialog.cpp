@@ -57,15 +57,21 @@ void toolsDialog::prepareText()
         ui->text_input->setText(t.trimmed());
         QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
         ui->label_formatError->setText(QString::number(i/2) + tr(" bytes"));
+        calcSums();
     } else {
         ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
     }
 }
 
-void toolsDialog::on_btn_calc_clicked()
+void toolsDialog::calcSums()
 {
     if(m_calcMethod > e_calcNothing)
         (this->*m_map[m_calcMethod])();
+}
+
+void toolsDialog::on_btn_calc_clicked()
+{
+    calcSums();
 }
 
 void toolsDialog::on_btn_copy_clicked()
@@ -82,6 +88,7 @@ void toolsDialog::on_btn_exit_clicked()
 void toolsDialog::btnToggle(int idx)
 {
     m_calcMethod = static_cast<calcMethod_e>(idx);
+    calcSums();
 }
 
 QString toolsDialog::byteArrayToString(QByteArray buffer)

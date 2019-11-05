@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "update698.h"
+#include "ui/toolsDialog.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -10,6 +11,9 @@ int main(int argc, char *argv[])
 
 //    update698 u;
 //    u.show();
+
+//    toolsDialog t;
+//    t.show();
 
     return a.exec();
 }

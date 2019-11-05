@@ -46,6 +46,7 @@ private:
     void calcInverse();
 
 private slots:
+    void calcSums();
     void on_btn_calc_clicked();
     void on_btn_exit_clicked();
     void on_btn_copy_clicked();
