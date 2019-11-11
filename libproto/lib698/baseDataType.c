@@ -10,18 +10,51 @@ typedef enum { bigEndian=0, littleEndian=1 } endianess;
 #   define CPU_LITTLE_ENDIAN   (isLittleEndian() == littleEndian)
 static int isLittleEndian()
 {
-    const union {
-        u32 u;
-        u8 c[4];
-    } one = { 1 };  // only set one.u to 1, so u32 u's bit pattern is 0x00 00 00 01 logically.
-                    // if cpu is little endian, then u's physical bit pattern is 0x01 00 00 00,
-                    // from LSB(Least Significant Bit) to MSB(Most Significant Bit), so one.c[0]
-                    // is 0x01.
-                    // if cpu is big endian, u's physical bit pattern is 0x00 00 00 01, so one.c[0]
-                    // is 0x00.
-    return one.c[0];
+    int littleEndian = 1;
+
+    return *(char *)&littleEndian == 1;
 }
 #endif
+
+u16 decode_null(u8* buf, u16 bufSize, NULL_t* pValue)
+{
+    if ( NULL == buf || bufSize < sizeof(NULL_t) || NULL == pValue)
+        return 0;
+
+    *pValue = 0x00;
+
+    return sizeof(NULL_t);
+}
+
+u16 encode_null(u8* buf, u16 bufSize, NULL_t* pValue)
+{
+    if ( NULL == buf || bufSize < sizeof(NULL_t) || NULL == pValue)
+        return 0;
+
+    *buf = 0x00;
+
+    return sizeof(NULL_t);
+}
+
+u16 decode_bool(u8* buf, u16 bufSize, BOOL_t* pValue)
+{
+    if ( NULL == buf || bufSize < sizeof(BOOL_t) || NULL == pValue)
+        return 0;
+
+    *pValue = *buf;
+
+    return sizeof(BOOL_t);
+}
+
+u16 encode_bool(u8* buf, u16 bufSize, BOOL_t* pValue)
+{
+    if ( NULL == buf || bufSize < sizeof(BOOL_t) || NULL == pValue)
+        return 0;
+
+    *buf = *pValue;
+
+    return sizeof(BOOL_t);
+}
 
 u16 decode_unsigned(u8* buf, u16 bufSize, unsigned_t* pValue)
 {
