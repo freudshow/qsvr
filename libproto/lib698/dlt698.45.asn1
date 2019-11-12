@@ -1,7 +1,6 @@
 DLT69845 DEFINITIONS ::= BEGIN
 
 -----------------------------basic data type---------------------------------------
-    Null ::= NULL
 	Array ::= SEQUENCE OF Data
 	Structure ::= SEQUENCE OF Data
 	Bool ::= BOOLEAN
@@ -11,7 +10,7 @@ DLT69845 DEFINITIONS ::= BEGIN
 	Octet-string ::= OCTET STRING
     Visible-string ::= VisibleString
     UTF8-string ::= UTF8String
-	Integer ::= INTEGER(-128..127)
+	Integer8s ::= INTEGER(-128..127)
 	Long ::= INTEGER(-32768..32767)
     Unsigned ::= INTEGER(0..255)
     LongUnsigned ::= INTEGER(0..65535)
@@ -111,7 +110,7 @@ DLT69845 DEFINITIONS ::= BEGIN
 	}
 
 	ScalerUnit ::= SEQUENCE {
-		conversion Integer,	    --换算-倍数因子的指数,基数为 10；如数值不是数字的,则换算应被置 0。
+		conversion Integer8s,	    --换算-倍数因子的指数,基数为 10；如数值不是数字的,则换算应被置 0。
 		unit PhysicalUnit		--物理单位, 详见698.45<表B.1 物理单位的枚举定义>, 其符号待以后添加
 	}
 
@@ -370,7 +369,7 @@ DLT69845 DEFINITIONS ::= BEGIN
 		octetString			[9] Octet-string,
 		visibleString		[10] VisibleString,
 		utf8String			[12] UTF8String,
-		integer				[15] Integer,
+		integer				[15] Integer8s,
 		long				[16] Long,
 		unsigned			[17] Unsigned,
 		longunsigned		[18] LongUnsigned,
