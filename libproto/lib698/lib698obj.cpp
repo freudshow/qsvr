@@ -18,6 +18,6 @@ QByteArray lib698Obj::getOneFrameFromBuf()
 
 void lib698Obj::getBlockSlice(QByteArray b)
 {
-
+    Q_UNUSED(b);
 }
 
