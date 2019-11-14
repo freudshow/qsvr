@@ -13,7 +13,9 @@ void lib698Obj::pushBytes(QByteArray b)
 
 QByteArray lib698Obj::getOneFrameFromBuf()
 {
+    QByteArray b;
 
+    return b;
 }
 
 void lib698Obj::getBlockSlice(QByteArray b)

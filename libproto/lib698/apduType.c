@@ -15,13 +15,13 @@ boolean decodeLinkRequestApdu(u8* buf, u16 bufSize, apdu_p pApdu)
 
     if (e_link_request_type == *pBuf) {
         pBuf++;
-        pBuf += decode_piid_acd(pBuf, bufSize-(pBuf-buf), &pApdu->link_request.piidacd);
+        pBuf += decode_piid_acd(pBuf, bufSize-(pBuf-buf), &pApdu->u.link_request.piidacd);
 
-        pApdu->link_request.type = *pBuf;
+        pApdu->u.link_request.type = *pBuf;
         pBuf++;
 
-        pBuf += decode_long_unsigned(pBuf, bufSize-(pBuf-buf), &pApdu->link_request.heart);
-        pBuf += decode_date_time(pBuf, bufSize-(pBuf-buf), &pApdu->link_request.requestTime);
+        pBuf += decode_long_unsigned(pBuf, bufSize-(pBuf-buf), &pApdu->u.link_request.heart);
+        pBuf += decode_date_time(pBuf, bufSize-(pBuf-buf), &pApdu->u.link_request.requestTime);
 
         return TRUE;
     }

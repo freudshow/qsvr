@@ -147,11 +147,11 @@ typedef struct server_apdu_s {
 typedef struct apdu_s {//todo: to be completed
     apdu_type_e e;
     union {
-    link_request_t link_request;        //预连接请求
-    link_response_t link_response;      //预连接响应
-    client_apdu_t client_apdu;          //客户端应用层数据单元
-    server_apdu_t server_apdu;          //服务端应用层数据单元
-    }
+        link_request_t link_request;        //预连接请求
+        link_response_t link_response;      //预连接响应
+        client_apdu_t client_apdu;          //客户端应用层数据单元
+        server_apdu_t server_apdu;          //服务端应用层数据单元
+    } u;
 } apdu_t;
 typedef apdu_t* apdu_p;
 
