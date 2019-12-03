@@ -93,6 +93,7 @@ FORMS += \
 
 DISTFILES += \
     libproto/lib698/dlt698.45.asn1 \
+    libproto/lib698/a-xdr.types.txt \
     config/config.ini
 
 RC_ICONS = icon/gk.ico

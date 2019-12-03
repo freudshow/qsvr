@@ -111,12 +111,12 @@ typedef struct asn_enc_rval_s {
  * NOTE: This function pointer type is only useful internally.
  * Do not use it in your application.
  */
-typedef u32 (asn_outmost_tag_f)(
+typedef u32 (axdr_outmost_tag_f)(
         const struct asn_TYPE_descriptor_s *type_descriptor,
         const void *struct_ptr, int tag_mode, u32 tag);
 
 /* The instance of the above function type; used internally. */
-asn_outmost_tag_f asn_TYPE_outmost_tag;
+axdr_outmost_tag_f asn_TYPE_outmost_tag;
 
 /*
  * Generic type of an application-defined callback to return various
@@ -149,7 +149,7 @@ typedef void (asn_app_constraint_failed_f)(void *application_specific_key,
  * statically or arranged on the stack, yet its elements are allocated
  * dynamically.)
  */
-typedef void (asn_struct_free_f)(
+typedef void (axdr_struct_free_f)(
         struct asn_TYPE_descriptor_s *type_descriptor,
         void *struct_ptr, int free_contents_only);
 
@@ -160,7 +160,7 @@ typedef void (asn_struct_free_f)(
 /*
  * Print the structure according to its specification.
  */
-typedef int (asn_struct_print_f)(
+typedef int (axdr_struct_print_f)(
         struct asn_TYPE_descriptor_s *type_descriptor,
         const void *struct_ptr,
         int level,	/* Indentation level */
@@ -170,7 +170,7 @@ typedef int (asn_struct_print_f)(
  * Generic type for constraint checking callback,
  * associated with every type descriptor.
  */
-typedef int (asn_constr_check_f)(
+typedef int (axdr_constr_check_f)(
     struct asn_TYPE_descriptor_s *type_descriptor,
     const void *struct_ptr,
     asn_app_constraint_failed_f *optional_callback,	/* Log the error */
@@ -180,7 +180,7 @@ typedef int (asn_constr_check_f)(
 /*
  * Type of generic function which decodes the byte stream into the structure.
  */
-typedef asn_dec_rval_t (ber_type_decoder_f)(
+typedef asn_dec_rval_t (axdr_type_decoder_f)(
         struct asn_codec_ctx_s *opt_codec_ctx,
         struct asn_TYPE_descriptor_s *type_descriptor,
         void **struct_ptr, const void *buf_ptr, s32 size,
@@ -189,7 +189,7 @@ typedef asn_dec_rval_t (ber_type_decoder_f)(
 /*
  * Type of the generic axdr encoder.
  */
-typedef asn_enc_rval_t (der_type_encoder_f)(
+typedef asn_enc_rval_t (axdr_type_encoder_f)(
         struct asn_TYPE_descriptor_s *type_descriptor,
         void *struct_ptr,	/* Structure to be encoded */
         int tag_mode,		/* {-1,0,1}: IMPLICIT, no, EXPLICIT */
@@ -214,12 +214,12 @@ typedef const struct asn_per_constraint_s {
     long upper_bound;		/* "ub" value */
 } asn_per_constraint_t;
 
-typedef const struct asn_per_constraints_s {
+typedef const struct axdr_constraints_s {
     asn_per_constraint_t value;
     asn_per_constraint_t size;
     int (*value2code)(unsigned int value);
     int (*code2value)(unsigned int code);
-} asn_per_constraints_t;
+} axdr_constraints_t;
 
 #define	ASN__DECODE_FAILED do {					\
     asn_dec_rval_t tmp_error;				\
@@ -254,8 +254,8 @@ typedef struct asn_TYPE_member_s {
     u32 tag;		/* Outmost (most immediate) tag */
     int tag_mode;		/* IMPLICIT/no/EXPLICIT tag at current level */
     asn_TYPE_descriptor_t *type;	/* Member type descriptor */
-    asn_constr_check_f *memb_constraints;	/* Constraints validator */
-    asn_per_constraints_t *per_constraints;	/* PER compiled constraints */
+    axdr_constr_check_f *memb_constraints;	/* Constraints validator */
+    axdr_constraints_t *per_constraints;	/* PER compiled constraints */
     int (*default_value)(int setval, void **sptr);	/* DEFAULT <value> */
     const char *name;			/* ASN.1 identifier of the element */
 } asn_TYPE_member_t;
@@ -272,11 +272,11 @@ typedef struct asn_TYPE_descriptor_s {
      * Generalized functions for dealing with the specific type.
      * May be directly invoked by applications.
      */
-    asn_struct_free_f  *free_struct;	/* Free the structure */
-    asn_struct_print_f *print_struct;	/* Human readable output */
-    asn_constr_check_f *check_constraints;	/* Constraints validator */
-    ber_type_decoder_f *ber_decoder;	/* decoder */
-    der_type_encoder_f *der_encoder;	/* encoder */
+    axdr_struct_free_f  *free_struct;	/* Free the structure */
+    axdr_struct_print_f *print_struct;	/* Human readable output */
+    axdr_constr_check_f *check_constraints;	/* Constraints validator */
+    axdr_type_decoder_f *decoder;	/* decoder */
+    axdr_type_encoder_f *encoder;	/* encoder */
 
     /***********************************************************************
      * Internally useful members. Not to be used by applications directly. *
@@ -285,13 +285,13 @@ typedef struct asn_TYPE_descriptor_s {
     /*
      * Tags that are expected to occur.
      */
-    asn_outmost_tag_f  *outmost_tag;	/* <optional, internal> */
+    axdr_outmost_tag_f  *outmost_tag;	/* <optional, internal> */
     const u32 *tags;                    /* Effective tags sequence for this type */
     int tags_count;                     /* Number of tags which are expected */
     const u32 *all_tags;                /* Every tag for BER/containment */
     int all_tags_count;                 /* Number of tags */
 
-    asn_per_constraints_t *per_constraints;	/* PER compiled constraints */
+    axdr_constraints_t *constraints;	/* PER compiled constraints */
 
     /*
      * An ASN.1 production type members (members of SEQUENCE, SET, CHOICE).
@@ -305,6 +305,103 @@ typedef struct asn_TYPE_descriptor_s {
      */
     const void *specifics;
 } asn_TYPE_descriptor_t;
+
+
+
+
+
+/***********************************************************************
+ * axdr types free, print, check constraints, decoder, encoder funtions
+ * start
+ **********************************************************************/
+extern asn_TYPE_descriptor_t axdr_DEF_Integer;
+axdr_struct_free_f  *free_struct_integer;	/* Free the structure */
+axdr_struct_print_f *print_struct_integer;	/* Human readable output */
+axdr_constr_check_f *check_constraints_integer;	/* Constraints validator */
+axdr_type_decoder_f *decoder_integer;	/* decoder */
+axdr_type_encoder_f *encoder_integer;	/* encoder */
+
+axdr_struct_free_f  *free_struct_boolean;	/* Free the structure */
+axdr_struct_print_f *print_struct_boolean;	/* Human readable output */
+axdr_constr_check_f *check_constraints_boolean;	/* Constraints validator */
+axdr_type_decoder_f *decoder_boolean;	/* decoder */
+axdr_type_encoder_f *encoder_boolean;	/* encoder */
+
+axdr_struct_free_f  *free_struct_enumerated;	/* Free the structure */
+axdr_struct_print_f *print_struct_enumerated;	/* Human readable output */
+axdr_constr_check_f *check_constraints_enumerated;	/* Constraints validator */
+axdr_type_decoder_f *decoder_enumerated;	/* decoder */
+axdr_type_encoder_f *encoder_enumerated;	/* encoder */
+
+axdr_struct_free_f  *free_struct_bit_string;	/* Free the structure */
+axdr_struct_print_f *print_struct_bit_string;	/* Human readable output */
+axdr_constr_check_f *check_constraints_bit_string;	/* Constraints validator */
+axdr_type_decoder_f *decoder_bit_string;	/* decoder */
+axdr_type_encoder_f *encoder_bit_string;	/* encoder */
+
+axdr_struct_free_f  *free_struct_byte_string;	/* Free the structure */
+axdr_struct_print_f *print_struct_byte_string;	/* Human readable output */
+axdr_constr_check_f *check_constraints_byte_string;	/* Constraints validator */
+axdr_type_decoder_f *decoder_byte_string;	/* decoder */
+axdr_type_encoder_f *encoder_byte_string;	/* encoder */
+
+axdr_struct_free_f  *free_struct_choice;	/* Free the structure */
+axdr_struct_print_f *print_struct_choice;	/* Human readable output */
+axdr_constr_check_f *check_constraints_choice;	/* Constraints validator */
+axdr_type_decoder_f *decoder_choice;	/* decoder */
+axdr_type_encoder_f *encoder_choice;	/* encoder */
+
+axdr_struct_free_f  *free_struct_flag;	/* Free the structure */
+axdr_struct_print_f *print_struct_flag;	/* Human readable output */
+axdr_constr_check_f *check_constraints_flag;	/* Constraints validator */
+axdr_type_decoder_f *decoder_flag;	/* decoder */
+axdr_type_encoder_f *encoder_flag;	/* encoder */
+
+axdr_struct_free_f  *free_struct_optional;	/* Free the structure */
+axdr_struct_print_f *print_struct_optional;	/* Human readable output */
+axdr_constr_check_f *check_constraints_optional;	/* Constraints validator */
+axdr_type_decoder_f *decoder_optional;	/* decoder */
+axdr_type_encoder_f *encoder_optional;	/* encoder */
+
+axdr_struct_free_f  *free_struct_default;	/* Free the structure */
+axdr_struct_print_f *print_struct_default;	/* Human readable output */
+axdr_constr_check_f *check_constraints_default;	/* Constraints validator */
+axdr_type_decoder_f *decoder_default;	/* decoder */
+axdr_type_encoder_f *encoder_default;	/* encoder */
+
+axdr_struct_free_f  *free_struct_sequence;	/* Free the structure */
+axdr_struct_print_f *print_struct_sequence;	/* Human readable output */
+axdr_constr_check_f *check_constraints_sequence;	/* Constraints validator */
+axdr_type_decoder_f *decoder_sequence;	/* decoder */
+axdr_type_encoder_f *encoder_sequence;	/* encoder */
+
+axdr_struct_free_f  *free_struct_sequence_of;	/* Free the structure */
+axdr_struct_print_f *print_struct_sequence_of;	/* Human readable output */
+axdr_constr_check_f *check_constraints_sequence_of;	/* Constraints validator */
+axdr_type_decoder_f *decoder_sequence_of;	/* decoder */
+axdr_type_encoder_f *encoder_sequence_of;	/* encoder */
+
+axdr_struct_free_f  *free_struct_visiblestring;	/* Free the structure */
+axdr_struct_print_f *print_struct_visiblestring;	/* Human readable output */
+axdr_constr_check_f *check_constraints_visiblestring;	/* Constraints validator */
+axdr_type_decoder_f *decoder_visiblestring;	/* decoder */
+axdr_type_encoder_f *encoder_visiblestring;	/* encoder */
+
+axdr_struct_free_f  *free_struct_generalizedtime;	/* Free the structure */
+axdr_struct_print_f *print_struct_generalizedtime;	/* Human readable output */
+axdr_constr_check_f *check_constraints_generalizedtime;	/* Constraints validator */
+axdr_type_decoder_f *decoder_generalizedtime;	/* decoder */
+axdr_type_encoder_f *encoder_generalizedtime;	/* encoder */
+
+axdr_struct_free_f  *free_struct_null;	/* Free the structure */
+axdr_struct_print_f *print_struct_null;	/* Human readable output */
+axdr_constr_check_f *check_constraints_null;	/* Constraints validator */
+axdr_type_decoder_f *decoder_null;	/* decoder */
+axdr_type_encoder_f *encoder_null;	/* encoder */
+/***********************************************************************
+ * axdr types free, print, check constraints, decoder, encoder funtions
+ * end
+ **********************************************************************/
 
 #ifdef __cplusplus
 } /*extern "C"*/
