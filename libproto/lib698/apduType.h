@@ -62,14 +62,14 @@ typedef enum {
 
     /****Server-APDU type start****/
     e_connect_Response_type = 130,
-    e_releaseResponse =131,
-    e_releaseNotification =132,
-    e_getResponse =133,
-    e_setResponse =134,
-    e_actionResponse =135,
-    e_reportNotification =136,
-    e_proxyResponse =137,
-    e_errorResponse =238,
+    e_releaseResponse_type =131,
+    e_releaseNotification_type =132,
+    e_getResponse_type =133,
+    e_setResponse_type =134,
+    e_actionResponse_type =135,
+    e_reportNotification_type =136,
+    e_proxyResponse_type =137,
+    e_errorResponse_type =238,
     /****Server-APDU type end****/
 
     e_link_response_type = 129
@@ -105,6 +105,8 @@ typedef struct link_response_s {
     date_time_t    receiveTime;
     date_time_t    responseTime;
 } link_response_t;
+
+
 
 /*************************************************
  * link-apdu end
@@ -142,12 +144,14 @@ typedef struct server_apdu_s {
  *************************************************/
 
 
-typedef union apdu_s {//todo: to be completed
+typedef struct apdu_s {//todo: to be completed
     apdu_type_e e;
-    link_request_t link_request;        //预连接请求
-    link_response_t link_response;      //预连接响应
-    client_apdu_t client_apdu;          //客户端应用层数据单元
-    server_apdu_t server_apdu;          //服务端应用层数据单元
+    union {
+        link_request_t link_request;        //预连接请求
+        link_response_t link_response;      //预连接响应
+        client_apdu_t client_apdu;          //客户端应用层数据单元
+        server_apdu_t server_apdu;          //服务端应用层数据单元
+    } u;
 } apdu_t;
 typedef apdu_t* apdu_p;
 

@@ -49,7 +49,8 @@ SOURCES += \
     libproto/lib698/lib698obj.cpp \
     libproto/lib698/oiclass.c \
     libproto/lib698/objectidentify.c \
-    update698.cpp
+    update698.cpp \
+    libproto/lib698/a_xdr.c
 
 HEADERS += \
         mainwindow.h \
@@ -77,7 +78,8 @@ HEADERS += \
     libproto/lib698/lib698obj.h \
     libproto/lib698/interfaceclass.h \
     libproto/lib698/objectidentify.h \
-    update698.h
+    update698.h \
+    libproto/lib698/a_xdr.h
 
 FORMS += \
         ui/mainwindow.ui \
@@ -90,6 +92,7 @@ FORMS += \
 
 DISTFILES += \
     libproto/lib698/dlt698.45.asn1 \
+    libproto/lib698/a-xdr.types.txt \
     config/config.ini
 
 RC_ICONS = icon/gk.ico
