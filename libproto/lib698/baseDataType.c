@@ -139,14 +139,14 @@ u16 decode_date_time(u8* buf, u16 bufSize, date_time_t* pValue)
 
     u8* pBuf = buf;
 
-    pBuf += decode_long_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->year);
-    pBuf += decode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->month);
-    pBuf += decode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->day_of_month);
-    pBuf += decode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->day_of_week);
-    pBuf += decode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->hour);
-    pBuf += decode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->minute);
-    pBuf += decode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->second);
-    pBuf += decode_long_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->milliseconds);
+    pBuf += decode_long_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->year);
+    pBuf += decode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->month);
+    pBuf += decode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->day_of_month);
+    pBuf += decode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->day_of_week);
+    pBuf += decode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->hour);
+    pBuf += decode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->minute);
+    pBuf += decode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->second);
+    pBuf += decode_long_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->milliseconds);
 
     return DATE_TIME_SIZE;
 }
@@ -159,13 +159,13 @@ u16 encode_date_time(u8* buf, u16 bufSize, date_time_t* pValue)
     u8* pBuf = buf;
 
     pBuf += encode_long_unsigned(pBuf, bufSize, &pValue->year);
-    pBuf += encode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->month);
-    pBuf += encode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->day_of_month);
-    pBuf += encode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->day_of_week);
-    pBuf += encode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->hour);
-    pBuf += encode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->minute);
-    pBuf += encode_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->second);
-    pBuf += encode_long_unsigned(pBuf, bufSize-(pBuf-buf), &pValue->milliseconds);
+    pBuf += encode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->month);
+    pBuf += encode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->day_of_month);
+    pBuf += encode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->day_of_week);
+    pBuf += encode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->hour);
+    pBuf += encode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->minute);
+    pBuf += encode_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->second);
+    pBuf += encode_long_unsigned(pBuf, bufSize-(u16)(pBuf-buf), &pValue->milliseconds);
 
     return DATE_TIME_SIZE;
 }

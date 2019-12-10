@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "update698.h"
-#include "ui/toolsDialog.h"
+#include "ui/toolsdialog.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
