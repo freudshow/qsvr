@@ -62,8 +62,10 @@ typedef double                  fp64;         /* Double precision floating point
                             (a) = (a)^(b);\
                         }while(0)
 
-#define min(X, Y)  ((X) < (Y) ? (X) : (Y))
-#define max(X, Y)  ((X) > (Y) ? (X) : (Y))
+//#define min(X, Y)  ((X) < (Y) ? (X) : (Y))
+//#define max(X, Y)  ((X) > (Y) ? (X) : (Y))
+
+
 
 #define max_typeof(x, y)   ({\
                         typeof(x) _x = x;\

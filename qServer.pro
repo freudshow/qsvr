@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network serialport sql
-
+QT       += bluetooth
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = qServer
 TEMPLATE = app

@@ -17,16 +17,16 @@
 #include "ui/toolsdialog.h"
 
 namespace Ui {
-	class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = Q_NULLPTR);
-	~MainWindow();
+    ~MainWindow();
 
 public slots:
     void closeTool();
@@ -34,7 +34,7 @@ public slots:
 private slots:
     void on_btnOpenCom_clicked();
     void on_btnListenTcp_clicked();
-	void on_pushButton_Send_clicked();
+    void on_pushButton_Send_clicked();
     void on_Button_ClrRcv_clicked();
 
     void on_actionComconfig_triggered();
@@ -55,19 +55,18 @@ private slots:
     QString byteArrayToString(QByteArray, bool);
 
 private:
-	Ui::MainWindow *ui;
+    Ui::MainWindow *ui;
     comConfigForm *comUi;
     netConfigForm *netUi;
     setLogicAddr *logicAddrUi;
     setRS485 *rs485Ui;
     toolsDialog* toolsDiag;
 
-	QTcpServer* pServer;
-	QTcpSocket* pSocket;
+    QTcpServer* pServer;
+    QTcpSocket* pSocket;
     QUdpSocket* m_pUdpSoket;
     QString m_tcpPort;
     QSettings *m_config;
-    bool listenState;
     netSvr *m_netSvr;
     QList<clientInfo_s> m_clientList;
 

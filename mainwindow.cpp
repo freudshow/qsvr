@@ -8,26 +8,25 @@
 #include "libproto/lib698/lib698.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-	ui->setupUi(this);
+    ui->setupUi(this);
 
-	ui->pushButton_Send->setEnabled(false);
+    ui->pushButton_Send->setEnabled(false);
     ui->checkBox_RecvHex->setChecked(true);
     ui->checkBox_SendHex->setChecked(true);
 
     connect(ui->textEdit_Recv, &QTextEdit::textChanged, this, &MainWindow::setRecvCursor);
 
-	pServer = new QTcpServer();
+    pServer = new QTcpServer();
     pSocket = Q_NULLPTR;
 
-	//连接信号槽
+    //连接信号槽
     connect(pServer,&QTcpServer::newConnection,this,&MainWindow::serverNewConnect);
 
     m_netSvr = new netSvr(this);
     connect(m_netSvr, SIGNAL(clientInfo(clientInfo_s)), this, SLOT(newclient(clientInfo_s)));
-    listenState = false;
     m_clientList.clear();
 
     comUi       = Q_NULLPTR;
@@ -42,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-	pServer->close();
-	pServer->deleteLater();
+    pServer->close();
+    pServer->deleteLater();
     m_netSvr->close();
     m_netSvr->deleteLater();
     RELEASE_POINTER_RESOURCE(m_config)
@@ -164,45 +163,44 @@ void MainWindow::comReadData(QByteArray buffer)
 void MainWindow::on_btnListenTcp_clicked()
 {
 
-    qDebug() << "listenState: " << listenState;
+    qDebug() << "listenState: " << pServer->isListening();
 
-    if(Q_NULLPTR == m_config)
-        m_config =  new QSettings("config/config.ini", QSettings::IniFormat);
 
-    m_tcpPort = m_config->value("tcp/port").toString();
-    if(m_tcpPort.length() == 0) {
-        QMessageBox::warning(this, tr("Hint"), tr("please set tcp port first!"), QMessageBox::Ok);
-        return;
-    }
+    if(!pServer->isListening()) {
+        if(Q_NULLPTR == m_config)
+            m_config =  new QSettings("config/config.ini", QSettings::IniFormat);
 
-    if(!listenState) {
+        m_tcpPort = m_config->value("tcp/port").toString();
+        if(m_tcpPort.length() == 0) {
+            QMessageBox::warning(this, tr("Hint"), tr("please set tcp port first!"), QMessageBox::Ok);
+            return;
+        }
+
         quint16 port = static_cast<quint16>(m_tcpPort.toUInt());
         if(!pServer->listen(QHostAddress::Any, port)){
             qDebug() << pServer->errorString();
             QMessageBox::critical(this, tr("Hint"), pServer->errorString(), QMessageBox::Ok);
             return;
-		}
+        }
 
-        ui->btnListenTcp->setText(tr("Don't Listen"));
-        ui->pushButton_Send->setEnabled(true);
-		qDebug()<< "Listen succeessfully!";
+        qDebug()<< "Listen succeessfully!";
     } else {
         if(Q_NULLPTR != pSocket) {
             if (pSocket->state() == QAbstractSocket::ConnectedState)
                 pSocket->disconnectFromHost();
-            pServer->close();
             pSocket = Q_NULLPTR;
         }
-        ui->btnListenTcp->setText(tr("Listen"));
-        ui->pushButton_Send->setEnabled(false);
+        pServer->close();
     }
-    listenState = !listenState;
+
+    ui->btnListenTcp->setText(pServer->isListening() ? tr("Don't Listen") : tr("Listen"));
+    ui->pushButton_Send->setEnabled(pServer->isListening());
 }
 
 void MainWindow::on_pushButton_Send_clicked()
 {
     sendMsg();
-	qDebug() << "Send: " << ui->textEdit_Send->toPlainText();
+    qDebug() << "Send: " << ui->textEdit_Send->toPlainText();
 }
 
 void MainWindow::on_Button_ClrRcv_clicked()
@@ -407,13 +405,13 @@ void MainWindow::socketReadData()
         }
 
         ui->textEdit_Recv->append(isHex ? byteArrayToString(buffer, true) : tr(buffer));
-	}
+    }
 }
 
 void MainWindow::socketDisconnected()
 {
-	//发送按键失能
-	ui->pushButton_Send->setEnabled(false);
-	qDebug() << "Disconnected!";
+    //发送按键失能
+    ui->pushButton_Send->setEnabled(false);
+    qDebug() << "Disconnected!";
 }
 
