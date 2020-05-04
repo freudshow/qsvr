@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QUdpSocket>
 #include <QThread>
 #include "libutil/basedef.h"
 #include "libproto/protocolobj.h"
@@ -38,9 +39,13 @@ public slots:
     void readyRead();
     void writeFrame(QByteArray);
     void disconnected();
+//    int sendMsg();
+//    QByteArray readData();
 
 private:
     QTcpSocket *m_socket;
+    QUdpSocket *m_udpClient;
+
     qintptr m_socketDescriptor;
     protocolObj *m_proto;
     clientInfo_s m_clientInfo;
@@ -55,6 +60,7 @@ public:
     bool startServer(quint16);
 
 private:
+    QList<clientInfo_s> clientList;
 
 
 signals:

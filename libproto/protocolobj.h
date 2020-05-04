@@ -14,7 +14,8 @@ typedef enum protoTypes {
     e_unknow_type
 } protoTypes_e;
 
-class protocolObj {
+class protocolObj : public QObject
+{
 public:
     protocolObj();
     ~protocolObj();
