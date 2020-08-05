@@ -29,7 +29,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void closeTool();
+
 
 private slots:
     void on_btnOpenCom_clicked();

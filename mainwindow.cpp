@@ -256,17 +256,10 @@ void MainWindow::on_actionSetRS485Config_triggered()
 
 void MainWindow::on_actionSums_triggered()
 {
-    RELEASE_POINTER_RESOURCE(toolsDiag)
-
     toolsDiag = new toolsDialog();
     toolsDiag->setWindowModality(Qt::ApplicationModal);
-    QObject::connect(toolsDiag, SIGNAL(toolExit()), this, SLOT(closeTool()));
-    toolsDiag->show();
-}
 
-void MainWindow::closeTool()
-{
-    RELEASE_POINTER_RESOURCE(toolsDiag)
+    toolsDiag->show();
 }
 
 void MainWindow::sendMsg()

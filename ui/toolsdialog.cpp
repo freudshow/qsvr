@@ -29,6 +29,8 @@ toolsDialog::toolsDialog(QWidget *parent) :
     ui->rbtnGroup_calc->setId(ui->rbtn_minus0x33, e_calcMinus33);
     ui->rbtnGroup_calc->setId(ui->rbtn_inverse, e_calcInverse);
     QObject::connect(ui->rbtnGroup_calc, SIGNAL(buttonClicked(int)), this, SLOT(btnToggle(int)));
+
+    this->setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 toolsDialog::~toolsDialog()
@@ -82,7 +84,7 @@ void toolsDialog::on_btn_copy_clicked()
 
 void toolsDialog::on_btn_exit_clicked()
 {
-    emit toolExit();
+    this->close();
 }
 
 void toolsDialog::btnToggle(int idx)
