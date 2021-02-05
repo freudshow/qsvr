@@ -267,6 +267,19 @@ void MainWindow::delToolDiag()
     RELEASE_POINTER_RESOURCE(toolsDiag)
 }
 
+void MainWindow::on_actionFilesum_triggered()
+{
+    filesumWgt = new filesSum();
+    filesumWgt->setWindowModality(Qt::ApplicationModal);
+    QObject::connect(filesumWgt, SIGNAL(filesSum::fileClose()), this, SLOT(delFileSum()));
+    filesumWgt->show();
+}
+
+void MainWindow::delFileSum()
+{
+    RELEASE_POINTER_RESOURCE(filesumWgt)
+}
+
 void MainWindow::sendMsg()
 {
     QByteArray buf;

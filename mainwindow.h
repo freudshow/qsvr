@@ -15,6 +15,7 @@
 #include "ui/setrs485.h"
 #include "ui/setlogicaddr.h"
 #include "ui/toolsdialog.h"
+#include "ui/filessum.h"
 
 namespace Ui {
     class MainWindow;
@@ -42,7 +43,9 @@ private slots:
     void on_actionSetLogicAddr_triggered();
     void on_actionSetRS485Config_triggered();
     void on_actionSums_triggered();
+    void on_actionFilesum_triggered();
     void delToolDiag();
+    void delFileSum();
 
     void serverNewConnect();
     void newclient(clientInfo_s);
@@ -62,6 +65,7 @@ private:
     setLogicAddr *logicAddrUi;
     setRS485 *rs485Ui;
     toolsDialog* toolsDiag;
+    filesSum *filesumWgt;
 
     QTcpServer* pServer;
     QTcpSocket* pSocket;

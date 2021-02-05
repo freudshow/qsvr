@@ -220,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1044</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menucomConfig">
@@ -243,6 +243,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionSums"/>
+    <addaction name="actionFilesum"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -292,6 +293,11 @@
   <action name="actionSetRS485Config">
    <property name="text">
     <string>SetRS485Config</string>
+   </property>
+  </action>
+  <action name="actionFilesum">
+   <property name="text">
+    <string>filesum</string>
    </property>
   </action>
  </widget>

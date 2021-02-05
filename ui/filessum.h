@@ -20,7 +20,7 @@ class filesSum;
 }
 
 class filesSum;
-typedef void (filesSum::*calc_f)();
+typedef void (filesSum::*sumFIle_f)();
 
 class filesSum : public QWidget
 {
@@ -47,7 +47,10 @@ private:
     Ui::filesSum *ui;
 
     sumFileMethod_e m_sumFileMethod;
-    QMap<sumFileMethod_e, calc_f> m_map;
+    QMap<sumFileMethod_e, sumFIle_f> m_map;
+
+signals:
+    void fileClose();
 };
 
 #endif // FILESSUM_H

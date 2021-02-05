@@ -45,7 +45,7 @@ void filesSum::on_btn_choose_clicked()
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("请选择文件"),
                                                     "D:/",
-                                                    tr("json(*json);"));
+                                                    tr("*"));
 
     ui->lineEdit_filename->setText(fileName);
 }
@@ -53,6 +53,7 @@ void filesSum::on_btn_choose_clicked()
 void filesSum::on_btn_exit_clicked()
 {
     this->close();
+    emit fileClose();
 }
 
 void filesSum::on_btn_calc_clicked() {}
