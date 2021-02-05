@@ -128,6 +128,7 @@ extern u16 fcs16(unsigned char *cp, int  len);
 extern void add33(u8* buf, int bufSize);
 extern void minus33(u8* buf, int bufSize);
 extern u8 chkSum(u8* buf, int bufSize);
+extern u8 xorSum(u8* buf, int bufSize);
 extern void inverseArray(u8* buf, u16 bufSize);
 
 #ifdef __cplusplus

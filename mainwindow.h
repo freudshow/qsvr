@@ -42,6 +42,7 @@ private slots:
     void on_actionSetLogicAddr_triggered();
     void on_actionSetRS485Config_triggered();
     void on_actionSums_triggered();
+    void delToolDiag();
 
     void serverNewConnect();
     void newclient(clientInfo_s);

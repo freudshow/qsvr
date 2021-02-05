@@ -283,6 +283,17 @@ u8 chkSum(u8* buf, int bufSize)
     return sum;
 }
 
+u8 xorSum(u8* buf, int bufSize)
+{
+    u16 i = 0;
+    u8 sum = 0;
+
+    for (i = 0, sum = 0; i < bufSize; i++)
+        sum ^= buf[i];
+
+    return sum;
+}
+
 void add33(u8* buf, int bufSize)
 {
     u16 i = 0;

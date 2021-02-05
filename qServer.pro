@@ -38,6 +38,7 @@ SOURCES += \
         libproto/libdlt645/libdlt645.c \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
+    ui/filessum.cpp \
         ui/netconfigform.cpp \
         libdb/libdb.cpp \
         libnet/libnet.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
         libproto/libdlt645/libdlt645.h \
         libcom/libcom.h \
         ui/comconfigform.h \
+    ui/filessum.h \
         ui/netconfigform.h \
         libdb/libdb.h \
         libnet/libnet.h \
@@ -82,6 +84,7 @@ HEADERS += \
     libproto/lib698/a_xdr.h
 
 FORMS += \
+    ui/filessum.ui \
         ui/mainwindow.ui \
         ui/comconfigform.ui \
     ui/netconfigform.ui \

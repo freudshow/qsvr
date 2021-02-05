@@ -21,6 +21,10 @@ toolsDialog::toolsDialog(QWidget *parent) :
     m_map[e_calcAdd33] = &toolsDialog::calcAdd33;
     m_map[e_calcMinus33] = &toolsDialog::calcMinus33;
     m_map[e_calcInverse] = &toolsDialog::calcInverse;
+    m_map[e_ascii] = &toolsDialog::calcAscii;
+    m_map[e_float] = &toolsDialog::calcFloat;
+    m_map[e_doubleFloat] = &toolsDialog::calcDoubleFloat;
+    m_map[e_xorsum] = &toolsDialog::calcXorsum;
 
     ui->rbtnGroup_calc->setId(ui->rbtn_crc16, e_calcCRC16);
     ui->rbtnGroup_calc->setId(ui->rbtn_fcs, e_calcFCS);
@@ -28,6 +32,11 @@ toolsDialog::toolsDialog(QWidget *parent) :
     ui->rbtnGroup_calc->setId(ui->rbtn_add0x33, e_calcAdd33);
     ui->rbtnGroup_calc->setId(ui->rbtn_minus0x33, e_calcMinus33);
     ui->rbtnGroup_calc->setId(ui->rbtn_inverse, e_calcInverse);
+    ui->rbtnGroup_calc->setId(ui->rbtn_ascii, e_ascii);
+    ui->rbtnGroup_calc->setId(ui->rbtn_float, e_float);
+    ui->rbtnGroup_calc->setId(ui->rbtn_doubleFloat, e_doubleFloat);
+    ui->rbtnGroup_calc->setId(ui->rbtn_xorsum, e_xorsum);
+
     QObject::connect(ui->rbtnGroup_calc, SIGNAL(buttonClicked(int)), this, SLOT(btnToggle(int)));
 
     this->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -85,6 +94,7 @@ void toolsDialog::on_btn_copy_clicked()
 void toolsDialog::on_btn_exit_clicked()
 {
     this->close();
+    emit toolExit();
 }
 
 void toolsDialog::btnToggle(int idx)
@@ -218,6 +228,86 @@ void toolsDialog::calcMinus33()
 }
 
 void toolsDialog::calcInverse()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    for (int i = 0; i< len;i++) {
+        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+    }
+
+    ui->lineEdit_result->setText(byteArrayToString(b));
+}
+
+void toolsDialog::calcAscii()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    for (int i = 0; i< len;i++) {
+        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+    }
+
+    ui->lineEdit_result->setText(QString(b));
+}
+
+void toolsDialog::calcFloat()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    for (int i = 0; i< len;i++) {
+        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+    }
+
+    ui->lineEdit_result->setText(byteArrayToString(b));
+}
+
+void toolsDialog::calcDoubleFloat()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    for (int i = 0; i< len;i++) {
+        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+    }
+
+    ui->lineEdit_result->setText(byteArrayToString(b));
+}
+
+void toolsDialog::calcXorsum()
 {
     QByteArray b;
     QStringList l;

@@ -258,8 +258,13 @@ void MainWindow::on_actionSums_triggered()
 {
     toolsDiag = new toolsDialog();
     toolsDiag->setWindowModality(Qt::ApplicationModal);
-
+    QObject::connect(toolsDiag, SIGNAL(toolsDialog::toolExit()), this, SLOT(delToolDiag()));
     toolsDiag->show();
+}
+
+void MainWindow::delToolDiag()
+{
+    RELEASE_POINTER_RESOURCE(toolsDiag)
 }
 
 void MainWindow::sendMsg()

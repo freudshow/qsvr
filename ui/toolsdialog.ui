@@ -110,6 +110,46 @@
        </attribute>
       </widget>
      </item>
+     <item>
+      <widget class="QRadioButton" name="rbtn_ascii">
+       <property name="text">
+        <string>ascii</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbtn_float">
+       <property name="text">
+        <string>float</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbtn_doubleFloat">
+       <property name="text">
+        <string>double float</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="rbtn_xorsum">
+       <property name="text">
+        <string>xorsum</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="3" column="0">

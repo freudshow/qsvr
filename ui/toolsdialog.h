@@ -14,7 +14,11 @@ typedef enum calcMethod {
     e_calcSumChk,
     e_calcAdd33,
     e_calcMinus33,
-    e_calcInverse
+    e_calcInverse,
+    e_ascii,
+    e_float,
+    e_doubleFloat,
+    e_xorsum
 } calcMethod_e;
 
 namespace Ui {
@@ -44,6 +48,10 @@ private:
     void calcAdd33();
     void calcMinus33();
     void calcInverse();
+    void calcAscii();
+    void calcFloat();
+    void calcDoubleFloat();
+    void calcXorsum();
 
 private slots:
     void calcSums();
