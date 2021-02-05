@@ -98,4 +98,4 @@ DISTFILES += \
     libproto/lib698/a-xdr.types.txt \
     config/config.ini
 
-RC_ICONS = icon/gk.ico
+RC_ICONS = icon/dfe.ico
