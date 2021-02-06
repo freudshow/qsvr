@@ -276,6 +276,7 @@ void toolsDialog::calcFloat()
     QStringList l;
     int len = 0;
     bool ok;
+    float f = 0.0;
 
     b.clear();
     l.clear();
@@ -283,11 +284,17 @@ void toolsDialog::calcFloat()
     l = ui->text_input->toPlainText().split(" ");
 
     len = l.count();
-    for (int i = 0; i < len;i++) {
-        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+    if (len != sizeof(f)) {
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
+        return;
     }
 
-    ui->lineEdit_result->setText(byteArrayToString(b));
+    for (int i = 0; i < len; i++) {
+        b.append((char) l.at(i).toInt(&ok, 16));
+    }
+
+    memcpy(&f, b.data(), sizeof(f));
+    ui->lineEdit_result->setText(QString::number(f));
 }
 
 void toolsDialog::calcDoubleFloat()
@@ -296,6 +303,7 @@ void toolsDialog::calcDoubleFloat()
     QStringList l;
     int len = 0;
     bool ok;
+    double f = 0.0;
 
     b.clear();
     l.clear();
@@ -303,11 +311,17 @@ void toolsDialog::calcDoubleFloat()
     l = ui->text_input->toPlainText().split(" ");
 
     len = l.count();
-    for (int i = 0; i< len;i++) {
-        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+    if (len != sizeof(f)) {
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
+        return;
     }
 
-    ui->lineEdit_result->setText(byteArrayToString(b));
+    for (int i = 0; i < len; i++) {
+        b.append((char) l.at(i).toInt(&ok, 16));
+    }
+
+    memcpy(&f, b.data(), sizeof(f));
+    ui->lineEdit_result->setText(QString::number(f));
 }
 
 void toolsDialog::calcXorsum()
@@ -324,7 +338,7 @@ void toolsDialog::calcXorsum()
 
     len = l.count();
     for (int i = 0; i< len;i++) {
-        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+        b.append((char)l.at(i).toInt(&ok, 16));
     }
 
     u8 x = xorSum((u8*)b.data(), b.length());
