@@ -74,6 +74,34 @@ void toolsDialog::prepareText()
     }
 }
 
+void toolsDialog::on_lineEdit_result_textChanged()
+{
+    QByteArray b;
+    bool ok;
+
+    QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
+
+    if (e_float == m_calcMethod) {
+        float f = ui->lineEdit_result->text().toFloat(&ok);
+        if (ok) {
+            char *p = (char *) &f;
+            for (int index = 0; index < sizeof(f); index++)
+                b.append(p[index]);
+        }
+    } else if (e_doubleFloat == m_calcMethod) {
+        double f = ui->lineEdit_result->text().toDouble(&ok);
+        if (ok) {
+            char *p = (char *) &f;
+            for (int index = 0; index < sizeof(f); index++)
+                b.append(p[index]);
+        }
+    }
+
+    ui->text_input->setText(b.toHex(' '));
+
+    QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
+}
+
 void toolsDialog::calcSums()
 {
     if(m_calcMethod > e_calcNothing)

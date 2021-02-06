@@ -58,6 +58,7 @@ private slots:
     void on_btn_calc_clicked();
     void on_btn_exit_clicked();
     void on_btn_copy_clicked();
+    void on_lineEdit_result_textChanged();
 
     void btnToggle(int);
     void prepareText(); //检查textEdit的输入字符串格式是否合法, 并将textEdit的字符串自动用空格分隔
