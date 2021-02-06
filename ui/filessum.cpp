@@ -4,6 +4,9 @@
 #include <QFile>
 #include <QDebug>
 #include <QFileDialog>
+#include <QCloseEvent>
+#include <QShowEvent>
+#include <QResizeEvent>
 
 filesSum::filesSum(QWidget *parent) :
     QWidget(parent),
@@ -53,7 +56,32 @@ void filesSum::on_btn_choose_clicked()
 void filesSum::on_btn_exit_clicked()
 {
     this->close();
+}
+
+void filesSum::closeEvent(QCloseEvent *event)
+{
+    int button = QMessageBox::question(this, tr("Question"), tr("Exit Really?"), \
+        QMessageBox::Yes|QMessageBox::Default, QMessageBox::No|QMessageBox::Escape);
+    if (button == QMessageBox::No)
+    {
+        return event->ignore();
+    }
+    else
+    {
+        event->accept();
+    }
+
     emit fileClose();
+}
+
+void filesSum::showEvent(QShowEvent * event)
+{
+
+}
+
+void filesSum::resizeEvent(QResizeEvent * event)
+{
+
 }
 
 void filesSum::on_btn_calc_clicked() {}

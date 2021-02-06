@@ -41,7 +41,12 @@ private slots:
     void on_btn_choose_clicked();
     void on_btn_exit_clicked();
     void on_btn_calc_clicked();
+
     void btnToggle(int idx);
+
+    void showEvent(QShowEvent * event);
+    void closeEvent(QCloseEvent * event);
+    void resizeEvent(QResizeEvent * event);
 
 private:
     Ui::filesSum *ui;

@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     logicAddrUi = Q_NULLPTR;
     rs485Ui     = Q_NULLPTR;
     toolsDiag   = Q_NULLPTR;
+    filesumWgt  = Q_NULLPTR;
     m_config    = Q_NULLPTR;
     m_comObj    = Q_NULLPTR;
     m_comThread = Q_NULLPTR;
@@ -50,7 +51,6 @@ MainWindow::~MainWindow()
     RELEASE_POINTER_RESOURCE(netUi)
     RELEASE_POINTER_RESOURCE(logicAddrUi)
     RELEASE_POINTER_RESOURCE(rs485Ui)
-    RELEASE_POINTER_RESOURCE(toolsDiag)
     RELEASE_POINTER_RESOURCE(ui);
 }
 
@@ -257,27 +257,29 @@ void MainWindow::on_actionSetRS485Config_triggered()
 void MainWindow::on_actionSums_triggered()
 {
     toolsDiag = new toolsDialog();
+    toolsDiag->setAttribute(Qt::WA_DeleteOnClose, true);
     toolsDiag->setWindowModality(Qt::ApplicationModal);
-    QObject::connect(toolsDiag, SIGNAL(toolsDialog::toolExit()), this, SLOT(delToolDiag()));
+    QObject::connect(toolsDiag, SIGNAL(toolExit()), this, SLOT(delToolDiag()));
     toolsDiag->show();
 }
 
 void MainWindow::delToolDiag()
 {
-    RELEASE_POINTER_RESOURCE(toolsDiag)
+    toolsDiag = Q_NULLPTR;
 }
 
 void MainWindow::on_actionFilesum_triggered()
 {
     filesumWgt = new filesSum();
+    filesumWgt->setAttribute(Qt::WA_DeleteOnClose, true);
     filesumWgt->setWindowModality(Qt::ApplicationModal);
-    QObject::connect(filesumWgt, SIGNAL(filesSum::fileClose()), this, SLOT(delFileSum()));
+    QObject::connect(filesumWgt, SIGNAL(fileClose()), this, SLOT(delFileSum()));
     filesumWgt->show();
 }
 
 void MainWindow::delFileSum()
 {
-    RELEASE_POINTER_RESOURCE(filesumWgt)
+    filesumWgt = Q_NULLPTR;
 }
 
 void MainWindow::sendMsg()
