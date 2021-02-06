@@ -113,12 +113,12 @@ QString toolsDialog::byteArrayToString(QByteArray buffer)
 
     for (i = 0; i < buffer.count() - 1; i++) {
         s.clear();
-        s.sprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
+        s.asprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
         buf += s;
     }
 
     s.clear();
-    s.sprintf("%02X", static_cast<unsigned char>(buffer.at(i)));
+    s.asprintf("%02X", static_cast<unsigned char>(buffer.at(i)));
     buf += s;
 
     return buf;
@@ -142,7 +142,7 @@ void toolsDialog::calcCRC16()
 
     u16 crc = crc16TblDrv((u8*)b.data(), b.length());
     s.clear();
-    s.sprintf("%02X %02X", (u8)crc, (u8)(crc>>8));
+    s.append(QString("%1 %2").arg(crc & 0xFF, 2, 16, QLatin1Char('0')).arg((u8)(crc >> 8), 2, 16, QLatin1Char('0')));
     ui->lineEdit_result->setText(s);
 }
 
@@ -164,7 +164,7 @@ void toolsDialog::calcFCS()
 
     u16 crc = fcs16((u8*)b.data(), b.length());
     s.clear();
-    s.sprintf("%02X %02X", (u8)crc, (u8)(crc>>8));
+    s.append(QString("%1 %2").arg(crc & 0xFF, 2, 16, QLatin1Char('0')).arg((u8)(crc >> 8), 2, 16, QLatin1Char('0')));
     ui->lineEdit_result->setText(s);
 }
 
@@ -186,7 +186,8 @@ void toolsDialog::calcSumChk()
 
     u8 crc = chkSum((u8*)b.data(), b.length());
     s.clear();
-    s.sprintf("%02X", crc);
+    s.asprintf("%02X", crc);
+    s.append(QString("%1").arg(crc & 0xFF, 2, 16, QLatin1Char('0')));
     ui->lineEdit_result->setText(s);
 }
 
@@ -205,8 +206,8 @@ void toolsDialog::calcAdd33()
         b.append((char)l.at(i).toInt(&ok, 16)+0x33);
     }
 
-//    ui->lineEdit_result->setText(b.toHex(' '));
-    ui->lineEdit_result->setText(byteArrayToString(b));//qt 5.5 does not have QByteArray.toHex(char separator) const
+    ui->lineEdit_result->setText(b.toHex(' '));
+//    ui->lineEdit_result->setText(byteArrayToString(b));//qt 5.5 does not have QByteArray.toHex(char separator) const
 }
 
 void toolsDialog::calcMinus33()
@@ -224,7 +225,7 @@ void toolsDialog::calcMinus33()
         b.append((char)l.at(i).toInt(&ok, 16)-0x33);
     }
 
-    ui->lineEdit_result->setText(byteArrayToString(b));
+    ui->lineEdit_result->setText(b.toHex(' '));
 }
 
 void toolsDialog::calcInverse()
@@ -244,7 +245,7 @@ void toolsDialog::calcInverse()
         b.append((char)l.at(len-1-i).toInt(&ok, 16));
     }
 
-    ui->lineEdit_result->setText(byteArrayToString(b));
+    ui->lineEdit_result->setText(b.toHex(' '));
 }
 
 void toolsDialog::calcAscii()
@@ -261,8 +262,10 @@ void toolsDialog::calcAscii()
 
     len = l.count();
     for (int i = 0; i< len;i++) {
-        b.append((char)l.at(len-1-i).toInt(&ok, 16));
+        b.append((char)l.at(i).toInt(&ok, 16));
     }
+
+    QString s = QString(b);
 
     ui->lineEdit_result->setText(QString(b));
 }
@@ -280,7 +283,7 @@ void toolsDialog::calcFloat()
     l = ui->text_input->toPlainText().split(" ");
 
     len = l.count();
-    for (int i = 0; i< len;i++) {
+    for (int i = 0; i < len;i++) {
         b.append((char)l.at(len-1-i).toInt(&ok, 16));
     }
 
@@ -324,5 +327,6 @@ void toolsDialog::calcXorsum()
         b.append((char)l.at(len-1-i).toInt(&ok, 16));
     }
 
-    ui->lineEdit_result->setText(byteArrayToString(b));
+    u8 x = xorSum((u8*)b.data(), b.length());
+    ui->lineEdit_result->setText(QString("%1").arg(x, 2, 16, QLatin1Char('0')));
 }
