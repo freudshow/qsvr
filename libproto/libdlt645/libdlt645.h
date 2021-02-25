@@ -29,7 +29,7 @@
 #define DLT645_ERR_DI_NDEF            -10         //数据标识未定义
 
 /*
- * 地址域由 6 个字节构成，每字节 2 位 BCD 码，地址长度可达12位十进制数。每块表具有唯一的
+ * 地址域由 6 个字节构成，每字节 2 位 BCD 码，地址长度可达12位十进制数。每块电表具有唯一的
  * 通信地址，且与物理层信道无关。当使用的地址码长度不足 6 字节时，高位用“0”补足。
  * 通信地址999999999999H为广播地址，只针对特殊命令有效，如广播校时和广播冻结等。广播命令
  * 不要求从站应答。
@@ -38,6 +38,7 @@
  */
 #define DLT645_BROADCAST_ADDR        0x99 //6byte, 广播校时和广播冻结等. 广播命令不要求从站应答.
 #define DLT645_WILDCARD_ADDR         0xAA //6byte, 通配符, 用于缩位寻址
+#define DLT645_ADDR_LEN              (6)  //DLT645逻辑地址长度
 
 /*
  * 5.3.3 传输响应
@@ -49,7 +50,7 @@
 #define DLT645_TIMEOUT    500 //抄表最小延迟时间500毫秒
 
 
-
+;//消除警告 warning: unterminated '#pragma pack (push, ...)' at end of file
 #pragma pack(push)
 #pragma pack(1)
 
@@ -57,6 +58,11 @@ typedef struct {    //压缩BCD码格式
     u8 l  :4;       //BCD码低位
     u8 h  :4;       //BCD码高位
 } comBCD_s;
+
+typedef union {
+    u8 b;
+    comBCD_s bcd;
+} comBCD_u;
 
 typedef union {         //645-07协议控制码结构
     u8 u8b;

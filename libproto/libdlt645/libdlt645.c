@@ -4,6 +4,70 @@
 #include "libdlt645.h"
 
 
+/**********************************************
+ * dlt645协议中的地址域约束:
+ * 0. 地址域编码为'压缩BCD码', 简写为COMBCD, COM 是
+ *    compressed的缩写, BCD是Binary-Coded Decimal‎
+ *    缩写. BCD码的取值范围是 0~9, '压缩'的含义是, 将
+ *    两个位的BCD码压缩进1个字节中, 即用4个2进制位表示
+ *    1个10进制位. 如, 0-0000, 1-0001, 2-0010,
+ *    3-0011, 4-0100, 5-0101, 6-0110, 7-0111,
+ *    8-1000, 9-1001. 因为1个字节共8个2进制位, 为了
+ *    节约传输/存储空间, 1个字节可以表示2个10进制
+ *    位. 关于10进制/2进制/16进制...等计数法, 同属于
+ *    '占位计数法'-positional number system, 详细
+ *    介绍请参见<Elementary number theory and
+ *    its applications> - by Kenneth H. Rosen的
+ *    第2章 - <Integer Representations and
+ *    Operations>
+ * 1. 地址域长度为12位10进制数, 用COMBCD编码时, 占
+ *    6个字节
+ * 2. 地址域中的字节序, 低字节在前, 高字节在后
+ * 3. 地址域中可以出现'0xAA', 作为缩位寻址时的通配符,
+ *    即从若干低位起，剩余高位补 '0xAA' 作为通配符进行
+ *    读表操作，从站应答帧的地址域返回实际通信地址
+ * 4. 根据第3条, 若地址域中出现了'0xAA', 处在它高
+ *    位的字节, 必须为'0xAA'
+ * 5. 根据第3条, 同1个字节中, 如果出现'0xA', 那么这个
+ *    字节必须为'0xAA'
+ *--------------------------------------------
+ *--------------------------------------------
+ * @param - buf, 报文中的地址域指针, 低位在前
+ * @param - bufSize, 报文中的地址域长度
+ * ___________________________________________
+ * @return - 地址域合法, 返回 0;
+ *           不合法, 返回 DLT645_ERR_ADDR
+ * *******************************************/
+s8 dlt645chkAddress(u8 *buf, u16 bufSize)
+{
+    if (bufSize != DLT645_ADDR_LEN || buf == NULL)
+        return DLT645_ERR_ADDR;
+
+    comBCD_u b;
+
+    for (int i = 0; i < DLT645_ADDR_LEN; i++) {
+        b.b = buf[i];
+
+        if (b.bcd.h > 0xA || b.bcd.l > 0xA) {
+            return DLT645_ERR_ADDR;
+        }
+
+        if (b.bcd.h == 0xA || b.bcd.l == 0xA) {
+            if (buf[i] != 0xAA) {
+                return DLT645_ERR_ADDR;
+            }
+
+            for (int j = 0; j < (DLT645_ADDR_LEN - i); j++) {
+                if (buf[i + j] != 0xAA)
+                    return DLT645_ERR_ADDR;
+            }
+        }
+    }
+
+
+    return 0;
+}
+
 /***************************************
  * CJ/T188 报文检查, 检查以下内容:
  * 1. 检查bufSize
@@ -15,27 +79,31 @@
  ***************************************/
 s8 dlt645Chk(u8* buf, u16 bufSize)
 {
-    u8 i = 0;
-
     if ( NULL == buf || 0 == bufSize)
         return DLT645_ERR_RCVD_LOST;
 
     if (bufSize < DLT645_MINSIZE)
         return DLT645_ERR_RCVD_LOST;
+
     if (buf[0] != DLT645_START_CHAR || buf[7] != DLT645_START_CHAR)
         return DLT645_ERR_LOST1_0x68;
-    for (i = 0; i < 6; i++) {
-        if (!isCOMBCD_c(buf[i + 1]))
-            return DLT645_ERR_RCVD_LOST;
-    }
+
     if (bufSize != (buf[9] + DLT645_MINSIZE))
         return DLT645_ERR_RCVD_LOST;
+
+    if (dlt645chkAddress(&buf[1], DLT645_ADDR_LEN) == DLT645_ERR_ADDR)
+        return DLT645_ERR_ADDR;
+
     if (buf[bufSize - 1] != DLT645_END_CHAR)
         return DLT645_ERR_LOST_0x16;
+
     if (chkSum(&buf[0], bufSize - 2) != buf[bufSize - 2])
         return DLT645_ERR_SUM_ERROR;   // 校验失败
+
     return DLT645_CHK_SUC;
 }
+
+
 
 static void printAddress(u8* addr)
 {
