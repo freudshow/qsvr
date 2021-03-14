@@ -68,10 +68,9 @@ void filesSum::closeEvent(QCloseEvent *event)
     }
     else
     {
+        emit fileClose();
         event->accept();
     }
-
-    emit fileClose();
 }
 
 void filesSum::showEvent(QShowEvent * event)

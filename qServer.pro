@@ -23,6 +23,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    libnet/mytcpserver.cpp \
+    libnet/mytcpsockets.cpp \
+    libnet/mythread.cpp \
+    libproto/protocolhanler.cpp \
         main.cpp \
         mainwindow.cpp \
         libproto/lib698/lib698.c \
@@ -54,6 +58,10 @@ SOURCES += \
     libproto/lib698/a_xdr.c
 
 HEADERS += \
+    libnet/mytcpserver.h \
+    libnet/mytcpsockets.h \
+    libnet/mythread.h \
+    libproto/protocolhanler.h \
         mainwindow.h \
         libproto/lib698/lib698.h \
         libutil/basedef.h \
