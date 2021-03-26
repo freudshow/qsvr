@@ -6,6 +6,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QString binPath = QApplication::applicationDirPath();
+
     MainWindow w;
     w.show();
 
