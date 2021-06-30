@@ -8,6 +8,7 @@
 #include <QCloseEvent>
 #include <QShowEvent>
 #include <QResizeEvent>
+#include <QCryptographicHash>
 
 filesSum::filesSum(QWidget *parent) :
     QWidget(parent),
@@ -76,15 +77,20 @@ void filesSum::closeEvent(QCloseEvent *event)
 
 void filesSum::showEvent(QShowEvent * event)
 {
-
+    Q_UNUSED(event);
 }
 
 void filesSum::resizeEvent(QResizeEvent * event)
 {
-
+    Q_UNUSED(event);
 }
 
-void filesSum::on_btn_calc_clicked() {}
+void filesSum::on_btn_calc_clicked()
+{
+    int idx = ui->rbtnGroup_sum->checkedId();
+    m_sumFileMethod = static_cast<sumFileMethod_e>(idx);
+    calcSum();
+}
 
 void filesSum::calcSum()
 {
@@ -139,23 +145,38 @@ void filesSum::sumFileMd5()
     }
 
     QByteArray b = file.readAll();
-    u8 *p = (u8 *) b.data();
-
-    INT8U md5code[16] = {0};
-    MD5_CTX mdContext;
-    MD5Init(&mdContext); //初始化用于md5加密的结构
-    MD5Update(&mdContext, p, b.size()); //对欲加密的字符进行加密
-    MD5Final(md5code, &mdContext);
-    QByteArray md5((char*)md5code, sizeof(md5code));
-    ui->lineEdit_result->setText(QString(md5.toHex()));
+    QCryptographicHash hash(QCryptographicHash::Md5);
+    hash.addData(b);
+    QByteArray result = hash.result();
+    ui->lineEdit_result->setText(QString(result.toHex()));
 }
 
 void filesSum::sumFileSha1()
 {
+    QFile file(ui->lineEdit_filename->text());
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "read file failed!";
+        return;
+    }
 
+    QByteArray b = file.readAll();
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(b);
+    QByteArray result = hash.result();
+    ui->lineEdit_result->setText(QString(result.toHex()));
 }
 
 void filesSum::sumFileSha256()
 {
+    QFile file(ui->lineEdit_filename->text());
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "read file failed!";
+        return;
+    }
 
+    QByteArray b = file.readAll();
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(b);
+    QByteArray result = hash.result();
+    ui->lineEdit_result->setText(QString(result.toHex()));
 }
