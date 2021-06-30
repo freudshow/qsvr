@@ -47,7 +47,7 @@ private slots:
     void showEvent(QShowEvent * event);
     void closeEvent(QCloseEvent * event);
     void resizeEvent(QResizeEvent * event);
-
+    u16 crcfile(QString filename);
 private:
     Ui::filesSum *ui;
 

@@ -1,5 +1,6 @@
 #include "filessum.h"
 #include "ui_filessum.h"
+#include "libutil/md5.h"
 
 #include <QFile>
 #include <QDebug>
@@ -107,9 +108,46 @@ void filesSum::sumFileCrc16()
     ui->lineEdit_result->setText(QString::number(crc, 16));
 }
 
+u16 filesSum::crcfile(QString filename)
+{
+    uint16_t crc = 0;
+    uint32_t offset = 0;
+    uint32_t readLen = 0;
+    uint32_t fileSize = 0;
+    uint32_t count = 0;
+    uint32_t i = 0;
+    QFile file(filename);
+    QByteArray b;
+
+    fileSize = file.size();
+    count = fileSize / 1024 + (((fileSize % 1024) == 0) ? 0 : 1);
+    for (i = 0, offset = 0; i < count; i++, offset += readLen) {
+        file.seek(offset);
+        b = file.read(1024);
+        crc = crc16continue((u8*)b.data(), b.length(), crc, i);
+    }
+
+    return crc;
+}
+
 void filesSum::sumFileMd5()
 {
+    QFile file(ui->lineEdit_filename->text());
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "read file failed!";
+        return;
+    }
 
+    QByteArray b = file.readAll();
+    u8 *p = (u8 *) b.data();
+
+    INT8U md5code[16] = {0};
+    MD5_CTX mdContext;
+    MD5Init(&mdContext); //初始化用于md5加密的结构
+    MD5Update(&mdContext, p, b.size()); //对欲加密的字符进行加密
+    MD5Final(md5code, &mdContext);
+    QByteArray md5((char*)md5code, sizeof(md5code));
+    ui->lineEdit_result->setText(QString(md5.toHex()));
 }
 
 void filesSum::sumFileSha1()

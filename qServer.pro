@@ -27,6 +27,7 @@ SOURCES += \
     libnet/mytcpsockets.cpp \
     libnet/mythread.cpp \
     libproto/protocolhanler.cpp \
+    libutil/md5.c \
         main.cpp \
         mainwindow.cpp \
         libproto/lib698/lib698.c \
@@ -62,6 +63,7 @@ HEADERS += \
     libnet/mytcpsockets.h \
     libnet/mythread.h \
     libproto/protocolhanler.h \
+    libutil/md5.h \
         mainwindow.h \
         libproto/lib698/lib698.h \
         libutil/basedef.h \

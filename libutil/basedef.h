@@ -130,7 +130,7 @@ extern void minus33(u8* buf, int bufSize);
 extern u8 chkSum(u8* buf, int bufSize);
 extern u8 xorSum(u8* buf, int bufSize);
 extern void inverseArray(u8* buf, u16 bufSize);
-
+extern u16 crc16continue(u8 *buf, int len, u16 crc, u8 lastCrc);
 #ifdef __cplusplus
 }
 #endif
