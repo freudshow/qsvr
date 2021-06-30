@@ -53,6 +53,7 @@ void filesSum::on_btn_choose_clicked()
                                                     tr("*"));
 
     ui->lineEdit_filename->setText(fileName);
+    calcSum();
 }
 
 void filesSum::on_btn_exit_clicked()
