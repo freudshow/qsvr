@@ -51,20 +51,23 @@ void toolsDialog::prepareText()
 {
     QRegExp re("[\\x0-9a-fA-F]+");
     QString s;
-    int i =0;
 
-    s = ui->text_input->toPlainText().remove(QRegExp("\\n")).
-                                      remove(QRegExp("\\r")).
-                                      remove(QRegExp("\\s")).
-                                      remove(QRegExp("\\t"));
+    s = ui->text_input->toPlainText()
+            .remove(QRegExp("\\n"))
+            .remove(QRegExp("\\r"))
+            .remove(QRegExp("\\s"))
+            .remove(QRegExp("\\t"));
 
     if(re.exactMatch(s) && (s.count()%2) == 0) {
         ui->label_formatError->setText("");
-        QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
-        QString t;
-        for (i = 0; i<s.count();i+=2)
-              t.append(s.at(i)).append(s.at(i+1)).append(" ");
 
+        QString t;
+
+        int i = 0;
+        for (i = 0; i < s.count(); i += 2)
+            t.append(s.at(i)).append(s.at(i + 1)).append(" ");
+
+        QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
         ui->text_input->setText(t.trimmed());
         QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
         ui->label_formatError->setText(QString::number(i/2) + tr(" bytes"));
@@ -79,27 +82,31 @@ void toolsDialog::on_lineEdit_result_textChanged()
     QByteArray b;
     bool ok;
 
-    QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
-
     if (e_float == m_calcMethod) {
+        QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
+
         float f = ui->lineEdit_result->text().toFloat(&ok);
         if (ok) {
             char *p = (char *) &f;
-            for (int index = 0; index < sizeof(f); index++)
-                b.append(p[index]);
+            for (u32 i = 0; i < sizeof(f); i++)
+                b.append(p[i]);
         }
+
+        ui->text_input->setText(b.toHex(' '));
+        QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
     } else if (e_doubleFloat == m_calcMethod) {
+        QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
+
         double f = ui->lineEdit_result->text().toDouble(&ok);
         if (ok) {
             char *p = (char *) &f;
-            for (int index = 0; index < sizeof(f); index++)
-                b.append(p[index]);
+            for (u32 i = 0; i < sizeof(f); i++)
+                b.append(p[i]);
         }
+
+        ui->text_input->setText(b.toHex(' '));
+        QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
     }
-
-    ui->text_input->setText(b.toHex(' '));
-
-    QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
 }
 
 void toolsDialog::calcSums()
