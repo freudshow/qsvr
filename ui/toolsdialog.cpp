@@ -372,7 +372,7 @@ void toolsDialog::calcXorsum()
     l = ui->text_input->toPlainText().split(" ");
 
     len = l.count();
-    for (int i = 0; i< len;i++) {
+    for (int i = 0; i < len;i++) {
         b.append((char)l.at(i).toInt(&ok, 16));
     }
 
