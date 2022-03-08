@@ -25,6 +25,10 @@ toolsDialog::toolsDialog(QWidget *parent) :
     m_map[e_float] = &toolsDialog::calcFloat;
     m_map[e_doubleFloat] = &toolsDialog::calcDoubleFloat;
     m_map[e_xorsum] = &toolsDialog::calcXorsum;
+    m_map[e_uint32] = &toolsDialog::calcUInt32;
+    m_map[e_uint16] = &toolsDialog::calcUInt16;
+    m_map[e_int32] = &toolsDialog::calcInt32;
+    m_map[e_int16] = &toolsDialog::calcInt16;
 
     ui->rbtnGroup_calc->setId(ui->rbtn_crc16, e_calcCRC16);
     ui->rbtnGroup_calc->setId(ui->rbtn_fcs, e_calcFCS);
@@ -36,6 +40,10 @@ toolsDialog::toolsDialog(QWidget *parent) :
     ui->rbtnGroup_calc->setId(ui->rbtn_float, e_float);
     ui->rbtnGroup_calc->setId(ui->rbtn_doubleFloat, e_doubleFloat);
     ui->rbtnGroup_calc->setId(ui->rbtn_xorsum, e_xorsum);
+    ui->rbtnGroup_calc->setId(ui->rbtn_uint32, e_uint32);
+    ui->rbtnGroup_calc->setId(ui->rbtn_uint16, e_uint16);
+    ui->rbtnGroup_calc->setId(ui->rbtn_int32, e_int32);
+    ui->rbtnGroup_calc->setId(ui->rbtn_int16, e_int16);
 
     QObject::connect(ui->rbtnGroup_calc, SIGNAL(buttonClicked(int)), this, SLOT(btnToggle(int)));
 
@@ -70,7 +78,8 @@ void toolsDialog::prepareText()
         QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
         ui->text_input->setText(t.trimmed());
         QObject::connect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
-        ui->label_formatError->setText(QString::number(i/2) + tr(" bytes"));
+        m_nBytes = i / 2;
+        ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
         calcSums();
     } else {
         ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
@@ -324,6 +333,8 @@ void toolsDialog::calcFloat()
         return;
     }
 
+    ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
+
     for (int i = 0; i < len; i++) {
         b.append((char) l.at(i).toInt(&ok, 16));
     }
@@ -350,6 +361,8 @@ void toolsDialog::calcDoubleFloat()
         ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
         return;
     }
+
+    ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
 
     for (int i = 0; i < len; i++) {
         b.append((char) l.at(i).toInt(&ok, 16));
@@ -378,4 +391,120 @@ void toolsDialog::calcXorsum()
 
     u8 x = xorSum((u8*)b.data(), b.length());
     ui->lineEdit_result->setText(QString("%1").arg(x, 2, 16, QLatin1Char('0')));
+}
+
+void toolsDialog::calcUInt32()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+    uint32_t u = 0;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    if (len != sizeof(u)) {
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
+        return;
+    }
+
+    ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
+
+    for (int i = 0; i < len; i++) {
+        b.append((char) l.at(i).toInt(&ok, 16));
+    }
+
+    memcpy(&u, b.data(), sizeof(u));
+    ui->lineEdit_result->setText(QString::number(u));
+}
+
+void toolsDialog::calcUInt16()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+    uint16_t u = 0;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    if (len != sizeof(u)) {
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
+        return;
+    }
+
+    ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
+
+    for (int i = 0; i < len; i++) {
+        b.append((char) l.at(i).toInt(&ok, 16));
+    }
+
+    memcpy(&u, b.data(), sizeof(u));
+    ui->lineEdit_result->setText(QString::number(u));
+}
+
+void toolsDialog::calcInt32()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+    int32_t u = 0;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    if (len != sizeof(u)) {
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
+        return;
+    }
+
+    ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
+
+    for (int i = 0; i < len; i++) {
+        b.append((char) l.at(i).toInt(&ok, 16));
+    }
+
+    memcpy(&u, b.data(), sizeof(u));
+    ui->lineEdit_result->setText(QString::number(u));
+}
+
+void toolsDialog::calcInt16()
+{
+    QByteArray b;
+    QStringList l;
+    int len = 0;
+    bool ok;
+    int16_t u = 0;
+
+    b.clear();
+    l.clear();
+
+    l = ui->text_input->toPlainText().split(" ");
+
+    len = l.count();
+    if (len != sizeof(u)) {
+        ui->label_formatError->setText("<font color=Red><b>Input Format Error!</b></font>");
+        return;
+    }
+
+    ui->label_formatError->setText(QString::number(m_nBytes) + tr(" bytes"));
+
+    for (int i = 0; i < len; i++) {
+        b.append((char) l.at(i).toInt(&ok, 16));
+    }
+
+    memcpy(&u, b.data(), sizeof(u));
+    ui->lineEdit_result->setText(QString::number(u));
 }

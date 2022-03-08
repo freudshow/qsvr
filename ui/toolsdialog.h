@@ -18,7 +18,11 @@ typedef enum calcMethod {
     e_ascii,
     e_float,
     e_doubleFloat,
-    e_xorsum
+    e_xorsum,
+    e_uint32,
+    e_uint16,
+    e_int32,
+    e_int16,
 } calcMethod_e;
 
 namespace Ui {
@@ -38,6 +42,7 @@ public:
 
 private:
     Ui::toolsDialog *ui;
+    int m_nBytes = 0;
 
     calcMethod_e m_calcMethod;
     QMap<calcMethod_e, calc_f> m_map;
@@ -52,6 +57,10 @@ private:
     void calcFloat();
     void calcDoubleFloat();
     void calcXorsum();
+    void calcUInt32();
+    void calcUInt16();
+    void calcInt32();
+    void calcInt16();
 
 private slots:
     void calcSums();
