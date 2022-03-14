@@ -44,6 +44,7 @@ SOURCES += \
         libcom/libcom.cpp \
         ui/comconfigform.cpp \
     ui/filessum.cpp \
+    ui/misctools.cpp \
         ui/netconfigform.cpp \
         libdb/libdb.cpp \
         libnet/libnet.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
         libcom/libcom.h \
         ui/comconfigform.h \
     ui/filessum.h \
+    ui/misctools.h \
         ui/netconfigform.h \
         libdb/libdb.h \
         libnet/libnet.h \
@@ -97,6 +99,7 @@ FORMS += \
     ui/filessum.ui \
         ui/mainwindow.ui \
         ui/comconfigform.ui \
+    ui/misctools.ui \
     ui/netconfigform.ui \
     ui/setlogicaddr.ui \
     ui/setrs485.ui \

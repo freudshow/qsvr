@@ -380,15 +380,15 @@ QString MainWindow::byteArrayToString(QByteArray buffer, bool read)
 
     for (i = 0; i < buffer.count() - 1; i++) {
         s.clear();
-        s.sprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
+        s.asprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
         buf += s;
     }
 
     s.clear();
-    s.sprintf("%02X", static_cast<unsigned char>(buffer.at(i)));
+    s.asprintf("%02X", static_cast<unsigned char>(buffer.at(i)));
     buf += s;
     s.clear();
-    s.sprintf("\n");
+    s.asprintf("\n");
     buf += s;
 
     return buf;
