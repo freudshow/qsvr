@@ -60,17 +60,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QRadioButton" name="rbtn_fcs">
-       <property name="text">
-        <string>fcs</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="0" column="3">
+     <item row="0" column="1">
       <widget class="QRadioButton" name="rbtn_sum">
        <property name="text">
         <string>sum</string>
@@ -80,67 +70,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="0" column="4">
-      <widget class="QRadioButton" name="rbtn_xorsum">
-       <property name="text">
-        <string>xorsum</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="QRadioButton" name="rbtn_ascii">
-       <property name="text">
-        <string>ascii</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="0" column="6">
-      <widget class="QRadioButton" name="rbtn_float">
-       <property name="text">
-        <string>float</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="0" column="7">
-      <widget class="QRadioButton" name="rbtn_uint32">
-       <property name="text">
-        <string>uint32</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="0" column="8">
-      <widget class="QRadioButton" name="rbtn_int32">
-       <property name="text">
-        <string>int32</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="QRadioButton" name="rbtn_inverse">
-       <property name="text">
-        <string>inverse</string>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">rbtnGroup_calc</string>
-       </attribute>
-      </widget>
-     </item>
-     <item row="1" column="2" colspan="2">
+     <item row="0" column="2">
       <widget class="QRadioButton" name="rbtn_add0x33">
        <property name="text">
         <string>+0x33</string>
@@ -150,7 +80,57 @@
        </attribute>
       </widget>
      </item>
-     <item row="1" column="4">
+     <item row="0" column="3">
+      <widget class="QRadioButton" name="rbtn_ascii">
+       <property name="text">
+        <string>ascii</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QRadioButton" name="rbtn_float">
+       <property name="text">
+        <string>float</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QRadioButton" name="rbtn_uint32">
+       <property name="text">
+        <string>uint32</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QRadioButton" name="rbtn_int32">
+       <property name="text">
+        <string>int32</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="1" rowspan="2">
+      <widget class="QRadioButton" name="rbtn_xorsum">
+       <property name="text">
+        <string>xorsum</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="1" column="2" rowspan="2">
       <widget class="QRadioButton" name="rbtn_minus0x33">
        <property name="text">
         <string>-0x33</string>
@@ -160,17 +140,37 @@
        </attribute>
       </widget>
      </item>
-     <item row="1" column="6">
-      <widget class="QRadioButton" name="rbtn_doubleFloat">
+     <item row="1" column="3" rowspan="2" colspan="2">
+      <widget class="QRadioButton" name="rbtn_inverse">
        <property name="text">
-        <string>double float</string>
+        <string>inverse</string>
        </property>
        <attribute name="buttonGroup">
         <string notr="true">rbtnGroup_calc</string>
        </attribute>
       </widget>
      </item>
-     <item row="1" column="7">
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="rbtn_fcs">
+       <property name="text">
+        <string>fcs</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QRadioButton" name="rbtn_doubleFloat">
+       <property name="text">
+        <string>double</string>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">rbtnGroup_calc</string>
+       </attribute>
+      </widget>
+     </item>
+     <item row="2" column="5">
       <widget class="QRadioButton" name="rbtn_uint16">
        <property name="text">
         <string>uint16</string>
@@ -180,7 +180,7 @@
        </attribute>
       </widget>
      </item>
-     <item row="1" column="8">
+     <item row="2" column="6">
       <widget class="QRadioButton" name="rbtn_int16">
        <property name="text">
         <string>int16</string>
