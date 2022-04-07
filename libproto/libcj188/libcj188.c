@@ -576,7 +576,7 @@ void getUnitStr(u8 c, char* unit)
     if (NULL == unit)
         return;
 
-    u8 len = ELEM_NUM(unitSet);
+    u8 len = NELEM(unitSet);
     u8 found = 0;
     u8 i = 0;
 

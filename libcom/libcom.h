@@ -9,6 +9,7 @@
 #include <QSerialPortInfo>
 #include "libutil/basedef.h"
 
+#define TIME_OUT 1000
 
 typedef struct {
     QString					portName;

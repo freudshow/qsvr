@@ -26,6 +26,7 @@ SOURCES += \
     libnet/mytcpserver.cpp \
     libnet/mytcpsockets.cpp \
     libnet/mythread.cpp \
+    libproto/libmodbus/modbus.c \
     libproto/protocolhanler.cpp \
     libutil/md5.c \
         main.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     libnet/mytcpserver.h \
     libnet/mytcpsockets.h \
     libnet/mythread.h \
+    libproto/libmodbus/modbus.h \
     libproto/protocolhanler.h \
     libutil/md5.h \
         mainwindow.h \
