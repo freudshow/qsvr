@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QString binPath = QApplication::applicationDirPath();
 
-//    MainWindow w;
-//    w.show();
+    MainWindow w;
+    w.show();
 
 //    update698 u;
 //    u.show();
@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
 //    toolsDialog t;
 //    t.show();
 
-    miscTools *misc = new miscTools();
-    misc->show();
+//    miscTools *misc = new miscTools();
+//    misc->show();
 
     return a.exec();
 }

@@ -1,4 +1,4 @@
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QClipboard>
 #include "toolsdialog.h"
 #include "ui_toolsdialog.h"
@@ -57,22 +57,23 @@ toolsDialog::~toolsDialog()
 
 void toolsDialog::prepareText()
 {
-    QRegExp re("[\\x0-9a-fA-F]+");
+    QRegularExpression re("[\\x0-9a-fA-F]+");
     QString s;
 
     s = ui->text_input->toPlainText()
-            .remove(QRegExp("\\n"))
-            .remove(QRegExp("\\r"))
-            .remove(QRegExp("\\s"))
-            .remove(QRegExp("\\t"));
+            .remove(QRegularExpression("\\n"))
+            .remove(QRegularExpression("\\r"))
+            .remove(QRegularExpression("\\s"))
+            .remove(QRegularExpression("\\t"));
 
-    if(re.exactMatch(s) && (s.count()%2) == 0) {
+    QRegularExpressionMatch me = re.match(s);
+    if(me.isValid() && ((s.size()%2) == 0)) {
         ui->label_formatError->setText("");
 
         QString t;
 
         int i = 0;
-        for (i = 0; i < s.count(); i += 2)
+        for (i = 0; i < s.size(); i += 2)
             t.append(s.at(i)).append(s.at(i + 1)).append(" ");
 
         QObject::disconnect(ui->text_input, SIGNAL(textChanged()), this, SLOT(prepareText()));
@@ -155,7 +156,7 @@ QString toolsDialog::byteArrayToString(QByteArray buffer)
 
     buf.clear();
 
-    for (i = 0; i < buffer.count() - 1; i++) {
+    for (i = 0; i < buffer.size() - 1; i++) {
         s.clear();
         s.asprintf("%02X ", static_cast<unsigned char>(buffer.at(i)));
         buf += s;

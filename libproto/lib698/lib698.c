@@ -196,7 +196,7 @@ boolean encodeFrame(u8* buf, u16* bufSize, frm698_p pFrame)
     u8* pApduBuf = NULL;
     u16 apduLen = 0;
 
-    ret = checkFrame(buf, &bufSize, &pFrame->head);
+    ret = checkFrame(buf, bufSize, &pFrame->head);
     if( FALSE == ret) {
         DEBUG_TIME_LINE("frame invalid");
         ret = FALSE;

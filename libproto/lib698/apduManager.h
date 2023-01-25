@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-extern boolean userDataManager(u8* buf, u16 bufSize, apdu_p pApdu);
+extern boolean userDataManager(u8* buf, u16* bufSize, apdu_p pApdu);
 
 #ifdef __cplusplus
 }

@@ -6,6 +6,8 @@
 
 QT       += core gui network serialport sql
 QT       += bluetooth
+QT       += core5compat
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = qServer
 TEMPLATE = app
